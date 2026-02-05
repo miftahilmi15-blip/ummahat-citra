@@ -1,14 +1,14 @@
 {
   "name": "Master Admin Pro System",
   "short_name": "MasterPro",
-  "description": "Premium Management System By Bos",
+  "description": "Premium Management System",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#1e3a8a",
+  "background_color": "#ffffff",
   "theme_color": "#2563eb",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/906/906343.png",
+      "src": "kamalul.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
