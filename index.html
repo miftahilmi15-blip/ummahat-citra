@@ -2,10 +2,16 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Master Admin Pro</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
     <style>
         :root {
             --blue-dark: #1e3a8a;
@@ -13,10 +19,11 @@
             --blue-light: #eff6ff;
             --white: #ffffff;
             --text-main: #334155;
+            --bg-body: #f1f5f9;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--blue-light); color: var(--text-main); }
+        body { background: var(--bg-body); color: var(--text-main); overflow-x: hidden; }
 
         /* --- HALAMAN LOGIN --- */
         #login-page {
@@ -25,166 +32,233 @@
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, var(--blue-dark), var(--blue-primary));
+            position: fixed;
+            width: 100%;
+            z-index: 999;
         }
 
         .login-card {
             background: var(--white);
             padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            width: 100%;
-            max-width: 380px;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 400px;
             text-align: center;
         }
 
-        .login-card h2 { color: var(--blue-dark); margin-bottom: 25px; }
+        .login-card h2 { color: var(--blue-dark); font-size: 24px; margin-bottom: 5px; }
+        .login-card p { color: #64748b; font-size: 14px; margin-bottom: 30px; }
+        
         .login-card input {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
             outline: none;
+            transition: 0.3s;
+            background: #f8fafc;
         }
+
+        .login-card input:focus { border-color: var(--blue-primary); background: #fff; }
 
         .btn-login {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: var(--blue-primary);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-        .btn-login:hover { background: var(--blue-dark); }
+        .btn-login:hover { background: var(--blue-dark); transform: translateY(-2px); }
 
         /* --- DASHBOARD --- */
         #dashboard-page { display: none; }
         
         header {
             background: var(--white);
-            padding: 20px;
+            padding: 15px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .container { padding: 30px; max-width: 1200px; margin: auto; }
+        .logo-text { font-weight: 800; color: var(--blue-primary); font-size: 22px; letter-spacing: -1px; }
+        .logo-text span { color: var(--blue-dark); }
+
+        .container { padding: 25px 5%; max-width: 1200px; margin: auto; }
         
-        .welcome-text { margin-bottom: 30px; }
-        .welcome-text h1 { color: var(--blue-dark); font-size: 24px; }
+        .welcome-section { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 20px; 
+            margin-bottom: 25px; 
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+        .welcome-text h1 { color: var(--blue-dark); font-size: 22px; }
+        .welcome-text p { color: #64748b; font-size: 14px; }
 
         /* GRID 6 MENU */
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
         }
 
         .menu-card {
             background: var(--white);
-            padding: 30px;
+            padding: 20px;
             border-radius: 20px;
-            text-align: center;
             transition: 0.3s;
             cursor: pointer;
             border: 1px solid #e2e8f0;
             display: flex;
-            flex-direction: column;
             align-items: center;
             gap: 15px;
         }
 
         .menu-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(37, 99, 235, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.1);
             border-color: var(--blue-primary);
         }
 
-        .menu-card i {
-            font-size: 40px;
-            color: var(--blue-primary);
+        .icon-box {
+            width: 55px;
+            height: 55px;
+            background: var(--blue-light);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
         }
 
-        .menu-card h3 { font-size: 18px; color: var(--blue-dark); }
-        .menu-card p { font-size: 13px; color: #64748b; }
+        .menu-card i { font-size: 22px; color: var(--blue-primary); }
+        .menu-info h3 { font-size: 16px; color: var(--blue-dark); margin-bottom: 2px; }
+        .menu-info p { font-size: 12px; color: #64748b; line-height: 1.4; }
 
         .btn-logout {
-            background: #ef4444;
-            color: white;
-            padding: 8px 15px;
-            border-radius: 8px;
+            background: #fee2e2;
+            color: #ef4444;
+            padding: 10px 18px;
+            border-radius: 10px;
             text-decoration: none;
-            font-size: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.2s;
         }
+        .btn-logout:hover { background: #ef4444; color: white; }
 
         .hidden { display: none; }
+
+        @media (max-width: 600px) {
+            .welcome-section { text-align: center; justify-content: center; }
+            .menu-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
     <div id="login-page">
         <div class="login-card">
-            <i class="fas fa-user-shield" style="font-size: 50px; color: var(--blue-primary); margin-bottom: 15px;"></i>
+            <div style="width:65px; height:65px; background:var(--blue-light); border-radius:50%; display:flex; align-items:center; justify-content:center; margin: 0 auto 20px;">
+                <i class="fas fa-lock" style="font-size: 28px; color: var(--blue-primary);"></i>
+            </div>
             <h2>Admin Login</h2>
+            <p>Masukkan akses kontrol panel Anda</p>
             <input type="text" id="username" placeholder="Username (admin)">
             <input type="password" id="password" placeholder="Password (123)">
-            <button class="btn-login" onclick="handleLogin()">MASUK KE SISTEM</button>
+            <button class="btn-login" onclick="handleLogin()">MASUK KE DASHBOARD</button>
         </div>
     </div>
 
     <div id="dashboard-page">
         <header>
-            <div style="font-weight: bold; color: var(--blue-primary); font-size: 20px;">E-SANTRI PRO</div>
-            <a href="#" class="btn-logout" onclick="handleLogout()">Keluar <i class="fas fa-sign-out-alt"></i></a>
+            <div class="logo-text">MASTER<span>PRO</span></div>
+            <a href="#" class="btn-logout" onclick="handleLogout()"><i class="fas fa-power-off"></i> Keluar</a>
         </header>
 
         <div class="container">
-            <div class="welcome-text">
-                <h1>Selamat Datang, Admin 👋</h1>
-                <p>Silakan pilih menu untuk mengelola data santri.</p>
+            <div class="welcome-section">
+                <div class="welcome-text">
+                    <h1>Selamat Datang, Admin 👋</h1>
+                    <p>Pusat Kendali Manajemen Sistem Terpadu</p>
+                </div>
+                <div id="current-date" style="font-weight: 600; color: var(--blue-primary); background: var(--blue-light); padding: 5px 15px; border-radius: 30px; font-size: 13px;"></div>
             </div>
 
             <div class="menu-grid">
-                <div class="menu-card">
-                    <i class="fas fa-user-check"></i>
-                    <h3>Absensi Santri</h3>
-                    <p>Monitoring kehadiran harian santri secara real-time.</p>
+                <div class="menu-card" onclick="alert('Membuka Presensi...')">
+                    <div class="icon-box"><i class="fas fa-user-clock"></i></div>
+                    <div class="menu-info">
+                        <h3>Presensi Digital</h3>
+                        <p>Kelola data kehadiran harian secara real-time.</p>
+                    </div>
                 </div>
-                <div class="menu-card">
-                    <i class="fas fa-quran"></i>
-                    <h3>Data Tahfidz</h3>
-                    <p>Pantau setoran hafalan dan progres santri.</p>
+                <div class="menu-card" onclick="alert('Membuka Progres...')">
+                    <div class="icon-box"><i class="fas fa-chart-line"></i></div>
+                    <div class="menu-info">
+                        <h3>Progres Belajar</h3>
+                        <p>Monitoring capaian kurikulum & target siswa.</p>
+                    </div>
                 </div>
-                <div class="menu-card">
-                    <i class="fas fa-file-signature"></i>
-                    <h3>Ujian Online</h3>
-                    <p>Atur jadwal ujian dan input bank soal.</p>
+                <div class="menu-card" onclick="alert('Membuka Ujian...')">
+                    <div class="icon-box"><i class="fas fa-edit"></i></div>
+                    <div class="menu-info">
+                        <h3>Pusat Ujian</h3>
+                        <p>Atur jadwal ujian dan manajemen bank soal.</p>
+                    </div>
                 </div>
-                <div class="menu-card">
-                    <i class="fas fa-chart-bar"></i>
-                    <h3>Rekap Nilai</h3>
-                    <p>Lihat rincian 13 mapel dan download laporan Excel.</p>
+                <div class="menu-card" onclick="alert('Membuka Rekap...')">
+                    <div class="icon-box"><i class="fas fa-file-invoice"></i></div>
+                    <div class="menu-info">
+                        <h3>Laporan Nilai</h3>
+                        <p>Rekapitulasi 13 mapel & export data ke Excel.</p>
+                    </div>
                 </div>
-                <div class="menu-card">
-                    <i class="fas fa-book-open"></i>
-                    <h3>Materi & Doa</h3>
-                    <p>Update Mahfuzat dan doa harian untuk santri.</p>
+                <div class="menu-card" onclick="alert('Membuka Materi...')">
+                    <div class="icon-box"><i class="fas fa-book-open"></i></div>
+                    <div class="menu-info">
+                        <h3>Manajemen Materi</h3>
+                        <p>Update konten belajar, mahfuzat, dan doa.</p>
+                    </div>
                 </div>
-                <div class="menu-card">
-                    <i class="fas fa-trophy"></i>
-                    <h3>Reward Ikan</h3>
-                    <p>Kelola hadiah dan aquarium prestasi santri.</p>
+                <div class="menu-card" onclick="alert('Membuka Reward...')">
+                    <div class="icon-box"><i class="fas fa-award"></i></div>
+                    <div class="menu-info">
+                        <h3>Sistem Reward</h3>
+                        <p>Manajemen poin prestasi dan hadiah digital.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Registrasi Service Worker Baru (Putus hubungan sama E-Santri)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+            .then(() => console.log("MasterPro System Active"))
+            .catch(err => console.error("SW Error", err));
+        }
+
+        // Logic Login
         function handleLogin() {
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
@@ -192,23 +266,28 @@
             if(user === "admin" && pass === "123") {
                 document.getElementById('login-page').style.display = 'none';
                 document.getElementById('dashboard-page').style.display = 'block';
-                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('master_login_session', 'true');
             } else {
-                alert("Username atau Password salah, Bos!");
+                alert("Username atau Password Salah!");
             }
         }
 
         function handleLogout() {
-            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('master_login_session');
             location.reload();
         }
 
-        // Cek status login saat refresh
         window.onload = () => {
-            if(localStorage.getItem('isLoggedIn') === 'true') {
+            // Cek Session
+            if(localStorage.getItem('master_login_session') === 'true') {
                 document.getElementById('login-page').style.display = 'none';
                 document.getElementById('dashboard-page').style.display = 'block';
             }
+            
+            // Tanggal Indonesia
+            const d = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').innerText = d.toLocaleDateString('id-ID', options);
         }
     </script>
 </body>
