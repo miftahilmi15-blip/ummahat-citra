@@ -18,100 +18,108 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg-body); color: #334155; padding-bottom: 50px; }
+        body { background: var(--bg-body); color: #334155; }
 
+        /* Header Gaya Dashboard */
         header {
-            background: var(--white); padding: 20px 5%; display: flex;
+            background: var(--white); padding: 15px 5%; display: flex;
             justify-content: space-between; align-items: center;
             box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
         }
+        .logo-text { font-weight: 800; color: var(--blue-primary); font-size: 20px; text-decoration: none; }
+        .logo-text span { color: var(--blue-dark); }
 
-        .btn-back { text-decoration: none; color: var(--blue-dark); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .container { padding: 30px 5%; max-width: 1200px; margin: auto; }
 
-        .container { padding: 25px 5%; max-width: 1100px; margin: auto; }
+        /* Stats Row */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 25px; border-radius: 20px; border: 1px solid #e2e8f0; position: relative; overflow: hidden; }
+        .stat-card h4 { font-size: 13px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-card .amount { font-size: 24px; font-weight: 800; margin-top: 10px; display: block; }
+        
+        /* Glassmorphism Input Area */
+        .input-section { background: white; border-radius: 24px; border: 1px solid #e2e8f0; padding: 30px; margin-bottom: 30px; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        label { font-size: 12px; font-weight: 700; color: var(--blue-dark); margin-bottom: 8px; display: block; }
+        input, select { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #f1f5f9; background: #f8fafc; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--blue-primary); background: white; }
 
-        /* Stats Cards */
-        .stats-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-box { background: white; padding: 20px; border-radius: 20px; border: 1px solid #e2e8f0; }
-        .stat-box h4 { font-size: 13px; color: #64748b; margin-bottom: 5px; }
-        .stat-box .amount { font-size: 20px; font-weight: 800; }
-        .text-up { color: var(--success); }
-        .text-down { color: var(--danger); }
+        .btn-submit { 
+            background: var(--blue-primary); color: white; border: none; 
+            padding: 15px 30px; border-radius: 12px; font-weight: 600; 
+            cursor: pointer; width: 100%; margin-top: 25px; transition: 0.3s;
+        }
+        .btn-submit:hover { background: var(--blue-dark); transform: translateY(-2px); }
 
-        /* Form Input */
-        .card-form { background: white; padding: 25px; border-radius: 24px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
-        input, select { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f1f5f9; outline: none; }
-        .btn-save { background: var(--blue-primary); color: white; border: none; padding: 12px 25px; border-radius: 12px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 15px; }
-
-        /* Table Style */
-        .table-container { background: white; border-radius: 24px; border: 1px solid #e2e8f0; overflow: hidden; }
+        /* Table Area */
+        .table-res { background: white; border-radius: 24px; border: 1px solid #e2e8f0; overflow: hidden; }
         table { width: 100%; border-collapse: collapse; }
-        thead { background: var(--blue-light); }
-        th { text-align: left; padding: 15px; font-size: 14px; color: var(--blue-dark); }
-        td { padding: 15px; font-size: 14px; border-top: 1px solid #f1f5f9; }
-        .badge { padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; }
-        .badge-in { background: #d1fae5; color: var(--success); }
-        .badge-out { background: #fee2e2; color: var(--danger); }
+        th { background: #f8fafc; padding: 18px; text-align: left; font-size: 13px; color: #64748b; }
+        td { padding: 18px; border-top: 1px solid #f1f5f9; font-size: 14px; }
 
-        @media (max-width: 600px) { th:nth-child(3), td:nth-child(3) { display: none; } }
+        .badge { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; }
+        .in { background: #d1fae5; color: var(--success); }
+        .out { background: #fee2e2; color: var(--danger); }
+
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            th:nth-child(1), td:nth-child(1) { display: none; }
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
-        <h3 style="color: var(--blue-dark)">Rekap Infaq & Sosialis</h3>
+        <a href="index.html" class="logo-text">MASTER<span>PRO</span></a>
+        <div style="font-size: 14px; font-weight: 600; color: var(--blue-dark);">Manajemen Infaq</div>
     </header>
 
     <div class="container">
-        <div class="stats-container">
-            <div class="stat-box" style="border-top: 4px solid var(--blue-primary)">
-                <h4>Total Saldo Kas</h4>
-                <div class="amount" id="total-kas" style="color: var(--blue-dark)">Rp 0</div>
+        <div class="stats-grid">
+            <div class="stat-card" style="border-bottom: 4px solid var(--blue-primary)">
+                <h4>Saldo Kas Yayasan</h4>
+                <span class="amount" id="total-kas" style="color: var(--blue-dark)">Rp 0</span>
             </div>
-            <div class="stat-box" style="border-top: 4px solid var(--success)">
-                <h4>Pemasukan Bulan Ini</h4>
-                <div class="amount text-up" id="total-masuk">Rp 0</div>
+            <div class="stat-card" style="border-bottom: 4px solid var(--success)">
+                <h4>Pemasukan</h4>
+                <span class="amount" id="total-masuk" style="color: var(--success)">Rp 0</span>
             </div>
-            <div class="stat-box" style="border-top: 4px solid var(--danger)">
-                <h4>Pengeluaran Bulan Ini</h4>
-                <div class="amount text-down" id="total-keluar">Rp 0</div>
+            <div class="stat-card" style="border-bottom: 4px solid var(--danger)">
+                <h4>Pengeluaran</h4>
+                <span class="amount" id="total-keluar" style="color: var(--danger)">Rp 0</span>
             </div>
         </div>
 
-        <div class="card-form">
-            <h3 style="font-size: 16px;"><i class="fas fa-plus-circle"></i> Catat Transaksi Baru</h3>
-            <div class="form-grid">
+        <div class="input-section">
+            <h3 style="margin-bottom: 20px; font-size: 18px;">Input Transaksi Baru</h3>
+            <div class="form-row">
                 <div>
-                    <label style="font-size: 12px; font-weight: 600;">Keterangan</label>
-                    <input type="text" id="desc" placeholder="Contoh: Infaq Jumat">
+                    <label>Keterangan Transaksi</label>
+                    <input type="text" id="desc" placeholder="Contoh: Infaq Hamba Allah">
                 </div>
                 <div>
-                    <label style="font-size: 12px; font-weight: 600;">Nominal (Rp)</label>
-                    <input type="number" id="amount" placeholder="50000">
+                    <label>Nominal (Rp)</label>
+                    <input type="number" id="amount" placeholder="0">
                 </div>
                 <div>
-                    <label style="font-size: 12px; font-weight: 600;">Jenis</label>
+                    <label>Jenis Transaksi</label>
                     <select id="type">
-                        <option value="masuk">Pemasukan (Infaq)</option>
-                        <option value="keluar">Pengeluaran</option>
+                        <option value="masuk">Pemasukan / Infaq</option>
+                        <option value="keluar">Pengeluaran / Sosial</option>
                     </select>
                 </div>
             </div>
-            <button class="btn-save" onclick="addTransaction()">SIMPAN TRANSAKSI</button>
+            <button class="btn-submit" onclick="addTransaction()">SIMPAN DATA TRANSAKSI</button>
         </div>
 
-        <div class="table-container">
-            <div style="padding: 20px; border-bottom: 1px solid #f1f5f9;">
-                <h3 style="font-size: 16px;">Riwayat Transaksi Terakhir</h3>
-            </div>
-            <table id="trans-table">
+        <div class="table-res">
+            <div style="padding: 20px; font-weight: 800; border-bottom: 1px solid #f1f5f9;">Riwayat Transaksi</div>
+            <table>
                 <thead>
                     <tr>
                         <th>Tanggal</th>
                         <th>Keterangan</th>
-                        <th>Tipe</th>
+                        <th>Status</th>
                         <th>Nominal</th>
                     </tr>
                 </thead>
@@ -127,23 +135,21 @@
         function updateUI() {
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
-            
-            let masuk = 0;
-            let keluar = 0;
+            let masuk = 0, keluar = 0;
 
             transactions.forEach((t) => {
                 if(t.type === 'masuk') masuk += parseInt(t.amount);
                 else keluar += parseInt(t.amount);
 
-                const row = `<tr>
-                    <td>${t.date}</td>
-                    <td><b>${t.desc}</b></td>
-                    <td><span class="badge ${t.type === 'masuk' ? 'badge-in' : 'badge-out'}">${t.type.toUpperCase()}</span></td>
-                    <td style="font-weight: 600; color: ${t.type === 'masuk' ? '#10b981' : '#ef4444'}">
-                        ${t.type === 'masuk' ? '+' : '-'} Rp ${parseInt(t.amount).toLocaleString('id-ID')}
-                    </td>
-                </tr>`;
-                tbody.innerHTML += row;
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${t.date}</td>
+                        <td style="font-weight:600">${t.desc}</td>
+                        <td><span class="badge ${t.type === 'masuk' ? 'in' : 'out'}">${t.type.toUpperCase()}</span></td>
+                        <td style="font-weight:800; color:${t.type === 'masuk' ? '#10b981' : '#ef4444'}">
+                            Rp ${parseInt(t.amount).toLocaleString('id-ID')}
+                        </td>
+                    </tr>`;
             });
 
             document.getElementById('total-masuk').innerText = "Rp " + masuk.toLocaleString('id-ID');
@@ -161,13 +167,10 @@
                 transactions.unshift({ desc, amount, type, date });
                 localStorage.setItem('kas_data', JSON.stringify(transactions));
                 updateUI();
-                
-                // Clear Form
                 document.getElementById('desc').value = '';
                 document.getElementById('amount').value = '';
-                alert("Transaksi Berhasil Dicatat!");
             } else {
-                alert("Lengkapi datanya, Bos!");
+                alert("Isi data dengan lengkap, Bos!");
             }
         }
 
