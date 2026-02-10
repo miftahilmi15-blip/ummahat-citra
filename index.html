@@ -42,7 +42,7 @@
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .saldo-area { display: flex; align-items: center; gap: 10px; }
         .saldo-area span { font-size: 14px; opacity: 0.9; }
-        .saldo-val { font-size: 20px; font-weight: 700; }
+        .saldo-val { font-size: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; }
 
         .quick-actions {
             display: flex;
@@ -54,10 +54,10 @@
         .action-item i { font-size: 24px; margin-bottom: 8px; display: block; }
         .action-item p { font-size: 12px; font-weight: 500; }
 
-        /* --- MAIN GRID (White Box) --- */
+        /* --- MAIN GRID --- */
         .main-container {
             padding: 0 15px;
-            margin-top: -30px; /* Menumpuk ke atas biru */
+            margin-top: -30px;
             position: relative;
             z-index: 10;
         }
@@ -78,7 +78,7 @@
             border-radius: 20px;
             padding: 20px 10px;
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 kolom ala DANA */
+            grid-template-columns: repeat(4, 1fr);
             gap: 15px 5px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }
@@ -128,7 +128,6 @@
         .c-kutipan { color: #ec4899; }
         .c-kas { color: #06b6d4; }
         .c-laporan { color: #64748b; }
-        .c-admin { color: #475569; }
 
     </style>
 </head>
@@ -151,13 +150,16 @@
             <i class="fas fa-bars" onclick="toggleSidebar()" style="font-size: 20px; cursor:pointer"></i>
             <div class="saldo-area">
                 <span>Saldo Kas</span>
-                <div class="saldo-val" id="display-saldo">Rp 0 <i class="far fa-eye-slash" style="font-size:14px; margin-left:5px"></i></div>
+                <div class="saldo-val" onclick="toggleMata()">
+                    <span id="angka-saldo">Rp 0</span>
+                    <i id="icon-mata" class="far fa-eye" style="font-size:14px;"></i>
+                </div>
             </div>
             <i class="fas fa-comment-dots" style="font-size: 20px;"></i>
         </div>
 
         <div class="quick-actions">
-            <div class="action-item">
+            <div class="action-item" onclick="location.href='infaq.html'">
                 <i class="fas fa-plus-square"></i>
                 <p>Isi Saldo</p>
             </div>
@@ -169,7 +171,7 @@
                 <i class="fas fa-paper-plane"></i>
                 <p>Kirim</p>
             </div>
-            <div class="action-item">
+            <div class="action-item" onclick="location.href='infaq.html'">
                 <i class="fas fa-wallet"></i>
                 <p>Kas Box</p>
             </div>
@@ -179,7 +181,7 @@
     <div class="main-container">
         <div class="mahfuzat-card">
             <h4>MAHFUZAT HARI INI</h4>
-            <p id="m-text">"Man jadda wajada - Siapa bersungguh-sungguh akan berhasil."</p>
+            <p id="m-text">"Man jadda wajada..."</p>
         </div>
 
         <div class="menu-white-box">
@@ -207,7 +209,7 @@
                 <div class="icon-circle"><i class="fas fa-quote-left c-kutipan"></i></div>
                 <h3>Kutipan</h3>
             </div>
-            <div class="menu-item" onclick="location.href='kas.html'">
+            <div class="menu-item" onclick="location.href='infaq.html'">
                 <div class="icon-circle"><i class="fas fa-box-open c-kas"></i></div>
                 <h3>Inventaris</h3>
             </div>
@@ -215,59 +217,60 @@
                 <div class="icon-circle"><i class="fas fa-file-contract c-laporan"></i></div>
                 <h3>Laporan</h3>
             </div>
-            <div class="menu-item" onclick="toggleSidebar()">
-                <div class="icon-circle"><i class="fas fa-th-large" style="color:#aaa"></i></div>
-                <h3>Lainnya</h3>
-            </div>
         </div>
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item active">
-            <i class="fas fa-home"></i>
-            Beranda
-        </div>
-        <div class="nav-item">
-            <i class="fas fa-history"></i>
-            Aktivitas
-        </div>
-        <div class="pay-btn">
-            <i class="fas fa-qrcode"></i>
-        </div>
-        <div class="nav-item">
-            <i class="fas fa-wallet"></i>
-            Dompet
-        </div>
-        <div class="nav-item">
-            <i class="fas fa-user-circle"></i>
-            Saya
-        </div>
+        <div class="nav-item active"><i class="fas fa-home"></i> Beranda</div>
+        <div class="nav-item"><i class="fas fa-history"></i> Aktivitas</div>
+        <div class="pay-btn"><i class="fas fa-qrcode"></i></div>
+        <div class="nav-item"><i class="fas fa-wallet"></i> Dompet</div>
+        <div class="nav-item"><i class="fas fa-user-circle"></i> Saya</div>
     </div>
 
     <script>
+        let isHidden = false;
+        let totalSaldoGlobal = 0;
+
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('overlay').classList.toggle('active');
         }
 
-        // --- LOGIKA SALDO OTOMATIS ---
+        // --- LOGIKA UPDATE SALDO DARI KAS_DATA ---
         function updateSaldo() {
-            // Mengambil data dari localStorage dengan kunci 'data_infaq'
-            // Pastikan di halaman infaq.html, data disimpan dengan kunci yang sama
-            let listInfaq = JSON.parse(localStorage.getItem('data_infaq')) || [];
+            // DISINI KUNCINYA: Harus 'kas_data' biar nyambung sama infaq.html
+            let listKas = JSON.parse(localStorage.getItem('kas_data')) || [];
             
-            // Menghitung total nominal
-            let total = listInfaq.reduce((acc, curr) => acc + parseInt(curr.nominal || 0), 0);
-            
-            // Format ke Rupiah
-            let formatted = new Intl.NumberFormat('id-ID', {
-                style: 'currency',
-                currency: 'IDR',
-                minimumFractionDigits: 0
-            }).format(total);
+            let masuk = 0;
+            let keluar = 0;
 
-            // Update tampilan saldo
-            document.getElementById('display-saldo').innerHTML = formatted + ' <i class="far fa-eye-slash" style="font-size:14px; margin-left:5px"></i>';
+            listKas.forEach(t => {
+                if(t.type === 'masuk') masuk += parseInt(t.amount);
+                else keluar += parseInt(t.amount);
+            });
+
+            totalSaldoGlobal = masuk - keluar;
+            renderSaldo();
+        }
+
+        // --- FUNGSI MATA (SHOW/HIDE) ---
+        function toggleMata() {
+            isHidden = !isHidden;
+            renderSaldo();
+        }
+
+        function renderSaldo() {
+            const display = document.getElementById('angka-saldo');
+            const icon = document.getElementById('icon-mata');
+
+            if(isHidden) {
+                display.innerText = "Rp •••••••";
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                display.innerText = "Rp " + totalSaldoGlobal.toLocaleString('id-ID');
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
         }
 
         const mahfuzat = [
@@ -278,7 +281,6 @@
 
         window.onload = () => {
             document.getElementById('m-text').innerText = mahfuzat[Math.floor(Math.random() * mahfuzat.length)];
-            // Panggil fungsi saldo saat halaman dibuka
             updateSaldo();
         };
     </script>
