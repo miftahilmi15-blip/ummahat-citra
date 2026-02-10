@@ -56,7 +56,7 @@
         .container { padding: 25px 5%; max-width: 1200px; margin: auto; }
         .welcome-box { background: linear-gradient(135deg, var(--white), var(--blue-light)); padding: 25px; border-radius: 20px; margin-bottom: 30px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
 
-        /* GRID DASHBOARD (Berbeda dengan Sidebar) */
+        /* GRID DASHBOARD */
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .menu-card { background: var(--white); padding: 22px; border-radius: 24px; transition: 0.3s; cursor: pointer; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 18px; }
         .menu-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(37, 99, 235, 0.1); border-color: var(--blue-primary); }
@@ -73,9 +73,10 @@
             <i class="fas fa-times" onclick="toggleSidebar()" style="cursor:pointer"></i>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="#"><i class="fas fa-user-shield"></i> Menu Admin</a></li>
-            <li><a href="#"><i class="fas fa-clock"></i> Waktu Sholat</a></li>
-            <li><a href="#"><i class="fas fa-quote-left"></i> Mahfuzat</a></li> <li><a href="#"><i class="fas fa-calendar-alt"></i> Jadwal Kegiatan</a></li>
+            <li><a href="admin.html"><i class="fas fa-user-shield"></i> Menu Admin</a></li>
+            <li><a href="sholat.html"><i class="fas fa-clock"></i> Waktu Sholat</a></li>
+            <li><a href="mahfuzat.html"><i class="fas fa-quote-left"></i> Mahfuzat</a></li> 
+            <li><a href="jadwal.html"><i class="fas fa-calendar-alt"></i> Jadwal Kegiatan</a></li>
             <li style="margin-top:50px"><a href="#" onclick="handleLogout()" style="color:#fda4af"><i class="fas fa-power-off"></i> Keluar</a></li>
         </ul>
     </div>
@@ -110,7 +111,7 @@
             </div>
 
             <div class="menu-grid">
-                <div class="menu-card" style="border-left: 5px solid #10b981;">
+                <div class="menu-card" style="border-left: 5px solid #10b981;" onclick="window.location.href='infaq.html'">
                     <div class="icon-box"><i class="fas fa-wallet" style="color:#10b981"></i></div>
                     <div>
                         <h3>Rekap Infaq</h3>
@@ -118,7 +119,7 @@
                     </div>
                 </div>
 
-                <div class="menu-card" style="border-left: 5px solid #f59e0b;">
+                <div class="menu-card" style="border-left: 5px solid #f59e0b;" onclick="window.location.href='jamaah.html'">
                     <div class="icon-box"><i class="fas fa-users" style="color:#f59e0b"></i></div>
                     <div>
                         <h3>Data Jamaah</h3>
@@ -126,7 +127,7 @@
                     </div>
                 </div>
 
-                <div class="menu-card" style="border-left: 5px solid #8b5cf6;">
+                <div class="menu-card" style="border-left: 5px solid #8b5cf6;" onclick="window.location.href='sosial.html'">
                     <div class="icon-box"><i class="fas fa-file-medical-alt" style="color:#8b5cf6"></i></div>
                     <div>
                         <h3>Laporan Sosial</h3>
@@ -134,7 +135,7 @@
                     </div>
                 </div>
 
-                <div class="menu-card" style="border-left: 5px solid #ef4444;">
+                <div class="menu-card" style="border-left: 5px solid #ef4444;" onclick="window.location.href='setting.html'">
                     <div class="icon-box"><i class="fas fa-cog" style="color:#ef4444"></i></div>
                     <div>
                         <h3>Setting Sistem</h3>
