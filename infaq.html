@@ -2,283 +2,232 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Master Admin Pro | DANA Style</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setoran Infaq | Master Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    
     <style>
         :root {
-            --dana-blue: #108ee9;
-            --dana-dark-blue: #0a7cc2;
+            --blue-dark: #1e3a8a;
+            --blue-primary: #2563eb;
+            --blue-light: #eff6ff;
             --white: #ffffff;
-            --bg-light: #f5f5f5;
-            --text-dark: #333333;
-            --text-gray: #888888;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg-body: #f8fafc;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg-light); color: var(--text-dark); overflow-x: hidden; }
+        body { background: var(--bg-body); color: #334155; }
 
-        /* --- SIDEBAR --- */
-        #sidebar {
-            position: fixed; left: -280px; top: 0; width: 280px; height: 100%; 
-            background: var(--dana-blue); color: white; z-index: 3000; 
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); padding: 25px;
+        header {
+            background: var(--white); padding: 15px 5%; display: flex;
+            justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
         }
-        #sidebar.active { left: 0; }
-        .overlay { position: fixed; display: none; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2500; backdrop-filter: blur(2px); }
-        .overlay.active { display: block; }
+        .logo-text { font-weight: 800; color: var(--blue-primary); font-size: 20px; text-decoration: none; }
+        .logo-text span { color: var(--blue-dark); }
 
-        /* --- HEADER AREA --- */
-        .blue-section {
-            background: var(--dana-blue);
-            height: 220px;
-            padding: 20px 5%;
-            color: white;
-            position: relative;
-        }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .saldo-area { display: flex; align-items: center; gap: 10px; }
-        .saldo-area span { font-size: 14px; opacity: 0.9; }
-        .saldo-val { font-size: 20px; font-weight: 700; }
+        .container { padding: 30px 5%; max-width: 1200px; margin: auto; }
 
-        .quick-actions {
-            display: flex;
-            justify-content: space-between;
-            text-align: center;
-            margin-top: 10px;
-        }
-        .action-item { flex: 1; cursor: pointer; }
-        .action-item i { font-size: 24px; margin-bottom: 8px; display: block; }
-        .action-item p { font-size: 12px; font-weight: 500; }
-
-        /* --- MAIN GRID (White Box) --- */
-        .main-container {
-            padding: 0 15px;
-            margin-top: -30px; /* Menumpuk ke atas biru */
-            position: relative;
-            z-index: 10;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 25px; border-radius: 20px; border: 1px solid #e2e8f0; position: relative; }
+        .stat-card h4 { font-size: 13px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-card .amount { font-size: 24px; font-weight: 800; margin-top: 10px; display: block; }
         
-        .mahfuzat-card {
-            background: var(--white);
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border-left: 4px solid var(--dana-blue);
-        }
-        .mahfuzat-card h4 { font-size: 11px; color: var(--dana-blue); text-transform: uppercase; }
-        .mahfuzat-card p { font-size: 13px; font-style: italic; color: #555; margin-top: 3px; }
+        .input-section { background: white; border-radius: 24px; border: 1px solid #e2e8f0; padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.02); }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        label { font-size: 12px; font-weight: 700; color: var(--blue-dark); margin-bottom: 8px; display: block; }
+        input, select { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #f1f5f9; background: #f8fafc; outline: none; transition: 0.3s; font-size: 14px; }
+        input:focus { border-color: var(--blue-primary); background: white; }
 
-        .menu-white-box {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 20px 10px;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4 kolom ala DANA */
-            gap: 15px 5px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        .btn-submit { 
+            background: var(--blue-primary); color: white; border: none; 
+            padding: 15px 30px; border-radius: 12px; font-weight: 600; 
+            cursor: pointer; width: 100%; margin-top: 25px; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
+        .btn-submit:hover { background: var(--blue-dark); transform: translateY(-2px); }
 
-        .menu-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            cursor: pointer;
+        .table-res { background: white; border-radius: 24px; border: 1px solid #e2e8f0; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.02); }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f8fafc; padding: 18px; text-align: left; font-size: 13px; color: #64748b; }
+        td { padding: 18px; border-top: 1px solid #f1f5f9; font-size: 14px; }
+
+        .badge { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; }
+        .in { background: #d1fae5; color: var(--success); }
+        .out { background: #fee2e2; color: var(--danger); }
+        .cat-badge { background: #eff6ff; color: var(--blue-primary); padding: 4px 8px; border-radius: 6px; font-size: 10px; margin-top: 4px; display: inline-block; }
+
+        .delete-btn { color: #cbd5e1; cursor: pointer; transition: 0.3s; }
+        .delete-btn:hover { color: var(--danger); }
+
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            th:nth-child(1), td:nth-child(1) { display: none; }
         }
-        .icon-circle {
-            width: 45px;
-            height: 45px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-        .menu-item h3 { font-size: 11px; font-weight: 500; color: #444; line-height: 1.2; }
-
-        /* --- BOTTOM NAV --- */
-        .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; height: 70px;
-            background: var(--white); border-top: 1px solid #eee;
-            display: flex; justify-content: space-around; align-items: center;
-            z-index: 1000;
-        }
-        .nav-item { text-align: center; color: var(--text-gray); font-size: 10px; cursor: pointer; }
-        .nav-item.active { color: var(--dana-blue); }
-        .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
-
-        .pay-btn {
-            width: 60px; height: 60px; background: var(--dana-blue);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 24px; margin-top: -35px;
-            border: 5px solid var(--bg-light); box-shadow: 0 4px 10px rgba(16, 142, 233, 0.3);
-        }
-
-        /* ICON COLORS */
-        .c-infaq { color: #10b981; }
-        .c-jamaah { color: #f59e0b; }
-        .c-sholat { color: #3b82f6; }
-        .c-sosial { color: #ef4444; }
-        .c-jadwal { color: #8b5cf6; }
-        .c-kutipan { color: #ec4899; }
-        .c-kas { color: #06b6d4; }
-        .c-laporan { color: #64748b; }
-        .c-admin { color: #475569; }
-
     </style>
 </head>
 <body>
 
-    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-    <div id="sidebar">
-        <h2 style="margin-bottom:20px">MASTER PRO</h2>
-        <div class="sidebar-menu">
-            <p style="margin-bottom:15px; opacity:0.7">Menu Navigasi</p>
-            <a href="#" style="color:white; text-decoration:none; display:block; margin-bottom:15px"><i class="fas fa-home"></i> Beranda</a>
-            <a href="#" style="color:white; text-decoration:none; display:block; margin-bottom:15px"><i class="fas fa-user"></i> Profil</a>
-            <hr style="opacity:0.2; margin:20px 0">
-            <a href="#" onclick="location.reload()" style="color:#ffb2b2; text-decoration:none;"><i class="fas fa-power-off"></i> Keluar</a>
-        </div>
-    </div>
+    <header>
+        <a href="index.html" class="logo-text">MASTER<span>PRO</span></a>
+        <div style="font-size: 14px; font-weight: 600; color: var(--blue-dark);">Setoran Kas & Infaq</div>
+    </header>
 
-    <div class="blue-section">
-        <div class="top-bar">
-            <i class="fas fa-bars" onclick="toggleSidebar()" style="font-size: 20px; cursor:pointer"></i>
-            <div class="saldo-area">
-                <span>Saldo Kas</span>
-                <div class="saldo-val" id="main-saldo">Rp 0 <i class="far fa-eye-slash" style="font-size:14px; margin-left:5px"></i></div>
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card" style="border-bottom: 4px solid var(--blue-primary)">
+                <h4>Total Kas Tersedia</h4>
+                <span class="amount" id="total-kas">Rp 0</span>
             </div>
-            <i class="fas fa-comment-dots" style="font-size: 20px;"></i>
-        </div>
-
-        <div class="quick-actions">
-            <div class="action-item" onclick="location.href='infaq.html'">
-                <i class="fas fa-plus-square"></i>
-                <p>Isi Saldo</p>
+            <div class="stat-card" style="border-bottom: 4px solid var(--success)">
+                <h4>Total Setoran</h4>
+                <span class="amount" id="total-masuk">Rp 0</span>
             </div>
-            <div class="action-item">
-                <i class="fas fa-hand-holding-usd"></i>
-                <p>Minta</p>
+            <div class="stat-card" style="border-bottom: 4px solid var(--danger)">
+                <h4>Total Pengeluaran</h4>
+                <span class="amount" id="total-keluar">Rp 0</span>
             </div>
-            <div class="action-item">
-                <i class="fas fa-paper-plane"></i>
-                <p>Kirim</p>
-            </div>
-            <div class="action-item" onclick="location.href='infaq.html'">
-                <i class="fas fa-wallet"></i>
-                <p>Kas Box</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="main-container">
-        <div class="mahfuzat-card">
-            <h4>MAHFUZAT HARI INI</h4>
-            <p id="m-text">"Man jadda wajada - Siapa bersungguh-sungguh akan berhasil."</p>
         </div>
 
-        <div class="menu-white-box">
-            <div class="menu-item" onclick="location.href='infaq.html'">
-                <div class="icon-circle"><i class="fas fa-hand-holding-heart c-infaq"></i></div>
-                <h3>Infaq</h3>
+        <div class="input-section">
+            <h3 style="margin-bottom: 20px; font-size: 18px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-edit" style="color: var(--blue-primary)"></i> Form Setoran / Transaksi
+            </h3>
+            <div class="form-row">
+                <div>
+                    <label>Nama Penyetor / Penerima</label>
+                    <input type="text" id="person" placeholder="Contoh: H. Ahmad / Toko Bangunan">
+                </div>
+                <div>
+                    <label>Keterangan / Keperluan</label>
+                    <input type="text" id="desc" placeholder="Contoh: Infaq Jumat / Beli Cat">
+                </div>
+                <div>
+                    <label>Nominal (Rp)</label>
+                    <input type="number" id="amount" placeholder="0">
+                </div>
+                <div>
+                    <label>Kategori</label>
+                    <select id="category">
+                        <option value="Infaq">Infaq</option>
+                        <option value="Zakat">Zakat</option>
+                        <option value="Sedekah">Sedekah</option>
+                        <option value="Wakaf">Wakaf</option>
+                        <option value="Sosial">Bantuan Sosial (Keluar)</option>
+                        <option value="Operasional">Operasional (Keluar)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Jenis</label>
+                    <select id="type">
+                        <option value="masuk">Uang Masuk (Setoran)</option>
+                        <option value="keluar">Uang Keluar</option>
+                    </select>
+                </div>
             </div>
-            <div class="menu-item" onclick="location.href='jamaah.html'">
-                <div class="icon-circle"><i class="fas fa-users c-jamaah"></i></div>
-                <h3>Jamaah</h3>
-            </div>
-            <div class="menu-item" onclick="location.href='sholat.html'">
-                <div class="icon-circle"><i class="fas fa-mosque c-sholat"></i></div>
-                <h3>Sholat</h3>
-            </div>
-            <div class="menu-item" onclick="location.href='sosial.html'">
-                <div class="icon-circle"><i class="fas fa-heartbeat c-sosial"></i></div>
-                <h3>Sosial</h3>
-            </div>
-            <div class="menu-item" onclick="location.href='jadwal.html'">
-                <div class="icon-circle"><i class="fas fa-calendar-alt c-jadwal"></i></div>
-                <h3>Jadwal</h3>
-            </div>
-            <div class="menu-item" onclick="location.href='mahfuzat.html'">
-                <div class="icon-circle"><i class="fas fa-quote-left c-kutipan"></i></div>
-                <h3>Kutipan</h3>
-            </div>
-            <div class="menu-item" onclick="location.href='infaq.html'">
-                <div class="icon-circle"><i class="fas fa-box-open c-kas"></i></div>
-                <h3>Inventaris</h3>
-            </div>
-            <div class="menu-item" onclick="location.href='laporan.html'">
-                <div class="icon-circle"><i class="fas fa-file-contract c-laporan"></i></div>
-                <h3>Laporan</h3>
-            </div>
-            <div class="menu-item" onclick="toggleSidebar()">
-                <div class="icon-circle"><i class="fas fa-th-large" style="color:#aaa"></i></div>
-                <h3>Lainnya</h3>
-            </div>
+            <button class="btn-submit" onclick="addTransaction()">
+                <i class="fas fa-save"></i> SIMPAN DATA SETORAN
+            </button>
         </div>
-    </div>
 
-    <div class="bottom-nav">
-        <div class="nav-item active">
-            <i class="fas fa-home"></i>
-            Beranda
-        </div>
-        <div class="nav-item">
-            <i class="fas fa-history"></i>
-            Aktivitas
-        </div>
-        <div class="pay-btn">
-            <i class="fas fa-qrcode"></i>
-        </div>
-        <div class="nav-item">
-            <i class="fas fa-wallet"></i>
-            Dompet
-        </div>
-        <div class="nav-item">
-            <i class="fas fa-user-circle"></i>
-            Saya
+        <div class="table-res">
+            <div style="padding: 20px; font-weight: 800; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between;">
+                Riwayat Transaksi Terakhir
+                <span onclick="clearAll()" style="font-size: 11px; color: var(--danger); cursor: pointer; font-weight: 400;">Hapus Semua</span>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Penyetor/Keterangan</th>
+                        <th>Status</th>
+                        <th>Nominal</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+            </table>
         </div>
     </div>
 
     <script>
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('overlay').classList.toggle('active');
-        }
+        let transactions = JSON.parse(localStorage.getItem('kas_data')) || [];
 
-        // --- FUNGSI UPDATE SALDO DARI KAS_DATA ---
-        function refreshSaldo() {
-            const dataKas = JSON.parse(localStorage.getItem('kas_data')) || [];
-            let totalMasuk = 0;
-            let totalKeluar = 0;
+        function updateUI() {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+            let masuk = 0, keluar = 0;
 
-            dataKas.forEach(t => {
-                if(t.type === 'masuk') totalMasuk += parseInt(t.amount);
-                else totalKeluar += parseInt(t.amount);
+            transactions.forEach((t, index) => {
+                const amt = parseInt(t.amount);
+                if(t.type === 'masuk') masuk += amt;
+                else keluar += amt;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><small>${t.date}</small></td>
+                        <td>
+                            <div style="font-weight:600">${t.person || 'Anonim'}</div>
+                            <div style="font-size:12px; color:#64748b">${t.desc}</div>
+                            <span class="cat-badge">${t.category}</span>
+                        </td>
+                        <td><span class="badge ${t.type === 'masuk' ? 'in' : 'out'}">${t.type.toUpperCase()}</span></td>
+                        <td style="font-weight:800; color:${t.type === 'masuk' ? '#10b981' : '#ef4444'}">
+                            Rp ${amt.toLocaleString('id-ID')}
+                        </td>
+                        <td>
+                            <i class="fas fa-trash-alt delete-btn" onclick="deleteItem(${index})"></i>
+                        </td>
+                    </tr>`;
             });
 
-            const saldoAkhir = totalMasuk - totalKeluar;
-            
-            // Format Rupiah & Tampilkan
-            document.getElementById('main-saldo').innerHTML = 
-                "Rp " + saldoAkhir.toLocaleString('id-ID') + 
-                ' <i class="far fa-eye-slash" style="font-size:14px; margin-left:5px"></i>';
+            document.getElementById('total-masuk').innerText = "Rp " + masuk.toLocaleString('id-ID');
+            document.getElementById('total-keluar').innerText = "Rp " + keluar.toLocaleString('id-ID');
+            document.getElementById('total-kas').innerText = "Rp " + (masuk - keluar).toLocaleString('id-ID');
         }
 
-        const mahfuzat = [
-            "Man jadda wajada - Siapa bersungguh-sungguh akan berhasil.",
-            "Man shabara zhafira - Siapa bersabar akan beruntung.",
-            "Al-waqtu atsmanu minadz dzahabi - Waktu lebih berharga dari emas."
-        ];
+        function addTransaction() {
+            const person = document.getElementById('person').value;
+            const desc = document.getElementById('desc').value;
+            const amount = document.getElementById('amount').value;
+            const type = document.getElementById('type').value;
+            const category = document.getElementById('category').value;
+            const date = new Date().toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'});
 
-        window.onload = () => {
-            document.getElementById('m-text').innerText = mahfuzat[Math.floor(Math.random() * mahfuzat.length)];
-            refreshSaldo(); // Jalankan saat dashboard dibuka
-        };
+            if(desc && amount > 0) {
+                transactions.unshift({ person, desc, amount, type, category, date });
+                localStorage.setItem('kas_data', JSON.stringify(transactions));
+                updateUI();
+                
+                // Reset form
+                document.getElementById('person').value = '';
+                document.getElementById('desc').value = '';
+                document.getElementById('amount').value = '';
+                alert("Setoran Berhasil Disimpan!");
+            } else {
+                alert("Isi Keterangan dan Nominal dulu Bos!");
+            }
+        }
+
+        function deleteItem(index) {
+            if(confirm("Hapus data ini?")) {
+                transactions.splice(index, 1);
+                localStorage.setItem('kas_data', JSON.stringify(transactions));
+                updateUI();
+            }
+        }
+
+        function clearAll() {
+            if(confirm("Yakin hapus SEMUA riwayat? Saldo akan kembali ke Nol.")) {
+                localStorage.removeItem('kas_data');
+                transactions = [];
+                updateUI();
+            }
+        }
+
+        window.onload = updateUI;
     </script>
 </body>
 </html>
