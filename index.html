@@ -151,7 +151,7 @@
             <i class="fas fa-bars" onclick="toggleSidebar()" style="font-size: 20px; cursor:pointer"></i>
             <div class="saldo-area">
                 <span>Saldo Kas</span>
-                <div class="saldo-val">Rp 39.318 <i class="far fa-eye-slash" style="font-size:14px; margin-left:5px"></i></div>
+                <div class="saldo-val" id="display-saldo">Rp 0 <i class="far fa-eye-slash" style="font-size:14px; margin-left:5px"></i></div>
             </div>
             <i class="fas fa-comment-dots" style="font-size: 20px;"></i>
         </div>
@@ -250,6 +250,26 @@
             document.getElementById('overlay').classList.toggle('active');
         }
 
+        // --- LOGIKA SALDO OTOMATIS ---
+        function updateSaldo() {
+            // Mengambil data dari localStorage dengan kunci 'data_infaq'
+            // Pastikan di halaman infaq.html, data disimpan dengan kunci yang sama
+            let listInfaq = JSON.parse(localStorage.getItem('data_infaq')) || [];
+            
+            // Menghitung total nominal
+            let total = listInfaq.reduce((acc, curr) => acc + parseInt(curr.nominal || 0), 0);
+            
+            // Format ke Rupiah
+            let formatted = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(total);
+
+            // Update tampilan saldo
+            document.getElementById('display-saldo').innerHTML = formatted + ' <i class="far fa-eye-slash" style="font-size:14px; margin-left:5px"></i>';
+        }
+
         const mahfuzat = [
             "Man jadda wajada - Siapa bersungguh-sungguh akan berhasil.",
             "Man shabara zhafira - Siapa bersabar akan beruntung.",
@@ -258,6 +278,8 @@
 
         window.onload = () => {
             document.getElementById('m-text').innerText = mahfuzat[Math.floor(Math.random() * mahfuzat.length)];
+            // Panggil fungsi saldo saat halaman dibuka
+            updateSaldo();
         };
     </script>
 </body>
