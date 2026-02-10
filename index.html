@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Master Admin Pro | 9-Grid Dashboard</title>
+    <title>Master Admin Pro | 9-Grid & Sidebar</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -16,22 +16,44 @@
             --white: #ffffff;
             --text-main: #334155;
             --bg-body: #f1f5f9;
+            --sidebar-width: 280px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg-body); color: var(--text-main); }
+        body { background: var(--bg-body); color: var(--text-main); overflow-x: hidden; }
 
+        /* --- SIDEBAR --- */
+        #sidebar {
+            position: fixed; left: calc(-1 * var(--sidebar-width)); top: 0; 
+            width: var(--sidebar-width); height: 100%; background: var(--blue-dark);
+            color: white; z-index: 2000; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 25px; box-shadow: 10px 0 30px rgba(0,0,0,0.2);
+        }
+        #sidebar.active { left: 0; }
+        .sidebar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu a {
+            display: flex; align-items: center; gap: 15px; color: rgba(255,255,255,0.8);
+            text-decoration: none; padding: 14px 18px; border-radius: 12px; transition: 0.3s; font-size: 15px;
+        }
+        .sidebar-menu a:hover { background: var(--blue-primary); color: white; transform: translateX(5px); }
+
+        .overlay { position: fixed; display: none; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1500; backdrop-filter: blur(3px); }
+        .overlay.active { display: block; }
+
+        /* --- DASHBOARD UI --- */
         header { 
             background: var(--white); padding: 12px 5%; display: flex; 
             justify-content: space-between; align-items: center; 
             box-shadow: 0 2px 10px rgba(0,0,0,0.03); position: sticky; top: 0; z-index: 100;
         }
+        .logo-area { display: flex; align-items: center; gap: 15px; }
         .logo-text { font-weight: 800; color: var(--blue-primary); font-size: 18px; }
         .logo-text span { color: var(--blue-dark); }
 
         .container { padding: 15px; max-width: 1200px; margin: auto; }
 
-        /* MAHFUZAT SLIM WIDGET */
+        /* MAHFUZAT SLIM */
         .mahfuzat-slim {
             background: linear-gradient(135deg, var(--blue-dark), var(--blue-primary));
             padding: 20px; border-radius: 20px; margin-bottom: 20px;
@@ -43,7 +65,7 @@
         /* GRID 9 MENU */
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* Pas 3 kolom */
+            grid-template-columns: repeat(3, 1fr);
             gap: 12px;
         }
 
@@ -59,7 +81,7 @@
             cursor: pointer;
             transition: 0.2s;
             border: 1px solid rgba(0,0,0,0.03);
-            padding: 10px;
+            padding: 8px;
         }
 
         .menu-card:active { transform: scale(0.95); background: var(--blue-light); }
@@ -71,37 +93,53 @@
             font-size: 20px; margin-bottom: 8px;
         }
 
-        .menu-card h3 { font-size: 11px; font-weight: 700; color: var(--blue-dark); line-height: 1.2; }
+        .menu-card h3 { font-size: 11px; font-weight: 700; color: var(--blue-dark); }
 
-        /* WARNA IKON CUSTOM */
-        .bg-1 { background: #ecfdf5; color: #10b981; } /* Hijau */
-        .bg-2 { background: #fffbeb; color: #f59e0b; } /* Kuning */
-        .bg-3 { background: #fef2f2; color: #ef4444; } /* Merah */
-        .bg-4 { background: #eff6ff; color: #2563eb; } /* Biru */
-        .bg-5 { background: #f5f3ff; color: #8b5cf6; } /* Ungu */
-        .bg-6 { background: #fdf2f8; color: #db2777; } /* Pink */
-        .bg-7 { background: #f0fdfa; color: #0d9488; } /* Teal */
-        .bg-8 { background: #fafaf9; color: #44403c; } /* Stone */
-        .bg-9 { background: #f8fafc; color: #64748b; } /* Slate */
+        /* BG ICON COLORS */
+        .bg-1 { background: #ecfdf5; color: #10b981; } 
+        .bg-2 { background: #fffbeb; color: #f59e0b; } 
+        .bg-3 { background: #fef2f2; color: #ef4444; } 
+        .bg-4 { background: #eff6ff; color: #2563eb; } 
+        .bg-5 { background: #f5f3ff; color: #8b5cf6; } 
+        .bg-6 { background: #fdf2f8; color: #db2777; } 
+        .bg-7 { background: #f0fdfa; color: #0d9488; } 
+        .bg-8 { background: #fafaf9; color: #44403c; } 
+        .bg-9 { background: #f8fafc; color: #64748b; }
 
         @media (min-width: 768px) {
-            .menu-grid { grid-template-columns: repeat(3, 200px); justify-content: center; }
-            .menu-card { aspect-ratio: auto; height: 180px; }
-            .icon-box { width: 60px; height: 60px; font-size: 26px; }
-            .menu-card h3 { font-size: 14px; }
+            .menu-grid { grid-template-columns: repeat(3, 180px); justify-content: center; }
+            .menu-card h3 { font-size: 13px; }
         }
     </style>
 </head>
 <body>
 
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-text" style="color:white">MASTER<span>PRO</span></div>
+            <i class="fas fa-times" onclick="toggleSidebar()" style="cursor:pointer"></i>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="dashboard.html"><i class="fas fa-home"></i> Beranda</a></li>
+            <li><a href="admin.html"><i class="fas fa-user-shield"></i> Menu Admin</a></li>
+            <li><a href="sholat.html"><i class="fas fa-clock"></i> Waktu Sholat</a></li>
+            <li><a href="mahfuzat.html"><i class="fas fa-quote-left"></i> Mahfuzat</a></li> 
+            <li style="margin-top:50px"><a href="#" onclick="handleLogout()" style="color:#fda4af"><i class="fas fa-power-off"></i> Keluar</a></li>
+        </ul>
+    </div>
+
     <header>
-        <div class="logo-text">MASTER<span>PRO</span></div>
-        <div id="clock" style="font-size: 13px; font-weight: 600; color: var(--blue-primary)">00:00:00</div>
+        <div class="logo-area">
+            <i class="fas fa-bars" onclick="toggleSidebar()" style="cursor:pointer; font-size:20px; color:var(--blue-dark)"></i>
+            <div class="logo-text">MASTER<span>PRO</span></div>
+        </div>
+        <div id="clock" style="font-size: 12px; font-weight: 700; color: var(--blue-primary)">00:00:00</div>
     </header>
 
     <div class="container">
         <div class="mahfuzat-slim">
-            <h2>Mahfuzat</h2>
+            <h2>Mahfuzat Hari Ini</h2>
             <div class="mahfuzat-text" id="m-text">"Man jadda wajada"</div>
         </div>
 
@@ -118,7 +156,6 @@
                 <div class="icon-box bg-4"><i class="fas fa-mosque"></i></div>
                 <h3>Sholat</h3>
             </div>
-
             <div class="menu-card" onclick="location.href='sosial.html'">
                 <div class="icon-box bg-5"><i class="fas fa-heartbeat"></i></div>
                 <h3>Sosial</h3>
@@ -129,9 +166,8 @@
             </div>
             <div class="menu-card" onclick="location.href='mahfuzat_list.html'">
                 <div class="icon-box bg-6"><i class="fas fa-quote-left"></i></div>
-                <h3>Mahfuzat</h3>
+                <h3>Kutipan</h3>
             </div>
-
             <div class="menu-card" onclick="location.href='kas.html'">
                 <div class="icon-box bg-1"><i class="fas fa-wallet"></i></div>
                 <h3>Kas Box</h3>
@@ -148,20 +184,23 @@
     </div>
 
     <script>
-        const mahfuzat = [
-            "Man jadda wajada - Siapa bersungguh-sungguh, ia akan berhasil.",
-            "Man shabara zhafira - Siapa bersabar, ia akan beruntung.",
-            "Al-waqtu atsmanu minadz dzahabi - Waktu lebih berharga dari emas."
-        ];
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        function handleLogout() {
+            if(confirm("Keluar dari Sistem?")) {
+                localStorage.removeItem('session_pro');
+                location.reload();
+            }
+        }
 
         window.onload = () => {
-            // Jam Running
+            // Jam real-time
             setInterval(() => {
                 document.getElementById('clock').innerText = new Date().toLocaleTimeString('id-ID');
             }, 1000);
-
-            // Ganti Mahfuzat Random
-            document.getElementById('m-text').innerText = mahfuzat[Math.floor(Math.random() * mahfuzat.length)];
         };
     </script>
 </body>
