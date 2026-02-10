@@ -40,7 +40,42 @@
             position: relative;
         }
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .saldo-area { display: flex; align-items: center; gap: 10px; }
+        
+        /* MODIFIKASI DISINI UNTUK BUBBLE */
+        .saldo-area { display: flex; align-items: center; gap: 10px; position: relative; }
+        
+        .floating-reminder {
+            position: absolute;
+            background: #ffeb3b; /* Kuning cerah khas promo */
+            color: #333;
+            padding: 3px 10px;
+            border-radius: 15px 15px 15px 2px;
+            font-size: 9px;
+            font-weight: 800;
+            top: -25px;
+            left: 50px;
+            white-space: nowrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            animation: floatAnim 2s ease-in-out infinite;
+            z-index: 100;
+        }
+        
+        .floating-reminder::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 5px;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid #ffeb3b;
+        }
+
+        @keyframes floatAnim {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+
         .saldo-area span { font-size: 14px; opacity: 0.9; }
         .saldo-val { font-size: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; }
 
@@ -149,6 +184,8 @@
         <div class="top-bar">
             <i class="fas fa-bars" onclick="toggleSidebar()" style="font-size: 20px; cursor:pointer"></i>
             <div class="saldo-area">
+                <div class="floating-reminder" id="nasihat-gerak">Sudah Infaq Hari Ini?</div>
+                
                 <span>Saldo Kas</span>
                 <div class="saldo-val" onclick="toggleMata()">
                     <span id="angka-saldo">Rp 0</span>
@@ -239,7 +276,6 @@
 
         // --- LOGIKA UPDATE SALDO DARI KAS_DATA ---
         function updateSaldo() {
-            // DISINI KUNCINYA: Harus 'kas_data' biar nyambung sama infaq.html
             let listKas = JSON.parse(localStorage.getItem('kas_data')) || [];
             
             let masuk = 0;
@@ -254,7 +290,6 @@
             renderSaldo();
         }
 
-        // --- FUNGSI MATA (SHOW/HIDE) ---
         function toggleMata() {
             isHidden = !isHidden;
             renderSaldo();
@@ -279,8 +314,21 @@
             "Al-waqtu atsmanu minadz dzahabi - Waktu lebih berharga dari emas."
         ];
 
+        // KONSEP AGAMIS UNTUK BUBBLE
+        const nasihatAgamis = [
+            "Sudah Infaq Hari Ini?",
+            "Sedekah Tolak Bala lho..",
+            "Tabungan Akhirat Yuk!",
+            "Infaq 2rb Gak Bikin Miskin",
+            "Zakat itu Membersihkan Harta"
+        ];
+
         window.onload = () => {
             document.getElementById('m-text').innerText = mahfuzat[Math.floor(Math.random() * mahfuzat.length)];
+            
+            // Pilih nasihat acak untuk bubble gerak
+            document.getElementById('nasihat-gerak').innerText = nasihatAgamis[Math.floor(Math.random() * nasihatAgamis.length)];
+            
             updateSaldo();
         };
     </script>
