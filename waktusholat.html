@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BYOND Prayer & Qibla - Elegant Blue</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* PERUBAHAN WARNA JADI BIRU ELEGAN */
+            --primary-blue: #1e3a8a; /* Navy Elegan */
+            --accent-blue: #2563eb;  /* Royal Blue */
+            --light-blue: #eff6ff;   /* Background Item */
+            --accent-gold: #fbbf24;  /* Emas untuk Ka'bah */
+            --bg-white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: #e2e8f0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+
+        .phone-container {
+            width: 375px; height: 780px; background: var(--bg-white);
+            border-radius: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            overflow: hidden; position: relative; border: 8px solid #1e293b;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue)); 
+            padding: 50px 20px 40px;
+            color: white; text-align: center; border-radius: 0 0 35px 35px;
+        }
+        .time-now { font-size: 3.5rem; font-weight: 700; line-height: 1; }
+        .date-text { font-size: 1rem; opacity: 0.9; margin-top: 10px; font-weight: 500; }
+
+        .menu-actions { display: flex; justify-content: center; gap: 15px; margin-top: -25px; }
+        .btn-action {
+            background: white; padding: 12px 25px; border-radius: 25px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1); border: 1px solid #e2e8f0;
+            display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--primary-blue); cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-action:active { transform: scale(0.95); }
+
+        /* Kiblat Page */
+        .kiblat-page {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; z-index: 100; display: none; flex-direction: column; align-items: center;
+            padding: 60px 20px 20px;
+        }
+        .qibla-header { text-align: center; width: 100%; margin-bottom: 20px; }
+        .qibla-header h2 { font-size: 1.5rem; color: var(--primary-blue); }
+        .qibla-header p { font-size: 0.9rem; color: #64748b; margin-top: 10px; }
+
+        .compass-wrap {
+            position: relative; width: 300px; height: 300px;
+            display: flex; justify-content: center; align-items: center; margin-top: 20px;
+        }
+        .outer-ring {
+            width: 280px; height: 280px; border: 12px solid var(--light-blue); border-radius: 50%;
+            position: relative; display: flex; justify-content: center; align-items: center;
+        }
+        .degree-center { font-size: 3rem; font-weight: 700; color: var(--primary-blue); z-index: 5; transition: color 0.3s; }
+        
+        .kaaba-orbit { position: absolute; width: 100%; height: 100%; z-index: 10; transition: transform 0.1s; }
+        .kaaba-box {
+            position: absolute; top: -20px; left: calc(50% - 25px);
+            width: 50px; height: 50px; background: #000;
+            border: 2px solid var(--accent-gold);
+            border-radius: 12px; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-size: 1.5rem;
+        }
+        .pointer-up {
+            position: absolute; top: 10px; width: 0; height: 0;
+            border-left: 10px solid transparent; border-right: 10px solid transparent;
+            border-bottom: 20px solid var(--accent-blue); z-index: 10;
+        }
+
+        .close-btn { position: absolute; top: 20px; right: 20px; font-size: 1.8rem; cursor: pointer; border: none; background: none; color: var(--primary-blue); }
+        
+        .prayer-list { padding: 30px 20px; height: 450px; overflow-y: auto; }
+        .prayer-item {
+            display: flex; justify-content: space-between; padding: 20px;
+            background: white; border-radius: 20px; margin-bottom: 12px; 
+            border: 1px solid #f1f5f9; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .prayer-item span:first-child { font-weight: 600; font-size: 1rem; color: #64748b; }
+        .prayer-item span:last-child { font-weight: 700; color: #94a3b8; }
+
+        .prayer-item.active { 
+            background: var(--light-blue); 
+            border-color: var(--accent-blue); 
+            transform: scale(1.03);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.1);
+        }
+        .prayer-item.active span { color: var(--accent-blue) !important; }
+
+        .sensor-btn {
+            background: var(--primary-blue); color: white; border: none;
+            padding: 12px 30px; border-radius: 20px; margin-top: 20px;
+            font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .sensor-btn:hover { background: var(--accent-blue); }
+    </style>
+</head>
+<body>
+
+<audio id="adzanAudio" src="https://www.islamcan.com/audio/adhan/makkah.mp3" preload="auto"></audio>
+
+<div class="phone-container">
+    <div class="header">
+        <p>📍 <span id="cityName">Mencari Lokasi...</span></p>
+        <div class="time-now" id="liveClock">00:00</div>
+        <p class="date-text" id="dateDisplay">Memuat Tanggal...</p>
+    </div>
+
+    <div class="menu-actions">
+        <button class="btn-action" onclick="openMasjid()">🕌 Masjid</button>
+        <button class="btn-action" onclick="toggleKiblat(true)">🧭 Kiblat</button>
+    </div>
+
+    <div class="prayer-list" id="prayerItems"></div>
+
+    <div id="kiblatPage" class="kiblat-page">
+        <button class="close-btn" onclick="toggleKiblat(false)">✕</button>
+        <div class="qibla-header">
+            <h2>Arah Kiblat</h2>
+            <p>Target: <span id="targetDeg" style="font-weight: bold; color: var(--accent-blue);">...</span>°</p>
+        </div>
+        <div class="compass-wrap">
+            <div class="pointer-up"></div>
+            <div class="outer-ring" id="compassRing">
+                <div class="degree-center" id="currentHeadingDisplay">0°</div>
+                <div class="kaaba-orbit" id="kaabaOrbit">
+                    <div class="kaaba-box">🕋</div>
+                </div>
+            </div>
+        </div>
+        <button class="sensor-btn" id="sensorBtn" onclick="requestSensor()">Aktifkan Sensor</button>
+        <p style="font-size: 0.7rem; color: #94a3b8; margin-top: 15px; text-align: center; padding: 0 20px;">
+            Gerakkan HP membentuk angka 8 jika arah kompas tidak akurat.
+        </p>
+    </div>
+</div>
+
+<script>
+    /* SEMUA FUNGSI TETAP SAMA SESUAI ANALISIS BOS */
+    let userLat, userLon, qiblaAngle = 295;
+    let currentHeading = 0, lerpHeading = 0;
+    const filterFactor = 0.2; 
+    let prayerTimesData = {};
+    let adzanPlayedStatus = { Fajr: false, Dhuhr: false, Asr: false, Maghrib: false, Isha: false };
+
+    function init() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(pos => {
+                userLat = pos.coords.latitude;
+                userLon = pos.coords.longitude;
+                fetchData(userLat, userLon);
+                calculateQibla(userLat, userLon);
+            }, () => { 
+                fetchData(-6.2000, 106.8166); 
+                calculateQibla(-6.2000, 106.8166);
+            });
+        }
+        
+        if ("Notification" in window) { Notification.requestPermission(); }
+
+        updateTime();
+        setInterval(updateTime, 1000);
+        setInterval(updateActivePrayer, 30000); 
+        animate(); 
+    }
+
+    async function fetchData(lat, lon) {
+        try {
+            const dateObj = new Date();
+            const d = dateObj.toISOString().split('T')[0];
+            const [locRes, prayRes] = await Promise.all([
+                fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`).then(r => r.json()),
+                fetch(`https://api.aladhan.com/v1/timings/${d}?latitude=${lat}&longitude=${lon}&method=20`).then(r => r.json())
+            ]);
+            document.getElementById('cityName').innerText = locRes.address.city || locRes.address.town || "Lokasi Anda";
+            document.getElementById('dateDisplay').innerText = dateObj.toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+            prayerTimesData = prayRes.data.timings;
+            renderPrayerList();
+        } catch(e) { console.error("Error data"); }
+    }
+
+    function renderPrayerList() {
+        if(!prayerTimesData.Fajr) return;
+        const t = prayerTimesData;
+        const list = [["Subuh", t.Fajr], ["Dzuhur", t.Dhuhr], ["Ashar", t.Asr], ["Maghrib", t.Maghrib], ["Isya", t.Isha]];
+        document.getElementById('prayerItems').innerHTML = list.map((p, i) => `<div class="prayer-item" id="pray-${i}"><span>${p[0]}</span><span>${p[1]}</span></div>`).join('');
+        updateActivePrayer();
+    }
+
+    function triggerAdzan(sholatName) {
+        const audio = document.getElementById('adzanAudio');
+        audio.volume = 1.0;
+        if (Notification.permission === "granted") {
+            new Notification(`Waktu Sholat ${sholatName}`, { body: `Waktu ${sholatName} telah tiba.` });
+        }
+        audio.play().catch(e => console.log("Audio play diblokir: " + e));
+    }
+
+    function updateActivePrayer() {
+        if (!prayerTimesData.Fajr) return;
+        const now = new Date();
+        const currentTimeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+        const curTotalMin = now.getHours() * 60 + now.getMinutes();
+
+        const names = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
+        const indoNames = ["Subuh", "Dzuhur", "Ashar", "Maghrib", "Isya"];
+        const times = [prayerTimesData.Fajr, prayerTimesData.Dhuhr, prayerTimesData.Asr, prayerTimesData.Maghrib, prayerTimesData.Isha];
+        
+        let activeIdx = -1;
+        times.forEach((t, i) => {
+            const [h, m] = t.split(':').map(Number);
+            if (curTotalMin >= (h * 60 + m)) activeIdx = i;
+            if (currentTimeStr === t && !adzanPlayedStatus[names[i]]) {
+                triggerAdzan(indoNames[i]);
+                adzanPlayedStatus[names[i]] = true;
+            }
+        });
+
+        document.querySelectorAll('.prayer-item').forEach(el => el.classList.remove('active'));
+        if (activeIdx !== -1) document.getElementById(`pray-${activeIdx}`).classList.add('active');
+    }
+
+    function calculateQibla(lat, lon) {
+        const phiK = 21.4225 * Math.PI / 180; const lamK = 39.8262 * Math.PI / 180;
+        const phi = lat * Math.PI / 180; const lam = lon * Math.PI / 180;
+        let q = Math.atan2(Math.sin(lamK-lam), Math.cos(phi)*Math.tan(phiK)-Math.sin(phi)*Math.cos(lamK-lam));
+        qiblaAngle = (q * 180 / Math.PI + 360) % 360;
+        document.getElementById('targetDeg').innerText = Math.round(qiblaAngle);
+        document.getElementById('kaabaOrbit').style.transform = `rotate(${qiblaAngle}deg)`;
+    }
+
+    function toggleKiblat(show) {
+        document.getElementById('kiblatPage').style.display = show ? 'flex' : 'none';
+    }
+
+    function requestSensor() {
+        if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+            DeviceOrientationEvent.requestPermission().then(state => { if (state === 'granted') startCompass(); });
+        } else { startCompass(); }
+    }
+
+    function startCompass() {
+        const eventName = ('ondeviceorientationabsolute' in window) ? 'deviceorientationabsolute' : 'deviceorientation';
+        window.addEventListener(eventName, e => {
+            let heading = e.webkitCompassHeading || (360 - e.alpha);
+            if (heading !== undefined) currentHeading = heading;
+        }, true);
+        document.getElementById('sensorBtn').style.display = 'none';
+    }
+
+    function animate() {
+        let diff = currentHeading - lerpHeading;
+        if (diff > 180) diff -= 360;
+        if (diff < -180) diff += 360;
+        lerpHeading += diff * filterFactor;
+        lerpHeading = (lerpHeading + 360) % 360;
+
+        const ring = document.getElementById('compassRing');
+        const display = document.getElementById('currentHeadingDisplay');
+        if (ring) {
+            ring.style.transform = `rotate(${-lerpHeading}deg)`;
+            display.innerText = Math.round(lerpHeading) + "°";
+            const diffQibla = Math.abs(lerpHeading - qiblaAngle);
+            display.style.color = (diffQibla < 2 || diffQibla > 358) ? "var(--accent-blue)" : "var(--primary-blue)";
+        }
+        requestAnimationFrame(animate);
+    }
+
+    function updateTime() {
+        const n = new Date();
+        document.getElementById('liveClock').innerText = n.getHours().toString().padStart(2,'0')+":"+n.getMinutes().toString().padStart(2,'0');
+    }
+
+    function openMasjid() {
+        if (userLat) window.open(`https://www.google.com/maps/search/masjid+terdekat/@${userLat},${userLon},15z`, '_blank');
+    }
+
+    document.addEventListener('click', function() {
+        const audio = document.getElementById('adzanAudio');
+        audio.muted = true;
+        audio.play().then(() => { audio.pause(); audio.muted = false; });
+    }, { once: true });
+
+    init();
+</script>
+</body>
+</html>
