@@ -3,183 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Master Admin Pro | 9-Grid & Sidebar</title>
+    <title>Master Admin Pro | DANA Style</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
     <style>
         :root {
-            --blue-dark: #1e3a8a;
-            --blue-primary: #2563eb;
-            --blue-light: #eff6ff;
+            --dana-blue: #108ee9;
+            --dana-dark-blue: #0a7cc2;
             --white: #ffffff;
-            --text-main: #334155;
-            --bg-body: #f1f5f9;
-            --sidebar-width: 280px;
+            --bg-light: #f5f5f5;
+            --text-dark: #333333;
+            --text-gray: #888888;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg-body); color: var(--text-main); overflow-x: hidden; }
+        body { background: var(--bg-light); color: var(--text-dark); overflow-x: hidden; }
 
         /* --- SIDEBAR --- */
         #sidebar {
-            position: fixed; left: calc(-1 * var(--sidebar-width)); top: 0; 
-            width: var(--sidebar-width); height: 100%; background: var(--blue-dark);
-            color: white; z-index: 2000; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 25px; box-shadow: 10px 0 30px rgba(0,0,0,0.2);
+            position: fixed; left: -280px; top: 0; width: 280px; height: 100%; 
+            background: var(--dana-blue); color: white; z-index: 3000; 
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); padding: 25px;
         }
         #sidebar.active { left: 0; }
-        .sidebar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .sidebar-menu { list-style: none; }
-        .sidebar-menu a {
-            display: flex; align-items: center; gap: 15px; color: rgba(255,255,255,0.8);
-            text-decoration: none; padding: 14px 18px; border-radius: 12px; transition: 0.3s; font-size: 15px;
-        }
-        .sidebar-menu a:hover { background: var(--blue-primary); color: white; transform: translateX(5px); }
-
-        .overlay { position: fixed; display: none; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1500; backdrop-filter: blur(3px); }
+        .overlay { position: fixed; display: none; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2500; backdrop-filter: blur(2px); }
         .overlay.active { display: block; }
 
-        /* --- DASHBOARD UI --- */
-        header { 
-            background: var(--white); padding: 12px 5%; display: flex; 
-            justify-content: space-between; align-items: center; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03); position: sticky; top: 0; z-index: 100;
+        /* --- HEADER AREA --- */
+        .blue-section {
+            background: var(--dana-blue);
+            height: 220px;
+            padding: 20px 5%;
+            color: white;
+            position: relative;
         }
-        .logo-area { display: flex; align-items: center; gap: 15px; }
-        .logo-text { font-weight: 800; color: var(--blue-primary); font-size: 18px; }
-        .logo-text span { color: var(--blue-dark); }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .saldo-area { display: flex; align-items: center; gap: 10px; }
+        .saldo-area span { font-size: 14px; opacity: 0.9; }
+        .saldo-val { font-size: 20px; font-weight: 700; }
 
-        .container { padding: 15px; max-width: 1200px; margin: auto; }
-
-        /* MAHFUZAT SLIM */
-        .mahfuzat-slim {
-            background: linear-gradient(135deg, var(--blue-dark), var(--blue-primary));
-            padding: 20px; border-radius: 20px; margin-bottom: 20px;
-            color: white; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.15);
+        .quick-actions {
+            display: flex;
+            justify-content: space-between;
+            text-align: center;
+            margin-top: 10px;
         }
-        .mahfuzat-slim h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; margin-bottom: 5px; }
-        .mahfuzat-text { font-size: 15px; font-weight: 500; line-height: 1.4; font-style: italic; }
+        .action-item { flex: 1; cursor: pointer; }
+        .action-item i { font-size: 24px; margin-bottom: 8px; display: block; }
+        .action-item p { font-size: 12px; font-weight: 500; }
 
-        /* GRID 9 MENU */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+        /* --- MAIN GRID (White Box) --- */
+        .main-container {
+            padding: 0 15px;
+            margin-top: -30px; /* Menumpuk ke atas biru */
+            position: relative;
+            z-index: 10;
         }
-
-        .menu-card {
+        
+        .mahfuzat-card {
             background: var(--white);
-            aspect-ratio: 1 / 1;
-            border-radius: 18px;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--dana-blue);
+        }
+        .mahfuzat-card h4 { font-size: 11px; color: var(--dana-blue); text-transform: uppercase; }
+        .mahfuzat-card p { font-size: 13px; font-style: italic; color: #555; margin-top: 3px; }
+
+        .menu-white-box {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 20px 10px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 4 kolom ala DANA */
+            gap: 15px 5px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        .menu-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             text-align: center;
             cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid rgba(0,0,0,0.03);
-            padding: 8px;
+        }
+        .icon-circle {
+            width: 45px;
+            height: 45px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .menu-item h3 { font-size: 11px; font-weight: 500; color: #444; line-height: 1.2; }
+
+        /* --- BOTTOM NAV --- */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; height: 70px;
+            background: var(--white); border-top: 1px solid #eee;
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 1000;
+        }
+        .nav-item { text-align: center; color: var(--text-gray); font-size: 10px; cursor: pointer; }
+        .nav-item.active { color: var(--dana-blue); }
+        .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
+
+        .pay-btn {
+            width: 60px; height: 60px; background: var(--dana-blue);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 24px; margin-top: -35px;
+            border: 5px solid var(--bg-light); box-shadow: 0 4px 10px rgba(16, 142, 233, 0.3);
         }
 
-        .menu-card:active { transform: scale(0.95); background: var(--blue-light); }
+        /* ICON COLORS */
+        .c-infaq { color: #10b981; }
+        .c-jamaah { color: #f59e0b; }
+        .c-sholat { color: #3b82f6; }
+        .c-sosial { color: #ef4444; }
+        .c-jadwal { color: #8b5cf6; }
+        .c-kutipan { color: #ec4899; }
+        .c-kas { color: #06b6d4; }
+        .c-laporan { color: #64748b; }
+        .c-admin { color: #475569; }
 
-        .icon-box {
-            width: 45px; height: 45px;
-            border-radius: 14px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 20px; margin-bottom: 8px;
-        }
-
-        .menu-card h3 { font-size: 11px; font-weight: 700; color: var(--blue-dark); }
-
-        /* BG ICON COLORS */
-        .bg-1 { background: #ecfdf5; color: #10b981; } 
-        .bg-2 { background: #fffbeb; color: #f59e0b; } 
-        .bg-3 { background: #fef2f2; color: #ef4444; } 
-        .bg-4 { background: #eff6ff; color: #2563eb; } 
-        .bg-5 { background: #f5f3ff; color: #8b5cf6; } 
-        .bg-6 { background: #fdf2f8; color: #db2777; } 
-        .bg-7 { background: #f0fdfa; color: #0d9488; } 
-        .bg-8 { background: #fafaf9; color: #44403c; } 
-        .bg-9 { background: #f8fafc; color: #64748b; }
-
-        @media (min-width: 768px) {
-            .menu-grid { grid-template-columns: repeat(3, 180px); justify-content: center; }
-            .menu-card h3 { font-size: 13px; }
-        }
     </style>
 </head>
 <body>
 
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
     <div id="sidebar">
-        <div class="sidebar-header">
-            <div class="logo-text" style="color:white">MASTER<span>PRO</span></div>
-            <i class="fas fa-times" onclick="toggleSidebar()" style="cursor:pointer"></i>
+        <h2 style="margin-bottom:20px">MASTER PRO</h2>
+        <div class="sidebar-menu">
+            <p style="margin-bottom:15px; opacity:0.7">Menu Navigasi</p>
+            <a href="#" style="color:white; text-decoration:none; display:block; margin-bottom:15px"><i class="fas fa-home"></i> Beranda</a>
+            <a href="#" style="color:white; text-decoration:none; display:block; margin-bottom:15px"><i class="fas fa-user"></i> Profil</a>
+            <hr style="opacity:0.2; margin:20px 0">
+            <a href="#" onclick="location.reload()" style="color:#ffb2b2; text-decoration:none;"><i class="fas fa-power-off"></i> Keluar</a>
         </div>
-        <ul class="sidebar-menu">
-            <li><a href="dashboard.html"><i class="fas fa-home"></i> Beranda</a></li>
-            <li><a href="admin.html"><i class="fas fa-user-shield"></i> Menu Admin</a></li>
-            <li><a href="waktusholat.html"><i class="fas fa-clock"></i> Waktu Sholat</a></li>
-            <li><a href="mahfuzat.html"><i class="fas fa-quote-left"></i> Mahfuzat</a></li> 
-            <li style="margin-top:50px"><a href="#" onclick="handleLogout()" style="color:#fda4af"><i class="fas fa-power-off"></i> Keluar</a></li>
-        </ul>
     </div>
 
-    <header>
-        <div class="logo-area">
-            <i class="fas fa-bars" onclick="toggleSidebar()" style="cursor:pointer; font-size:20px; color:var(--blue-dark)"></i>
-            <div class="logo-text">MASTER<span>PRO</span></div>
-        </div>
-        <div id="clock" style="font-size: 12px; font-weight: 700; color: var(--blue-primary)">00:00:00</div>
-    </header>
-
-    <div class="container">
-        <div class="mahfuzat-slim">
-            <h2>Mahfuzat Hari Ini</h2>
-            <div class="mahfuzat-text" id="m-text">"Man jadda wajada"</div>
+    <div class="blue-section">
+        <div class="top-bar">
+            <i class="fas fa-bars" onclick="toggleSidebar()" style="font-size: 20px; cursor:pointer"></i>
+            <div class="saldo-area">
+                <span>Saldo Kas</span>
+                <div class="saldo-val">Rp 39.318 <i class="far fa-eye-slash" style="font-size:14px; margin-left:5px"></i></div>
+            </div>
+            <i class="fas fa-comment-dots" style="font-size: 20px;"></i>
         </div>
 
-        <div class="menu-grid">
-            <div class="menu-card" onclick="location.href='infaq.html'">
-                <div class="icon-box bg-1"><i class="fas fa-hand-holding-heart"></i></div>
+        <div class="quick-actions">
+            <div class="action-item">
+                <i class="fas fa-plus-square"></i>
+                <p>Isi Saldo</p>
+            </div>
+            <div class="action-item">
+                <i class="fas fa-hand-holding-usd"></i>
+                <p>Minta</p>
+            </div>
+            <div class="action-item">
+                <i class="fas fa-paper-plane"></i>
+                <p>Kirim</p>
+            </div>
+            <div class="action-item">
+                <i class="fas fa-wallet"></i>
+                <p>Kas Box</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="mahfuzat-card">
+            <h4>MAHFUZAT HARI INI</h4>
+            <p id="m-text">"Man jadda wajada - Siapa bersungguh-sungguh akan berhasil."</p>
+        </div>
+
+        <div class="menu-white-box">
+            <div class="menu-item" onclick="location.href='infaq.html'">
+                <div class="icon-circle"><i class="fas fa-hand-holding-heart c-infaq"></i></div>
                 <h3>Infaq</h3>
             </div>
-            <div class="menu-card" onclick="location.href='jamaah.html'">
-                <div class="icon-box bg-2"><i class="fas fa-users"></i></div>
+            <div class="menu-item" onclick="location.href='jamaah.html'">
+                <div class="icon-circle"><i class="fas fa-users c-jamaah"></i></div>
                 <h3>Jamaah</h3>
             </div>
-            <div class="menu-card" onclick="location.href='sholat.html'">
-                <div class="icon-box bg-4"><i class="fas fa-mosque"></i></div>
+            <div class="menu-item" onclick="location.href='sholat.html'">
+                <div class="icon-circle"><i class="fas fa-mosque c-sholat"></i></div>
                 <h3>Sholat</h3>
             </div>
-            <div class="menu-card" onclick="location.href='sosial.html'">
-                <div class="icon-box bg-5"><i class="fas fa-heartbeat"></i></div>
+            <div class="menu-item" onclick="location.href='sosial.html'">
+                <div class="icon-circle"><i class="fas fa-heartbeat c-sosial"></i></div>
                 <h3>Sosial</h3>
             </div>
-            <div class="menu-card" onclick="location.href='jadwal.html'">
-                <div class="icon-box bg-7"><i class="fas fa-calendar-alt"></i></div>
+            <div class="menu-item" onclick="location.href='jadwal.html'">
+                <div class="icon-circle"><i class="fas fa-calendar-alt c-jadwal"></i></div>
                 <h3>Jadwal</h3>
             </div>
-            <div class="menu-card" onclick="location.href='mahfuzat_list.html'">
-                <div class="icon-box bg-6"><i class="fas fa-quote-left"></i></div>
+            <div class="menu-item" onclick="location.href='mahfuzat.html'">
+                <div class="icon-circle"><i class="fas fa-quote-left c-kutipan"></i></div>
                 <h3>Kutipan</h3>
             </div>
-            <div class="menu-card" onclick="location.href='kas.html'">
-                <div class="icon-box bg-1"><i class="fas fa-wallet"></i></div>
-                <h3>Kas Box</h3>
+            <div class="menu-item" onclick="location.href='kas.html'">
+                <div class="icon-circle"><i class="fas fa-box-open c-kas"></i></div>
+                <h3>Inventaris</h3>
             </div>
-            <div class="menu-card" onclick="location.href='laporan.html'">
-                <div class="icon-box bg-8"><i class="fas fa-file-invoice"></i></div>
+            <div class="menu-item" onclick="location.href='laporan.html'">
+                <div class="icon-circle"><i class="fas fa-file-contract c-laporan"></i></div>
                 <h3>Laporan</h3>
             </div>
-            <div class="menu-card" onclick="location.href='setting.html'">
-                <div class="icon-box bg-3"><i class="fas fa-user-cog"></i></div>
-                <h3>Admin</h3>
+            <div class="menu-item" onclick="toggleSidebar()">
+                <div class="icon-circle"><i class="fas fa-th-large" style="color:#aaa"></i></div>
+                <h3>Lainnya</h3>
             </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active">
+            <i class="fas fa-home"></i>
+            Beranda
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-history"></i>
+            Aktivitas
+        </div>
+        <div class="pay-btn">
+            <i class="fas fa-qrcode"></i>
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-wallet"></i>
+            Dompet
+        </div>
+        <div class="nav-item">
+            <i class="fas fa-user-circle"></i>
+            Saya
         </div>
     </div>
 
@@ -189,18 +250,14 @@
             document.getElementById('overlay').classList.toggle('active');
         }
 
-        function handleLogout() {
-            if(confirm("Keluar dari Sistem?")) {
-                localStorage.removeItem('session_pro');
-                location.reload();
-            }
-        }
+        const mahfuzat = [
+            "Man jadda wajada - Siapa bersungguh-sungguh akan berhasil.",
+            "Man shabara zhafira - Siapa bersabar akan beruntung.",
+            "Al-waqtu atsmanu minadz dzahabi - Waktu lebih berharga dari emas."
+        ];
 
         window.onload = () => {
-            // Jam real-time
-            setInterval(() => {
-                document.getElementById('clock').innerText = new Date().toLocaleTimeString('id-ID');
-            }, 1000);
+            document.getElementById('m-text').innerText = mahfuzat[Math.floor(Math.random() * mahfuzat.length)];
         };
     </script>
 </body>
