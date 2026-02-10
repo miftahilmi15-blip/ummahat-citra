@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Kajian | Master Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --dana-blue: #108ee9;
+            --bg-light: #f5f5f5;
+            --success: #10b981;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg-light); padding-bottom: 50px; }
+
+        header {
+            background: var(--dana-blue); padding: 20px 5%; color: white;
+            display: flex; align-items: center; gap: 15px; position: sticky; top: 0; z-index: 100;
+        }
+        
+        .container { padding: 20px 5%; }
+
+        /* Card Input */
+        .card-input {
+            background: white; padding: 20px; border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 25px;
+        }
+        .form-group { margin-bottom: 15px; }
+        label { font-size: 12px; font-weight: 700; color: #666; display: block; margin-bottom: 5px; }
+        input {
+            width: 100%; padding: 12px; border-radius: 10px;
+            border: 1px solid #ddd; outline: none; font-size: 14px;
+        }
+        .btn-save {
+            width: 100%; padding: 15px; background: var(--dana-blue);
+            color: white; border: none; border-radius: 12px;
+            font-weight: 600; cursor: pointer; margin-top: 10px;
+        }
+
+        /* List Agenda */
+        .agenda-item {
+            background: white; padding: 15px; border-radius: 15px;
+            margin-bottom: 15px; border-left: 5px solid var(--dana-blue);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .info h3 { font-size: 15px; color: #333; }
+        .info p { font-size: 12px; color: #888; }
+        .btn-share {
+            background: #25D366; color: white; padding: 8px 12px;
+            border-radius: 8px; font-size: 12px; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 5px;
+        }
+        .btn-delete { color: #ff4d4d; margin-left: 15px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html" style="color:white; text-decoration:none;"><i class="fas fa-arrow-left"></i></a>
+    <h2 style="font-size: 18px;">Input Jadwal Kajian</h2>
+</header>
+
+<div class="container">
+    <div class="card-input">
+        <div class="form-group">
+            <label>Judul Kajian / Tema</label>
+            <input type="text" id="tema" placeholder="Contoh: Fiqih Kontemporer">
+        </div>
+        <div class="form-group">
+            <label>Nama Ustadz / Pemateri</label>
+            <input type="text" id="ustadz" placeholder="Contoh: Ustadz Adi Hidayat">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="form-group">
+                <label>Tanggal</label>
+                <input type="date" id="tgl">
+            </div>
+            <div class="form-group">
+                <label>Jam mulai</label>
+                <input type="time" id="jam">
+            </div>
+        </div>
+        <button class="btn-save" onclick="simpanJadwal()">
+            <i class="fas fa-calendar-plus"></i> Tambah ke Jadwal
+        </button>
+    </div>
+
+    <h4 style="margin-bottom: 15px; color: #444;">Daftar Agenda Terdekat</h4>
+    <div id="list-jadwal">
+        </div>
+</div>
+
+<script>
+    let agenda = JSON.parse(localStorage.getItem('data_jadwal')) || [];
+
+    function simpanJadwal() {
+        const tema = document.getElementById('tema').value;
+        const ustadz = document.getElementById('ustadz').value;
+        const tgl = document.getElementById('tgl').value;
+        const jam = document.getElementById('jam').value;
+
+        if(tema && ustadz && tgl && jam) {
+            const baru = { tema, ustadz, tgl, jam };
+            agenda.push(baru);
+            localStorage.setItem('data_jadwal', JSON.stringify(agenda));
+            renderJadwal();
+            
+            // Reset input
+            document.getElementById('tema').value = '';
+            document.getElementById('ustadz').value = '';
+        } else {
+            alert("Lengkapi datanya dulu ya Bos!");
+        }
+    }
+
+    function renderJadwal() {
+        const list = document.getElementById('list-jadwal');
+        list.innerHTML = '';
+
+        agenda.forEach((item, index) => {
+            // Link Share WhatsApp
+            const pesanWA = `*JADWAL KAJIAN YAYASAN*%0A%0A*Tema:* ${item.tema}%0A*Ustadz:* ${item.ustadz}%0A*Waktu:* ${item.tgl} @ ${item.jam} WIB%0A%0A_Ayo ajak keluarga dan teman!_`;
+            const waLink = `https://wa.me/?text=${pesanWA}`;
+
+            list.innerHTML += `
+                <div class="agenda-item">
+                    <div class="info">
+                        <h3>${item.tema}</h3>
+                        <p><i class="fas fa-user"></i> ${item.ustadz}</p>
+                        <p><i class="fas fa-clock"></i> ${item.tgl} | ${item.jam} WIB</p>
+                        <a href="${waLink}" class="btn-share" target="_blank">
+                            <i class="fab fa-whatsapp"></i> Share
+                        </a>
+                    </div>
+                    <div class="btn-delete" onclick="hapusJadwal(${index})">
+                        <i class="fas fa-trash-alt"></i>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function hapusJadwal(idx) {
+        if(confirm("Hapus jadwal ini?")) {
+            agenda.splice(idx, 1);
+            localStorage.setItem('data_jadwal', JSON.stringify(agenda));
+            renderJadwal();
+        }
+    }
+
+    window.onload = renderJadwal;
+</script>
+
+</body>
+</html>
