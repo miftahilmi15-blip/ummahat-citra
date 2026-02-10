@@ -54,13 +54,70 @@
         .logo-text span { color: var(--blue-dark); }
         
         .container { padding: 25px 5%; max-width: 1200px; margin: auto; }
-        .welcome-box { background: linear-gradient(135deg, var(--white), var(--blue-light)); padding: 25px; border-radius: 20px; margin-bottom: 30px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
 
-        /* GRID DASHBOARD */
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .menu-card { background: var(--white); padding: 22px; border-radius: 24px; transition: 0.3s; cursor: pointer; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 18px; }
-        .menu-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(37, 99, 235, 0.1); border-color: var(--blue-primary); }
-        .icon-box { width: 55px; height: 55px; background: var(--blue-light); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: var(--blue-primary); font-size: 22px; }
+        /* WIDGET MAHFUZAT (Besar) */
+        .mahfuzat-widget { 
+            background: linear-gradient(135deg, var(--blue-dark), var(--blue-primary)); 
+            padding: 40px; border-radius: 30px; margin-bottom: 30px; 
+            color: white; text-align: center; box-shadow: 0 15px 35px rgba(37, 99, 235, 0.2);
+            position: relative; overflow: hidden;
+        }
+        .mahfuzat-widget::after {
+            content: "\f10d"; font-family: "Font Awesome 5 Free"; font-weight: 900;
+            position: absolute; right: 20px; bottom: 10px; font-size: 80px; opacity: 0.1;
+        }
+        .mahfuzat-widget h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8; margin-bottom: 15px; }
+        .mahfuzat-text { font-size: 22px; font-weight: 600; font-style: italic; line-height: 1.6; }
+        .mahfuzat-author { margin-top: 15px; font-size: 13px; opacity: 0.7; }
+
+        /* GRID DASHBOARD (SQUARE ELEGANT) */
+        .menu-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); /* 2 Kolom sejajar */
+            gap: 20px; 
+        }
+        
+        .menu-card { 
+            background: var(--white); 
+            aspect-ratio: 1 / 1; /* Membuat kotak sempurna */
+            border-radius: 28px; 
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            cursor: pointer; 
+            border: 1px solid #e2e8f0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .menu-card:hover { 
+            transform: translateY(-10px); 
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1); 
+            border-color: var(--blue-primary); 
+        }
+
+        .icon-box { 
+            width: 70px; height: 70px; 
+            background: var(--blue-light); 
+            border-radius: 22px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: var(--blue-primary); 
+            font-size: 28px; 
+            margin-bottom: 15px;
+        }
+
+        .menu-card h3 { font-size: 16px; color: var(--blue-dark); font-weight: 700; }
+        .menu-card p { font-size: 11px; color: #64748b; margin-top: 5px; }
+
+        /* Deskripsi Tablet/Desktop */
+        @media (min-width: 768px) {
+            .menu-grid { grid-template-columns: repeat(4, 1fr); }
+            .mahfuzat-text { font-size: 28px; }
+        }
     </style>
 </head>
 <body>
@@ -102,45 +159,37 @@
         </header>
 
         <div class="container">
-            <div class="welcome-box">
-                <div>
-                    <h1>Assalamu'alaikum, Admin 👋</h1>
-                    <p>Pantau rekapitulasi yayasan hari ini.</p>
+            <div class="mahfuzat-widget">
+                <h2>Mahfuzat Hari Ini</h2>
+                <div class="mahfuzat-text" id="mahfuzat-content">
+                    "Man jadda wajada."
                 </div>
-                <div id="date-now" style="font-size:13px; font-weight:600; color:var(--blue-primary)"></div>
+                <div class="mahfuzat-author">— Barang siapa bersungguh-sungguh, maka dia akan berhasil.</div>
             </div>
 
             <div class="menu-grid">
-                <div class="menu-card" style="border-left: 5px solid #10b981;" onclick="window.location.href='infaq.html'">
-                    <div class="icon-box"><i class="fas fa-wallet" style="color:#10b981"></i></div>
-                    <div>
-                        <h3>Rekap Infaq</h3>
-                        <p>Lihat total donasi masuk.</p>
-                    </div>
+                <div class="menu-card" onclick="window.location.href='infaq.html'">
+                    <div class="icon-box" style="color:#10b981; background:#ecfdf5;"><i class="fas fa-wallet"></i></div>
+                    <h3>Rekap Infaq</h3>
+                    <p>Donasi Masuk</p>
                 </div>
 
-                <div class="menu-card" style="border-left: 5px solid #f59e0b;" onclick="window.location.href='jamaah.html'">
-                    <div class="icon-box"><i class="fas fa-users" style="color:#f59e0b"></i></div>
-                    <div>
-                        <h3>Data Jamaah</h3>
-                        <p>Manajemen profil & mustahik.</p>
-                    </div>
+                <div class="menu-card" onclick="window.location.href='jamaah.html'">
+                    <div class="icon-box" style="color:#f59e0b; background:#fffbeb;"><i class="fas fa-users"></i></div>
+                    <h3>Data Jamaah</h3>
+                    <p>Profil Mustahik</p>
                 </div>
 
-                <div class="menu-card" style="border-left: 5px solid #8b5cf6;" onclick="window.location.href='sosial.html'">
-                    <div class="icon-box"><i class="fas fa-file-medical-alt" style="color:#8b5cf6"></i></div>
-                    <div>
-                        <h3>Laporan Sosial</h3>
-                        <p>Dokumentasi bakti sosial.</p>
-                    </div>
+                <div class="menu-card" onclick="window.location.href='sosial.html'">
+                    <div class="icon-box" style="color:#8b5cf6; background:#f5f3ff;"><i class="fas fa-file-medical-alt"></i></div>
+                    <h3>Laporan Sosial</h3>
+                    <p>Dokumen Baksos</p>
                 </div>
 
-                <div class="menu-card" style="border-left: 5px solid #ef4444;" onclick="window.location.href='setting.html'">
-                    <div class="icon-box"><i class="fas fa-cog" style="color:#ef4444"></i></div>
-                    <div>
-                        <h3>Setting Sistem</h3>
-                        <p>Konfigurasi aplikasi & backup.</p>
-                    </div>
+                <div class="menu-card" onclick="window.location.href='setting.html'">
+                    <div class="icon-box" style="color:#ef4444; background:#fef2f2;"><i class="fas fa-cog"></i></div>
+                    <h3>Setting</h3>
+                    <p>Konfigurasi</p>
                 </div>
             </div>
         </div>
@@ -164,13 +213,28 @@
             if(confirm("Keluar?")) { localStorage.removeItem('session_pro'); location.reload(); }
         }
 
+        // List Mahfuzat Acak
+        const mahfuzatList = [
+            { ar: "Man jadda wajada.", id: "Barang siapa bersungguh-sungguh, maka dia akan berhasil." },
+            { ar: "Man shabara zhafira.", id: "Barang siapa bersabar, maka dia akan beruntung." },
+            { ar: "Al-waqtu atsmanu minadz dzahabi.", id: "Waktu itu lebih berharga daripada emas." },
+            { ar: "Jarib wa lahidz takun 'arifan.", id: "Cobalah dan perhatikanlah, niscaya kau akan jadi orang yang tahu." }
+        ];
+
         window.onload = () => {
             if(localStorage.getItem('session_pro') === 'true') {
                 document.getElementById('login-page').style.display = 'none';
                 document.getElementById('dashboard-page').style.display = 'block';
             }
-            document.getElementById('date-now').innerText = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' });
-            setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString('id-ID'); }, 1000);
+
+            // Pilih Mahfuzat Random
+            const random = mahfuzatList[Math.floor(Math.random() * mahfuzatList.length)];
+            document.getElementById('mahfuzat-content').innerText = `"${random.ar}"`;
+            document.querySelector('.mahfuzat-author').innerText = `— ${random.id}`;
+
+            setInterval(() => { 
+                document.getElementById('clock').innerText = new Date().toLocaleTimeString('id-ID'); 
+            }, 1000);
         }
     </script>
 </body>
