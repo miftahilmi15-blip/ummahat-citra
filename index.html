@@ -4,136 +4,142 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Master Admin Pro | Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
     <style>
         :root {
-            --blue-dark: #1e3a8a; --blue-primary: #2563eb; --blue-light: #eff6ff;
-            --white: #ffffff; --text-main: #334155; --bg-body: #f8fafc;
+            --blue-dark: #1e3a8a;
+            --blue-primary: #2563eb;
+            --blue-light: #eff6ff;
+            --white: #ffffff;
+            --text-main: #334155;
+            --bg-body: #f8fafc;
             --sidebar-width: 280px;
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg-body); color: var(--text-main); overflow-x: hidden; }
 
-        /* --- SIDEBAR (NAVIGASI UTAMA) --- */
+        /* --- SIDEBAR --- */
         #sidebar {
             position: fixed; left: calc(-1 * var(--sidebar-width)); top: 0; 
             width: var(--sidebar-width); height: 100%; background: var(--blue-dark);
-            color: white; z-index: 2000; transition: 0.3s; padding: 25px;
+            color: white; z-index: 2000; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 25px; box-shadow: 10px 0 30px rgba(0,0,0,0.2);
         }
         #sidebar.active { left: 0; }
-        .sidebar-menu { list-style: none; margin-top: 30px; }
-        .sidebar-menu li a {
+        .sidebar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-menu { list-style: none; }
+        .sidebar-menu a {
             display: flex; align-items: center; gap: 15px; color: rgba(255,255,255,0.8);
-            text-decoration: none; padding: 14px; border-radius: 12px; transition: 0.3s;
+            text-decoration: none; padding: 14px 18px; border-radius: 12px; transition: 0.3s; font-size: 15px;
         }
-        .sidebar-menu li a:hover { background: var(--blue-primary); color: white; }
+        .sidebar-menu a:hover { background: var(--blue-primary); color: white; transform: translateX(5px); }
 
-        /* --- DASHBOARD STRUCTURE --- */
-        header {
-            background: var(--white); padding: 15px 5%; display: flex;
-            justify-content: space-between; align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100;
-        }
-        .container { padding: 25px 5%; max-width: 1200px; margin: auto; }
-        
-        /* Dashboard Stats (Berbeda dengan Sidebar) */
-        .stats-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px;
-        }
-        .stat-card {
-            background: white; padding: 20px; border-radius: 20px; border: 1px solid #e2e8f0;
-            display: flex; flex-direction: column; gap: 10px;
-        }
-        .stat-card h4 { font-size: 14px; color: #64748b; }
-        .stat-card .value { font-size: 24px; font-weight: 800; color: var(--blue-dark); }
-        
-        /* Fitur Dashboard (Fokus ke Monitoring) */
-        .feature-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;
-        }
-        .feature-card {
-            background: white; padding: 25px; border-radius: 24px; border: 1px solid #e2e8f0;
-            transition: 0.3s; cursor: pointer;
-        }
-        .feature-card:hover { border-color: var(--blue-primary); transform: translateY(-5px); }
-
-        .overlay {
-            position: fixed; display: none; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5); z-index: 1500; backdrop-filter: blur(3px);
-        }
+        .overlay { position: fixed; display: none; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1500; backdrop-filter: blur(3px); }
         .overlay.active { display: block; }
-        #login-page { position: fixed; inset: 0; background: var(--blue-dark); z-index: 5000; display: flex; align-items: center; justify-content: center; }
-        .login-card { background: white; padding: 40px; border-radius: 24px; width: 90%; max-width: 400px; text-align: center; }
+
+        /* --- LOGIN PAGE --- */
+        #login-page { height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--blue-dark), var(--blue-primary)); position: fixed; z-index: 5000; }
+        .login-card { background: var(--white); padding: 40px; border-radius: 24px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+        .login-card input { width: 100%; padding: 14px; margin-bottom: 15px; border: 2px solid #e2e8f0; border-radius: 12px; outline: none; background: #f1f5f9; }
+        .btn-login { width: 100%; padding: 14px; background: var(--blue-primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; }
+
+        /* --- DASHBOARD --- */
+        header { background: var(--white); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .logo-area { display: flex; align-items: center; gap: 15px; }
+        .logo-text { font-weight: 800; color: var(--blue-primary); font-size: 20px; }
+        .logo-text span { color: var(--blue-dark); }
+        
+        .container { padding: 25px 5%; max-width: 1200px; margin: auto; }
+        .welcome-box { background: linear-gradient(135deg, var(--white), var(--blue-light)); padding: 25px; border-radius: 20px; margin-bottom: 30px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+
+        /* GRID DASHBOARD (Berbeda dengan Sidebar) */
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .menu-card { background: var(--white); padding: 22px; border-radius: 24px; transition: 0.3s; cursor: pointer; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 18px; }
+        .menu-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(37, 99, 235, 0.1); border-color: var(--blue-primary); }
+        .icon-box { width: 55px; height: 55px; background: var(--blue-light); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: var(--blue-primary); font-size: 22px; }
     </style>
 </head>
 <body>
 
-    <div id="login-page">
-        <div class="login-card">
-            <h2 style="color:var(--blue-dark)">Admin Login</h2>
-            <p style="margin-bottom:20px; color:gray">Master Pro Dashboard</p>
-            <input type="text" id="username" placeholder="Username" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #ddd;">
-            <input type="password" id="password" placeholder="Password" style="width:100%; padding:12px; margin-bottom:20px; border-radius:10px; border:1px solid #ddd;">
-            <button onclick="handleLogin()" style="width:100%; padding:12px; background:var(--blue-primary); color:white; border:none; border-radius:10px; font-weight:600;">MASUK</button>
-        </div>
-    </div>
-
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
     <div id="sidebar">
-        <div style="display:flex; justify-content:space-between; align-items:center">
-            <h3>MASTER<span>PRO</span></h3>
+        <div class="sidebar-header">
+            <div class="logo-text" style="color:white">MASTER<span>PRO</span></div>
             <i class="fas fa-times" onclick="toggleSidebar()" style="cursor:pointer"></i>
         </div>
         <ul class="sidebar-menu">
             <li><a href="#"><i class="fas fa-user-shield"></i> Menu Admin</a></li>
             <li><a href="#"><i class="fas fa-clock"></i> Waktu Sholat</a></li>
-            <li><a href="#"><i class="fas fa-book-open"></i> Mahfuzat</a></li> <li><a href="#"><i class="fas fa-calendar-alt"></i> Jadwal Kegiatan</a></li>
-            <li style="margin-top:50px"><a href="#" onclick="handleLogout()" style="color:#fb7185"><i class="fas fa-power-off"></i> Keluar</a></li>
+            <li><a href="#"><i class="fas fa-quote-left"></i> Mahfuzat</a></li> <li><a href="#"><i class="fas fa-calendar-alt"></i> Jadwal Kegiatan</a></li>
+            <li style="margin-top:50px"><a href="#" onclick="handleLogout()" style="color:#fda4af"><i class="fas fa-power-off"></i> Keluar</a></li>
         </ul>
+    </div>
+
+    <div id="login-page">
+        <div class="login-card">
+            <img src="kamalul.png" alt="Logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/906/906343.png'" style="width:80px; border-radius:50%">
+            <h2 style="margin-top:10px">Admin Login</h2>
+            <p style="color:gray; font-size:14px; margin-bottom:20px">Yayasan Master Pro</p>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button class="btn-login" onclick="handleLogin()">MASUK SISTEM</button>
+        </div>
     </div>
 
     <div id="dashboard-page" style="display:none">
         <header>
-            <div style="display:flex; align-items:center; gap:15px">
-                <i class="fas fa-bars" onclick="toggleSidebar()" style="cursor:pointer; font-size:20px"></i>
-                <h2 style="color:var(--blue-primary)">Dashboard <span>Monitoring</span></h2>
+            <div class="logo-area">
+                <i class="fas fa-bars" onclick="toggleSidebar()" style="cursor:pointer; font-size:22px; color:var(--blue-dark)"></i>
+                <div class="logo-text">MASTER<span>PRO</span></div>
             </div>
-            <div id="jam" style="font-weight:600"></div>
+            <div id="clock" style="font-weight:600; color:var(--blue-primary)"></div>
         </header>
 
         <div class="container">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h4>Total Infaq Bulan Ini</h4>
-                    <div class="value">Rp 12.500.000</div>
+            <div class="welcome-box">
+                <div>
+                    <h1>Assalamu'alaikum, Admin 👋</h1>
+                    <p>Pantau rekapitulasi yayasan hari ini.</p>
                 </div>
-                <div class="stat-card">
-                    <h4>Jumlah Jamaah Aktif</h4>
-                    <div class="value">450 Orang</div>
-                </div>
-                <div class="stat-card">
-                    <h4>Kegiatan Terdekat</h4>
-                    <div class="value" style="font-size:16px">Santunan Anak Yatim</div>
-                </div>
+                <div id="date-now" style="font-size:13px; font-weight:600; color:var(--blue-primary)"></div>
             </div>
 
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <i class="fas fa-chart-line" style="color:var(--blue-primary); font-size:30px; margin-bottom:15px"></i>
-                    <h3>Laporan Perkembangan</h3>
-                    <p>Lihat grafik pertumbuhan yayasan dan donasi jamaah.</p>
+            <div class="menu-grid">
+                <div class="menu-card" style="border-left: 5px solid #10b981;">
+                    <div class="icon-box"><i class="fas fa-wallet" style="color:#10b981"></i></div>
+                    <div>
+                        <h3>Rekap Infaq</h3>
+                        <p>Lihat total donasi masuk.</p>
+                    </div>
                 </div>
-                <div class="feature-card">
-                    <i class="fas fa-users-cog" style="color:#10b981; font-size:30px; margin-bottom:15px"></i>
-                    <h3>Manajemen Mustahik</h3>
-                    <p>Pantau data penerima bantuan agar tepat sasaran.</p>
+
+                <div class="menu-card" style="border-left: 5px solid #f59e0b;">
+                    <div class="icon-box"><i class="fas fa-users" style="color:#f59e0b"></i></div>
+                    <div>
+                        <h3>Data Jamaah</h3>
+                        <p>Manajemen profil & mustahik.</p>
+                    </div>
                 </div>
-                <div class="feature-card">
-                    <i class="fas fa-file-invoice-dollar" style="color:#f59e0b; font-size:30px; margin-bottom:15px"></i>
-                    <h3>Audit Keuangan</h3>
-                    <p>Verifikasi pengeluaran dan pemasukan operasional.</p>
+
+                <div class="menu-card" style="border-left: 5px solid #8b5cf6;">
+                    <div class="icon-box"><i class="fas fa-file-medical-alt" style="color:#8b5cf6"></i></div>
+                    <div>
+                        <h3>Laporan Sosial</h3>
+                        <p>Dokumentasi bakti sosial.</p>
+                    </div>
+                </div>
+
+                <div class="menu-card" style="border-left: 5px solid #ef4444;">
+                    <div class="icon-box"><i class="fas fa-cog" style="color:#ef4444"></i></div>
+                    <div>
+                        <h3>Setting Sistem</h3>
+                        <p>Konfigurasi aplikasi & backup.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -146,18 +152,15 @@
         }
 
         function handleLogin() {
-            const u = document.getElementById('username').value;
-            const p = document.getElementById('password').value;
-            if(u === "admin" && p === "123") {
+            if(document.getElementById('username').value === "admin" && document.getElementById('password').value === "123") {
                 document.getElementById('login-page').style.display = 'none';
                 document.getElementById('dashboard-page').style.display = 'block';
                 localStorage.setItem('session_pro', 'true');
-            } else { alert("Salah Bos!"); }
+            } else { alert("Salah, Bos!"); }
         }
 
         function handleLogout() {
-            localStorage.removeItem('session_pro');
-            location.reload();
+            if(confirm("Keluar?")) { localStorage.removeItem('session_pro'); location.reload(); }
         }
 
         window.onload = () => {
@@ -165,9 +168,8 @@
                 document.getElementById('login-page').style.display = 'none';
                 document.getElementById('dashboard-page').style.display = 'block';
             }
-            setInterval(() => {
-                document.getElementById('jam').innerText = new Date().toLocaleTimeString('id-ID');
-            }, 1000);
+            document.getElementById('date-now').innerText = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' });
+            setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString('id-ID'); }, 1000);
         }
     </script>
 </body>
