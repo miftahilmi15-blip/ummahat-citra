@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Master Tanam | Anti Pusing</title>
+    <title>Master Tanam | Pasti Muncul</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: #f0f4f8; overflow: hidden; height: 100vh; }
 
-        /* --- LANGIT & BUKIT --- */
+        /* --- STAGE --- */
         .game-container {
             height: 60vh;
             background: linear-gradient(to bottom, #4facfe, #00f2fe);
@@ -21,52 +21,32 @@
         .hill {
             position: absolute; bottom: -80px; width: 150%; height: 180px;
             background: #7cb342; border-radius: 50%; z-index: 1;
-            box-shadow: inset 0 20px 30px rgba(0,0,0,0.1);
         }
 
-        /* --- RAKITAN POHON CSS (PASTI MUNCUL) --- */
-        .tree {
-            position: relative; z-index: 10; margin-bottom: 40px;
-            transform-origin: bottom center; animation: sway 4s ease-in-out infinite;
+        /* --- POHON SVG (GAMBAR DALAM KODE) --- */
+        .tree-box {
+            position: relative;
+            z-index: 10;
+            margin-bottom: 20px;
+            width: 250px;
+            height: 250px;
+            animation: sway 4s ease-in-out infinite;
+            transform-origin: bottom center;
         }
-
-        /* Batang Pohon */
-        .trunk {
-            width: 30px; height: 100px; background: #5d4037;
-            margin: 0 auto; border-radius: 5px; position: relative;
-        }
-
-        /* Daun Rimbun (Lapis-lapis) */
-        .leaves {
-            position: absolute; bottom: 40px; left: 50%;
-            transform: translateX(-50%); width: 220px; height: 180px;
-        }
-
-        .leaf-blob {
-            position: absolute; background: #2e7d32; border-radius: 50%;
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
-        }
-
-        /* Nyusun Daun Biar Rimbun */
-        .l1 { width: 120px; height: 120px; top: 0; left: 50px; background: #388e3c; }
-        .l2 { width: 100px; height: 100px; top: 30px; left: 0; }
-        .l3 { width: 100px; height: 100px; top: 30px; right: 0; }
-        .l4 { width: 130px; height: 100px; bottom: 0; left: 45px; background: #1b5e20; }
 
         @keyframes sway {
-            0%, 100% { transform: rotate(-1deg) scale(1); }
-            50% { transform: rotate(1deg) scale(1.02); }
+            0%, 100% { transform: rotate(-1.5deg); }
+            50% { transform: rotate(1.5deg); }
         }
 
-        /* --- DASHBOARD UI --- */
+        /* --- UI PANEL --- */
         .ui-panel {
             height: 40vh; background: white; border-radius: 30px 30px 0 0;
             margin-top: -30px; position: relative; z-index: 20;
             padding: 25px; text-align: center; box-shadow: 0 -10px 20px rgba(0,0,0,0.1);
         }
 
-        .level-tag { background: #8bc34a; color: white; padding: 5px 15px; border-radius: 50px; font-size: 12px; font-weight: 700; margin-bottom: 10px; display: inline-block; }
-
+        .level-badge { background: #8bc34a; color: white; padding: 5px 15px; border-radius: 50px; font-size: 12px; font-weight: 700; display: inline-block; margin-bottom: 10px; }
         .progress-card { background: #f8f9fa; padding: 15px; border-radius: 20px; margin-bottom: 20px; border: 1px solid #eee; }
         .bar-bg { width: 100%; height: 12px; background: #eee; border-radius: 10px; margin: 8px 0; overflow: hidden; }
         .bar-fill { height: 100%; background: #4caf50; width: 0%; transition: 1.5s; }
@@ -77,7 +57,7 @@
             cursor: pointer; box-shadow: 0 5px 15px rgba(244, 67, 54, 0.3);
         }
 
-        /* Navigasi Dompet Terkunci */
+        /* Navigasi */
         .bottom-nav {
             position: fixed; bottom: 0; width: 100%; height: 75px;
             background: white; border-top: 1px solid #eee;
@@ -91,21 +71,26 @@
 <body>
 
     <div class="game-container">
-        <div class="tree" id="tree-master">
-            <div class="leaves">
-                <div class="leaf-blob l1"></div>
-                <div class="leaf-blob l2"></div>
-                <div class="leaf-blob l3"></div>
-                <div class="leaf-blob l4"></div>
-            </div>
-            <div class="trunk"></div>
+        <div class="tree-box" id="tree-master">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <path d="M90 190 L110 190 L105 130 L95 130 Z" fill="#5d4037" />
+                <circle cx="70" cy="140" r="35" fill="#2e7d32" />
+                <circle cx="130" cy="140" r="35" fill="#2e7d32" />
+                <circle cx="100" cy="150" r="40" fill="#1b5e20" />
+                <circle cx="75" cy="100" r="40" fill="#388e3c" />
+                <circle cx="125" cy="100" r="40" fill="#388e3c" />
+                <circle cx="100" cy="110" r="45" fill="#2e7d32" />
+                <circle cx="100" cy="70" r="45" fill="#4caf50" />
+                <circle cx="80" cy="80" r="5" fill="#ffeb3b" opacity="0.8" />
+                <circle cx="120" cy="110" r="5" fill="#ffeb3b" opacity="0.8" />
+            </svg>
         </div>
         <div class="hill"></div>
     </div>
 
     <div class="ui-panel">
-        <div class="level-tag" id="lvl-name">Level 1: Bibit</div>
-        <h2 style="font-size: 20px; font-weight: 800; color: #333;">Master Tanam</h2>
+        <div class="level-badge" id="lvl-name">Level 1: Bibit</div>
+        <h2 style="font-weight: 800; color: #333;">Master Tanam</h2>
         
         <div class="progress-card">
             <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700;">
@@ -115,12 +100,10 @@
             <div class="bar-bg">
                 <div class="bar-fill" id="progress-bar"></div>
             </div>
-            <p style="font-size: 11px; color: #888;">Saldo Terkumpul: Rp <span id="total-txt">0</span></p>
+            <p style="font-size: 11px; color: #888;">Sedekah: Rp <span id="total-txt">0</span></p>
         </div>
 
-        <button class="btn-siram" onclick="location.href='kartu.html'">
-            <i class="fas fa-faucet-drip"></i> SIRAM SEDEKAH
-        </button>
+        <button class="btn-siram" onclick="location.href='kartu.html'">SIRAM SEDEKAH</button>
     </div>
 
     <div class="bottom-nav">
@@ -143,12 +126,12 @@
             document.getElementById('progress-bar').style.width = p + "%";
             document.getElementById('percent-txt').innerText = Math.floor(p) + "%";
 
-            // Efek Pohon Membesar sesuai Sedekah
-            let scale = 0.5 + (p / 100);
+            // Efek Pohon Membesar
+            let scale = 0.4 + (p / 120);
             document.getElementById('tree-master').style.transform = `scale(${scale})`;
             
-            if(p > 80) document.getElementById('lvl-name').innerText = "Level 3: Pohon Rimbun";
-            else if(p > 30) document.getElementById('lvl-name').innerText = "Level 2: Tunas Harapan";
+            if(p > 70) document.getElementById('lvl-name').innerText = "Level 3: Pohon Rimbun";
+            else if(p > 20) document.getElementById('lvl-name').innerText = "Level 2: Tunas Harapan";
         }
         window.onload = updateGame;
     </script>
