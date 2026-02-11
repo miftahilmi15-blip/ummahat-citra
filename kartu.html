@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kartu Rekening Yayasan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        /* Desain Kartu ATM Style */
+        .card {
+            width: 100%;
+            max-width: 380px;
+            background: linear-gradient(135deg, #064e3b 0%, #059669 100%); /* Warna Hijau BSI */
+            border-radius: 24px;
+            padding: 30px;
+            color: white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        /* Chip & Logo Simbolis */
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        .chip {
+            width: 45px;
+            height: 35px;
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            border-radius: 8px;
+        }
+        .bank-name {
+            font-weight: 800;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+        .rekening-number {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin: 20px 0 10px 0;
+            display: block;
+        }
+        .holder-name {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+        /* Tombol Aksi */
+        .actions {
+            margin-top: 30px;
+            width: 100%;
+            max-width: 380px;
+        }
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            border: none;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+        .btn-copy {
+            background-color: white;
+            color: #064e3b;
+        }
+        .btn-wa {
+            background-color: #25d366;
+            color: white;
+        }
+        .btn:active { transform: scale(0.98); }
+        
+        .footer-info {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #64748b;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div style="width: 100%; max-width: 380px;">
+    <div class="card">
+        <div class="card-top">
+            <div class="chip"></div>
+            <div class="bank-name">BSI</div>
+        </div>
+        
+        <span class="rekening-number" id="norek">7123456789</span>
+        <div class="holder-name">YAYASAN MASTER PRO</div>
+        
+        <div style="margin-top: 30px; font-size: 11px; opacity: 0.7;">
+            BANK SYARIAH INDONESIA
+        </div>
+    </div>
+
+    <div class="actions">
+        <button class="btn btn-copy" onclick="copyNorek()">
+            <i class="far fa-copy"></i> SALIN NO. REKENING
+        </button>
+        
+        <button class="btn btn-wa" onclick="shareWA()">
+            <i class="fab fa-whatsapp"></i> KIRIM KE DONATUR
+        </button>
+    </div>
+
+    <div class="footer-info">
+        <i class="fas fa-lock"></i> Informasi Rekening Resmi Yayasan
+    </div>
+</div>
+
+<script>
+    function copyNorek() {
+        const norek = document.getElementById('norek').innerText;
+        navigator.clipboard.writeText(norek);
+        alert("Nomor Rekening Berhasil Disalin!");
+    }
+
+    function shareWA() {
+        const text = `*INFO REKENING YAYASAN*%0A%0A` +
+                     `Assalamu'alaikum, berikut rekening resmi Yayasan kami:%0A%0A` +
+                     `🏦 *Bank Syariah Indonesia (BSI)*%0A` +
+                     `🔢 *7123456789*%0A` +
+                     `👤 *A.n YAYASAN MASTER PRO*%0A%0A` +
+                     `Jazakumullah Khairan.`;
+        window.open(`https://wa.me/?text=${text}`, '_blank');
+    }
+</script>
+
+</body>
+</html>
