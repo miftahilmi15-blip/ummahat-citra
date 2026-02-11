@@ -3,212 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Master Tanam | Premium</title>
+    <title>Pohon Jariyah | Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        :root {
-            --shopee-orange: linear-gradient(90deg, #ff8a00, #ff4d00);
-            --dana-blue: #108ee9;
-        }
+        :root { --dana-blue: #108ee9; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        
-        body { background: #f4f7fa; overflow: hidden; height: 100vh; }
+        body { background: #f0f2f5; overflow: hidden; height: 100vh; }
 
-        /* --- BACKGROUND AREA (LEBIH HIDUP) --- */
-        .game-header {
-            height: 55vh;
-            background: linear-gradient(to bottom, #4facfe 0%, #00f2fe 100%);
+        /* --- STAGE POHON (Visual Mewah) --- */
+        .stage {
+            height: 60vh;
+            background: linear-gradient(to bottom, #4facfe, #00f2fe);
             position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
+            display: flex; justify-content: center; align-items: flex-end;
             overflow: hidden;
         }
 
-        /* Awan */
-        .cloud {
-            position: absolute; color: white; opacity: 0.8;
-            animation: moveCloud 20s linear infinite;
-        }
-        @keyframes moveCloud {
-            from { left: -100px; } to { left: 110%; }
-        }
-
-        /* Bukit Hijau Melengkung */
         .hill {
-            position: absolute; bottom: -50px; width: 150%; height: 150px;
-            background: #7cb342; border-radius: 50%; z-index: 2;
+            position: absolute; bottom: -100px; width: 140%; height: 200px;
+            background: #2ecc71; border-radius: 50%; z-index: 2;
         }
 
-        /* --- POHON RINDANG ASLI --- */
         .tree-container {
-            position: relative;
-            z-index: 5;
-            margin-bottom: 20px;
-            width: 280px;
-            height: 280px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
+            position: relative; z-index: 10; margin-bottom: 30px;
+            animation: sway 5s ease-in-out infinite; transform-origin: bottom center;
         }
 
-        .tree-img {
-            width: 100%;
-            height: auto;
-            /* Kita pakai filter supaya warna hijaunya lebih tajam */
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
-            animation: sway 4s ease-in-out infinite;
-            transform-origin: bottom center;
-        }
+        .tree-img { width: 260px; filter: drop-shadow(0 15px 20px rgba(0,0,0,0.2)); }
 
         @keyframes sway {
-            0%, 100% { transform: rotate(-1deg) scale(1); }
-            50% { transform: rotate(1deg) scale(1.02); }
+            0%, 100% { transform: rotate(-1deg); }
+            50% { transform: rotate(1deg); }
         }
 
-        /* --- UI PANEL (PERSIS SCREENSHOT TAPI RAPI) --- */
+        /* --- PANEL UI --- */
         .ui-panel {
-            height: 45vh;
-            background: white;
-            border-radius: 30px 30px 0 0;
-            margin-top: -30px;
-            position: relative;
-            z-index: 10;
-            padding: 25px;
-            box-shadow: 0 -10px 25px rgba(0,0,0,0.05);
+            height: 40vh; background: white; border-radius: 30px 30px 0 0;
+            margin-top: -30px; position: relative; z-index: 20;
+            padding: 30px 25px; text-align: center;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
         }
 
-        .badge-level {
-            background: #8bc34a;
-            color: white;
-            padding: 6px 15px;
-            border-radius: 50px;
-            font-size: 12px;
-            font-weight: 700;
-            display: inline-block;
-            margin-bottom: 15px;
+        .badge {
+            background: #e8f5e9; color: #2e7d32; padding: 5px 15px;
+            border-radius: 50px; font-size: 12px; font-weight: 700;
+            margin-bottom: 10px; display: inline-block;
         }
 
-        .title { font-size: 22px; font-weight: 800; color: #333; margin-bottom: 20px; }
-
-        .progress-box {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 20px;
-            margin-bottom: 25px;
+        .progress-card {
+            background: #f8f9fa; padding: 20px; border-radius: 20px;
+            margin: 15px 0 25px; border: 1px solid #eee;
         }
 
-        .bar-container {
-            width: 100%; height: 12px; background: #eee;
-            border-radius: 10px; margin: 10px 0; overflow: hidden;
-        }
-        .bar-fill {
-            height: 100%; background: #4caf50;
-            width: 0%; transition: 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
-        }
+        .bar-bg { width: 100%; height: 12px; background: #eee; border-radius: 10px; margin: 10px 0; overflow: hidden; }
+        .bar-fill { height: 100%; background: #4caf50; width: 0%; transition: 1.5s; }
 
         .btn-siram {
-            width: 100%;
-            padding: 18px;
-            background: var(--shopee-orange);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            box-shadow: 0 8px 20px rgba(255, 77, 0, 0.3);
-            cursor: pointer;
+            width: 100%; padding: 18px; background: #ff4d00; color: white;
+            border: none; border-radius: 50px; font-size: 16px; font-weight: 800;
+            cursor: pointer; box-shadow: 0 8px 15px rgba(255, 77, 0, 0.3);
         }
 
-        /* Navigasi */
-        .nav-bottom {
-            position: fixed; bottom: 0; width: 100%; height: 70px;
-            background: white; border-top: 1px solid #eee;
-            display: flex; align-items: center; z-index: 100;
+        /* --- NAVIGASI TERKUNCI --- */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; height: 75px;
+            background: white; border-top: 1px solid #f0f0f0;
+            display: flex; justify-content: space-around; align-items: center; z-index: 100;
         }
-        .nav-item { flex: 1; text-align: center; color: #bbb; font-size: 10px; text-decoration: none; }
+        .nav-item { text-align: center; color: #bbb; font-size: 10px; flex: 1; cursor: pointer; }
         .nav-item.active { color: var(--dana-blue); }
         .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
-    <div class="game-header">
-        <i class="fas fa-cloud cloud" style="top: 50px; font-size: 40px; animation-duration: 25s;"></i>
-        <i class="fas fa-cloud cloud" style="top: 120px; font-size: 30px; animation-duration: 18s; animation-delay: -5s;"></i>
-        
+    <div class="stage">
         <div class="tree-container">
-            <img src="https://www.pngarts.com/files/3/Green-Tree-PNG-Image-Background.png" class="tree-img" id="tree-visual">
+            <img src="https://www.pngarts.com/files/3/Green-Tree-PNG-Image-Background.png" class="tree-img">
         </div>
-        
         <div class="hill"></div>
     </div>
 
     <div class="ui-panel">
-        <div class="badge-level" id="lvl-badge">Level 3: Pohon Jariyah</div>
-        <h2 class="title">Master Tanam</h2>
+        <div class="badge">Pohon Kebaikan</div>
+        <h2 style="color: #333; font-weight: 800;">Dompet Jariyah</h2>
 
-        <div class="progress-box">
-            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 700;">
-                <span>Progress Tumbuh</span>
-                <span id="pct-text">0%</span>
+        <div class="progress-card">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700;">
+                <span>Progres Tumbuh</span>
+                <span id="pct">0%</span>
             </div>
-            <div class="bar-container">
-                <div class="bar-fill" id="bar-progress"></div>
+            <div class="bar-bg">
+                <div class="bar-fill" id="bar"></div>
             </div>
-            <p style="font-size: 11px; color: #888;" id="status-msg">Terus siram agar pohonmu semakin rimbun.</p>
+            <p style="font-size: 11px; color: #888;">Total Pahala: Rp <span id="total-val">0</span></p>
         </div>
 
-        <button class="btn-siram" onclick="location.href='kartu.html'">
-            <i class="fas fa-faucet-drip"></i> SIRAM DENGAN SEDEKAH
-        </button>
+        <button class="btn-siram" onclick="location.href='kartu.html'">SIRAM SEDEKAH</button>
     </div>
 
-    <div class="nav-bottom">
-        <a href="index.html" class="nav-item"><i class="fas fa-home"></i> Beranda</a>
-        <a href="aktivitas.html" class="nav-item"><i class="fas fa-history"></i> Aktivitas</a>
-        <a href="dompet.html" class="nav-item active"><i class="fas fa-wallet"></i> Dompet</a>
-        <a href="saya.html" class="nav-item"><i class="fas fa-user-circle"></i> Saya</a>
+    <div class="bottom-nav">
+        <div class="nav-item" onclick="location.href='dompet.html'"><i class="fas fa-home"></i>Beranda</div>
+        <div class="nav-item" onclick="location.href='dompet.html'"><i class="fas fa-history"></i>Aktivitas</div>
+        <div class="nav-item active" onclick="location.href='dompet.html'"><i class="fas fa-wallet"></i>Dompet</div>
+        <div class="nav-item" onclick="location.href='dompet.html'"><i class="fas fa-user-circle"></i>Saya</div>
     </div>
 
     <script>
-        function updateGame() {
-            let dataRaw = localStorage.getItem('kas_data');
-            let listKas = dataRaw ? JSON.parse(dataRaw) : [];
+        function loadData() {
+            let data = localStorage.getItem('kas_data');
+            let list = data ? JSON.parse(data) : [];
             let total = 0;
-            listKas.forEach(t => { if(t.type === 'masuk') total += parseInt(t.amount); });
+            list.forEach(item => { if(item.type === 'masuk') total += parseInt(item.amount); });
 
-            const bar = document.getElementById('bar-progress');
-            const pct = document.getElementById('pct-text');
-            const tree = document.getElementById('tree-visual');
-            const badge = document.getElementById('lvl-badge');
-
-            // Hitung persentase (target 1 juta)
+            document.getElementById('total-val').innerText = total.toLocaleString();
             let p = Math.min((total / 1000000) * 100, 100);
-            
             setTimeout(() => {
-                bar.style.width = p + "%";
-                pct.innerText = Math.floor(p) + "%";
-            }, 500);
-
-            // Ganti gambar/skala berdasarkan progress agar terasa tumbuh
-            if (p < 30) {
-                tree.style.transform = "scale(0.5)";
-                badge.innerText = "Level 1: Bibit";
-            } else if (p < 70) {
-                tree.style.transform = "scale(0.8)";
-                badge.innerText = "Level 2: Tunas";
-            } else {
-                tree.style.transform = "scale(1.1)";
-                badge.innerText = "Level 3: Pohon Jariyah";
-            }
+                document.getElementById('bar').style.width = p + "%";
+                document.getElementById('pct').innerText = Math.floor(p) + "%";
+            }, 300);
         }
-        window.onload = updateGame;
+        window.onload = loadData;
     </script>
 </body>
 </html>
