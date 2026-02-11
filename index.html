@@ -19,7 +19,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg-light); color: var(--text-dark); overflow-x: hidden; }
+        body { background: var(--bg-light); color: var(--text-dark); overflow-x: hidden; padding-bottom: 80px; }
 
         /* --- SIDEBAR --- */
         #sidebar {
@@ -34,28 +34,27 @@
         /* --- HEADER AREA --- */
         .blue-section {
             background: var(--dana-blue);
-            height: 240px;
+            height: 220px;
             padding: 20px 5%;
             color: white;
             position: relative;
         }
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .saldo-area { display: flex; align-items: center; gap: 10px; }
-        .saldo-area span { font-size: 14px; opacity: 0.9; }
+        .saldo-area span { font-size: 13px; opacity: 0.9; }
         .saldo-val { font-size: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; }
 
         .quick-actions {
             display: flex;
             justify-content: space-between;
             text-align: center;
-            margin-top: 10px;
-            margin-bottom: 25px;
+            margin-top: 15px;
         }
         .action-item { flex: 1; cursor: pointer; }
-        .action-item i { font-size: 24px; margin-bottom: 8px; display: block; }
-        .action-item p { font-size: 12px; font-weight: 500; }
+        .action-item i { font-size: 22px; margin-bottom: 8px; display: block; }
+        .action-item p { font-size: 11px; font-weight: 500; }
 
-        /* BUBBLE PENGINGAT AGAMIS */
+        /* BUBBLE PENGINGAT */
         .floating-reminder {
             position: absolute;
             background: #ffeb3b; 
@@ -64,26 +63,23 @@
             border-radius: 15px 15px 15px 2px;
             font-size: 10px;
             font-weight: 800;
-            bottom: 45px;
+            bottom: 35px;
             left: 20px;
             white-space: nowrap;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             animation: floatAnim 2s ease-in-out infinite;
             z-index: 100;
         }
-        
         .floating-reminder::after {
             content: '';
             position: absolute;
-            bottom: -5px;
-            left: 8px;
+            bottom: -5px; left: 8px;
             border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #ffeb3b;
         }
 
         @keyframes floatAnim {
-            0% { transform: translateY(0); }
+            0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-6px); }
-            100% { transform: translateY(0); }
         }
 
         /* --- MAIN CONTENT --- */
@@ -94,7 +90,6 @@
             z-index: 10;
         }
         
-        /* MAHFUZAT MARQUEE STYLE */
         .mahfuzat-card {
             background: var(--white);
             padding: 12px 15px;
@@ -102,23 +97,17 @@
             margin-bottom: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border-left: 4px solid var(--dana-blue);
-            overflow: hidden;
         }
-        .mahfuzat-card h4 { font-size: 10px; color: var(--dana-blue); text-transform: uppercase; margin-bottom: 5px;}
+        .mahfuzat-card h4 { font-size: 10px; color: var(--dana-blue); text-transform: uppercase; margin-bottom: 5px; letter-spacing: 0.5px;}
         
-        .marquee-wrapper {
-            width: 100%;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
+        .marquee-wrapper { width: 100%; overflow: hidden; white-space: nowrap; }
         .marquee-text {
             display: inline-block;
             font-size: 13px;
             font-style: italic;
             color: #555;
             padding-left: 100%;
-            animation: marqueeScroll 25s linear infinite; /* Kecepatan santai 25 detik */
+            animation: marqueeScroll 25s linear infinite;
         }
 
         @keyframes marqueeScroll {
@@ -129,28 +118,16 @@
         .menu-white-box {
             background: var(--white);
             border-radius: 20px;
-            padding: 20px 10px;
+            padding: 25px 10px;
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 15px 5px;
+            gap: 20px 5px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }
 
         .menu-item { display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; }
-        .icon-circle { width: 45px; height: 45px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .icon-circle { width: 45px; height: 45px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
         .menu-item h3 { font-size: 11px; font-weight: 500; color: #444; line-height: 1.2; }
-
-        /* --- AKTIVITAS STYLE --- */
-        .activity-card {
-            background: #fff;
-            padding: 12px 15px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-        }
 
         /* --- BOTTOM NAV --- */
         .bottom-nav {
@@ -159,24 +136,27 @@
             display: flex; justify-content: space-around; align-items: center;
             z-index: 1000;
         }
-        .nav-item { text-align: center; color: var(--text-gray); font-size: 10px; cursor: pointer; }
+        .nav-item { text-align: center; color: var(--text-gray); font-size: 10px; cursor: pointer; flex: 1; }
         .nav-item.active { color: var(--dana-blue); }
         .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
         .pay-btn { width: 60px; height: 60px; background: var(--dana-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; margin-top: -35px; border: 5px solid var(--bg-light); box-shadow: 0 4px 10px rgba(16, 142, 233, 0.3); }
 
-        .c-infaq { color: #10b981; } .c-jamaah { color: #f59e0b; } .c-sholat { color: #3b82f6; } .c-sosial { color: #ef4444; } .c-jadwal { color: #8b5cf6; } .c-kutipan { color: #ec4899; } .c-kas { color: #06b6d4; } .c-laporan { color: #64748b; }
+        /* Icon Colors */
+        .c-infaq { color: #10b981; } .c-jamaah { color: #f59e0b; } .c-sholat { color: #3b82f6; } .c-sosial { color: #ef4444; } 
+        .c-jadwal { color: #8b5cf6; } .c-kutipan { color: #ec4899; } .c-kas { color: #06b6d4; } .c-laporan { color: #64748b; }
     </style>
 </head>
 <body>
 
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+    
     <div id="sidebar">
-        <h2 style="margin-bottom:20px">MASTER PRO</h2>
+        <h2 style="margin-bottom:25px; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px;">MASTER PRO</h2>
         <div class="sidebar-menu">
-            <a href="#" style="color:white; text-decoration:none; display:block; margin-bottom:15px"><i class="fas fa-home"></i> Beranda</a>
-            <a href="#" style="color:white; text-decoration:none; display:block; margin-bottom:15px"><i class="fas fa-user"></i> Profil</a>
+            <a href="#" style="color:white; text-decoration:none; display:block; margin-bottom:20px"><i class="fas fa-home" style="width:25px"></i> Beranda</a>
+            <a href="#" style="color:white; text-decoration:none; display:block; margin-bottom:20px"><i class="fas fa-user" style="width:25px"></i> Profil</a>
             <hr style="opacity:0.2; margin:20px 0">
-            <a href="#" onclick="location.reload()" style="color:#ffb2b2; text-decoration:none;"><i class="fas fa-power-off"></i> Keluar</a>
+            <a href="#" onclick="location.reload()" style="color:#ffb2b2; text-decoration:none;"><i class="fas fa-power-off" style="width:25px"></i> Keluar</a>
         </div>
     </div>
 
@@ -200,7 +180,7 @@
             <div class="action-item" onclick="location.href='infaq.html'"><i class="fas fa-wallet"></i><p>Kas Box</p></div>
         </div>
 
-        <div class="floating-reminder" id="nasihat-gerak">Sudah Infaq Hari Ini?</div>
+        <div class="floating-reminder" id="nasihat-gerak">Memuat pesan...</div>
     </div>
 
     <div class="main-container">
@@ -221,21 +201,11 @@
             <div class="menu-item" onclick="location.href='infaq.html'"><div class="icon-circle"><i class="fas fa-box-open c-kas"></i></div><h3>Inventaris</h3></div>
             <div class="menu-item" onclick="location.href='laporan.html'"><div class="icon-circle"><i class="fas fa-file-contract c-laporan"></i></div><h3>Laporan</h3></div>
         </div>
-
-        <div style="margin-top: 25px; margin-bottom: 80px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <h4 style="font-size: 14px; font-weight: 600; color: #333;">Aktivitas Terakhir</h4>
-                <span onclick="location.href='laporan.html'" style="font-size: 11px; color: var(--dana-blue); font-weight: 600; cursor: pointer;">Lihat Semua</span>
-            </div>
-            <div id="activity-list">
-                <div style="text-align:center; padding: 20px; color:#bbb; font-size:12px;">Belum ada aktivitas.</div>
-            </div>
-        </div>
     </div>
 
     <div class="bottom-nav">
         <div class="nav-item active"><i class="fas fa-home"></i> Beranda</div>
-        <div class="nav-item" onclick="location.href='laporan.html'"><i class="fas fa-history"></i> Aktivitas</div>
+        <div class="nav-item" onclick="location.href='aktivitas.html'"><i class="fas fa-history"></i> Aktivitas</div>
         <div class="pay-btn"><i class="fas fa-qrcode"></i></div>
         <div class="nav-item"><i class="fas fa-wallet"></i> Dompet</div>
         <div class="nav-item"><i class="fas fa-user-circle"></i> Saya</div>
@@ -250,13 +220,11 @@
             document.getElementById('overlay').classList.toggle('active');
         }
 
-        // --- SINKRONISASI DATA ---
+        // --- SINKRONISASI SALDO SAJA ---
         function syncData() {
             let dataRaw = localStorage.getItem('kas_data');
             let listKas = dataRaw ? JSON.parse(dataRaw) : [];
-            
-            let masuk = 0;
-            let keluar = 0;
+            let masuk = 0; let keluar = 0;
 
             listKas.forEach(t => {
                 if(t.type === 'masuk') masuk += parseInt(t.amount);
@@ -265,43 +233,6 @@
 
             totalSaldoGlobal = masuk - keluar;
             renderSaldo();
-            renderActivity(listKas);
-        }
-
-        function renderActivity(data) {
-            const container = document.getElementById('activity-list');
-            if (data.length === 0) return;
-
-            let sortedData = [...data].reverse().slice(0, 4);
-            let html = '';
-
-            sortedData.forEach(item => {
-                const isMasuk = item.type === 'masuk';
-                const color = isMasuk ? '#10b981' : '#ef4444';
-                const icon = isMasuk ? 'fa-arrow-down' : 'fa-arrow-up';
-                const label = isMasuk ? 'Dana Masuk' : 'Dana Keluar';
-
-                html += `
-                    <div class="activity-card">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <div style="width: 35px; height: 35px; background: ${color}15; color: ${color}; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;">
-                                <i class="fas ${icon}"></i>
-                            </div>
-                            <div>
-                                <p style="font-size: 12px; font-weight: 600; color: #333; margin: 0;">${item.note || label}</p>
-                                <p style="font-size: 10px; color: #999; margin: 0;">${item.date || 'Baru saja'}</p>
-                            </div>
-                        </div>
-                        <div style="text-align: right;">
-                            <p style="font-size: 13px; font-weight: 700; color: ${isMasuk ? '#333' : '#ef4444'}; margin: 0;">
-                                ${isMasuk ? '+' : '-'}Rp ${parseInt(item.amount).toLocaleString('id-ID')}
-                            </p>
-                            <p style="font-size: 9px; color: #10b981; margin: 0; font-weight:600;">Berhasil</p>
-                        </div>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
         }
 
         function toggleMata() { isHidden = !isHidden; renderSaldo(); }
@@ -333,8 +264,7 @@
         ];
 
         window.onload = () => {
-            // Menggabungkan teks Mahfuzat agar berjalan panjang
-            document.getElementById('m-text').innerText = mahfuzat.join("   •   ");
+            document.getElementById('m-text').innerText = mahfuzat.join("   •   ");
             document.getElementById('nasihat-gerak').innerText = nasihatAgamis[Math.floor(Math.random() * nasihatAgamis.length)];
             syncData();
         };
