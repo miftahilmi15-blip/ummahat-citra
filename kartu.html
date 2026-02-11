@@ -3,177 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kartu Yayasan | Master Pro</title>
+    <title>Kartu Master Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
         body {
-            background-color: #f0f2f5;
+            background-color: #e9ecef;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
         }
 
-        /* Container Kartu (Mirip Screenshot) */
-        .card-container {
+        .phone-wrapper {
             width: 100%;
-            max-width: 340px;
-            background: linear-gradient(135deg, #00529b 0%, #108ee9 100%); /* Warna Biru */
-            aspect-ratio: 1 / 1.5; /* Proporsi kartu tegak sesuai foto */
-            border-radius: 30px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        /* Navigasi Atas */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+            cursor: pointer;
+            color: #333;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        h1 { font-size: 32px; margin-bottom: 30px; font-weight: 800; color: #000; }
+
+        /* KARTU UTAMA */
+        .card {
+            width: 100%;
+            aspect-ratio: 1.6 / 1;
+            background: linear-gradient(135deg, #0099ff 0%, #1a237e 100%);
+            border-radius: 25px;
             position: relative;
-            padding: 30px;
+            padding: 25px;
             color: white;
-            box-shadow: 0 15px 35px rgba(16, 142, 233, 0.3);
+            text-align: left;
             overflow: hidden;
-            background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05) 0%, transparent 20%),
-                              url('https://www.transparenttextures.com/patterns/batik-thin.png'); /* Pola batik halus */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            margin-bottom: 25px;
         }
 
-        /* Elemen Kuning Melengkung (Khas Jago) */
-        .jago-shape {
+        /* Variasi Background Batik */
+        .card::before {
+            content: "";
             position: absolute;
-            bottom: 15%;
-            left: -10%;
-            width: 80%;
-            height: 50%;
-            background: #ffeb3b;
-            border-radius: 100px;
-            transform: rotate(-10deg);
-            opacity: 0.9;
-            box-shadow: inset -10px 10px 20px rgba(0,0,0,0.1);
+            inset: 0;
+            opacity: 0.1;
+            background-image: url('https://www.transparenttextures.com/patterns/batik-thin.png');
         }
 
-        .logo-area { display: flex; justify-content: space-between; align-items: flex-start; z-index: 2; position: relative; }
-        .logo-text { font-weight: 800; font-size: 22px; line-height: 1; }
-        .logo-text span { display: block; font-size: 12px; font-weight: 400; opacity: 0.8; }
-        
+        /* Aksen Kuning Melengkung */
+        .yellow-blob {
+            position: absolute;
+            width: 130px;
+            height: 130px;
+            background: #ffcc00;
+            border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%;
+            bottom: -20px;
+            left: -40px;
+            filter: blur(2px);
+        }
+
+        .logo-text { font-size: 10px; font-weight: 400; opacity: 0.9; margin-bottom: -5px;}
+        .brand { font-size: 20px; font-weight: 800; margin-bottom: 20px; }
+        .brand span { color: #ffcc00; }
+
         .chip {
             width: 50px;
-            height: 40px;
-            background: linear-gradient(135deg, #cfd8dc, #90a4ae);
+            height: 38px;
+            background: linear-gradient(135deg, #bdc3c7, #2c3e50);
             border-radius: 8px;
-            margin-top: 20px;
-            position: relative;
-            z-index: 2;
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .card-type {
-            position: absolute;
-            right: 30px;
-            top: 130px;
-            font-weight: 600;
-            font-size: 18px;
-            opacity: 0.9;
-        }
+        .card-label { position: absolute; right: 25px; top: 100px; font-size: 14px; font-weight: 600; opacity: 0.8; }
 
         .holder-name {
             position: absolute;
-            right: 30px;
-            top: 50%;
-            font-size: 20px;
+            bottom: 45px;
+            right: 25px;
+            font-size: 24px;
             font-weight: 700;
-            text-align: right;
-            z-index: 3;
         }
 
         .gpn-logo {
             position: absolute;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            z-index: 3;
+            bottom: 25px;
+            right: 25px;
+            height: 20px;
+            background: white;
+            padding: 2px 8px;
+            border-radius: 5px;
         }
 
-        /* Saldo & Rekening Area */
-        .info-bottom {
-            margin-top: 30px;
-            width: 100%;
-            max-width: 340px;
+        /* BOX NOMOR REKENING */
+        .norek-box {
             background: white;
-            padding: 20px;
             border-radius: 20px;
+            padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 15px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
-        .btn-action {
+        .norek-label { font-size: 12px; color: #888; text-align: left; }
+        .norek-val { font-size: 22px; font-weight: 800; color: #333; }
+
+        /* TOMBOL */
+        .btn {
             width: 100%;
-            max-width: 340px;
-            margin-top: 15px;
-            padding: 15px;
-            border-radius: 15px;
+            padding: 18px;
+            border-radius: 25px;
             border: none;
             font-weight: 700;
+            font-size: 16px;
             cursor: pointer;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            transition: 0.2s;
+            transition: 0.3s;
         }
-        .btn-copy { background: #e0f2fe; color: #0369a1; }
-        .btn-wa { background: #25d366; color: white; margin-bottom: 50px;}
-        
-        .btn-back { position: fixed; top: 20px; left: 20px; color: #333; text-decoration: none; font-weight: 600; }
+
+        .btn-copy { background: #b3e5fc; color: #0277bd; }
+        .btn-share { background: #2ecc71; color: white; }
+        .btn:active { transform: scale(0.95); }
+
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
+<div class="phone-wrapper">
+    <a href="index.html" class="top-nav">
+        <i class="fas fa-arrow-left"></i>&nbsp;&nbsp; Kembali
+    </a>
 
-    <div style="margin-top: 60px; font-weight: 800; font-size: 24px; margin-bottom: 20px;">Kartu</div>
+    <h1>Kartu</h1>
 
-    <div class="card-container">
-        <div class="jago-shape"></div>
+    <div class="card">
+        <div class="yellow-blob"></div>
+        <div class="logo-text">syariah</div>
+        <div class="brand">Master <span>Pro</span> <i class="fas fa-gift"></i></div>
         
-        <div class="logo-area">
-            <div class="logo-text">
-                <span>syariah</span>
-                Master Pro
-            </div>
-            <i class="fas fa-gift" style="font-size: 20px;"></i>
-        </div>
-
         <div class="chip"></div>
-        <div class="card-type">debit</div>
-
+        <div class="card-label">debit</div>
+        
         <div class="holder-name">Miftah Ilmi</div>
-
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/GPN_logo.svg/1200px-GPN_logo.svg.png" class="gpn-logo" alt="GPN">
     </div>
 
-    <div class="info-bottom">
+    <div class="norek-box">
         <div>
-            <p style="font-size: 12px; color: #888;">Nomor Rekening</p>
-            <p style="font-size: 18px; font-weight: 700; color: #333;" id="norek">7209005888</p>
+            <div class="norek-label">Nomor Rekening</div>
+            <div class="norek-val" id="nomor-rek">7209005888</div>
         </div>
-        <i class="fas fa-university" style="color: #108ee9; font-size: 20px;"></i>
+        <i class="fas fa-graduation-cap" style="font-size: 28px; color: #0277bd;"></i>
     </div>
 
-    <button class="btn-action btn-copy" onclick="copyNorek()">
-        <i class="far fa-copy"></i> SALIN NOMOR REKENING
+    <button class="btn btn-copy" onclick="copyRek()">
+        <i class="fas fa-link"></i> SALIN NOMOR REKENING
     </button>
 
-    <button class="btn-action btn-wa" onclick="shareWA()">
+    <button class="btn btn-share" onclick="shareWA()">
         <i class="fab fa-whatsapp"></i> BAGIKAN KE DONATUR
     </button>
+</div>
 
-    <script>
-        function copyNorek() {
-            const norek = document.getElementById('norek').innerText;
-            navigator.clipboard.writeText(norek);
-            alert("Nomor rekening berhasil disalin!");
-        }
+<script>
+    function copyRek() {
+        const text = document.getElementById('nomor-rek').innerText;
+        navigator.clipboard.writeText(text);
+        alert("Nomor Rekening Disalin!");
+    }
 
-        function shareWA() {
-            const msg = `*INFO REKENING YAYASAN*%0A%0ABank: *BSI (Bank Syariah Indonesia)*%0ANomor: *7209005888*%0AA.n: *Miftah Ilmi*%0A%0A_Jazakumullah Khairan Katsiran._`;
-            window.open(`https://wa.me/?text=${msg}`, '_blank');
-        }
-    </script>
+    function shareWA() {
+        const pesan = `*INFO REKENING YAYASAN*%0A` +
+                    `----------------------------%0A` +
+                    `Bank: *BSI (Bank Syariah Indonesia)*%0A` +
+                    `No. Rek: *7209005888*%0A` +
+                    `A.n: *Miftah Ilmi*%0A` +
+                    `----------------------------%0A` +
+                    `_Jazakumullah Khairan Katsiran_`;
+        window.open(`https://wa.me/?text=${pesan}`, '_blank');
+    }
+</script>
+
 </body>
 </html>
