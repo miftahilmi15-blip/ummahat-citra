@@ -87,62 +87,54 @@
     <div id="main-list"></div>
 
     <script>
-        function loadData() {
-            const listContainer = document.getElementById('main-list');
-            // Ambil data dari localStorage
-            const rawData = localStorage.getItem('kas_data');
-            let data = rawData ? JSON.parse(rawData) : [];
+    function loadData() {
+        const listContainer = document.getElementById('main-list');
+        const rawData = localStorage.getItem('kas_data');
+        let data = rawData ? JSON.parse(rawData) : [];
 
-            // Update Waktu Refresh
-            const now = new Date();
-            const jam = now.getHours().toString().padStart(2, '0');
-            const menit = now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('update-text').innerText = `Diupdate jam ${jam}:${menit}.`;
+        // Update Waktu Refresh
+        const now = new Date();
+        document.getElementById('update-text').innerText = `Diupdate jam ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}.`;
 
-            if (data.length === 0) {
-                listContainer.innerHTML = `
-                    <div class="empty">
-                        <i class="fas fa-receipt fa-3x" style="margin-bottom:15px"></i>
-                        <p>Belum ada riwayat transaksi</p>
-                    </div>`;
-                return;
-            }
-
-            // --- INI KUNCINYA BOS ---
-            // .reverse() membuat data yang terakhir di-push muncul paling ATAS
-            const sortedData = [...data].reverse();
-
-            let htmlContent = '';
-            sortedData.forEach(item => {
-                const isMasuk = item.type === 'masuk';
-                
-                // Gunakan ikon layanan, bukan panah
-                const iconClass = isMasuk ? 'fa-wallet' : 'fa-paper-plane';
-                const bgClass = isMasuk ? 'bg-infaq' : 'bg-keluar';
-                const sign = isMasuk ? '' : '-';
-
-                htmlContent += `
-                    <div class="trans-item">
-                        <div class="icon-box ${bgClass}">
-                            <i class="fas ${iconClass}"></i>
-                        </div>
-                        <div class="trans-details">
-                            <p class="title">${item.note || (isMasuk ? 'Isi Saldo' : 'Kirim Uang')}</p>
-                            <p class="time">${item.date || 'Hari ini'}</p>
-                        </div>
-                        <div class="trans-amount">
-                            <p class="amount-text">${sign}Rp${parseInt(item.amount).toLocaleString('id-ID')}</p>
-                            <span class="status-badge">Berhasil</span>
-                        </div>
-                    </div>
-                `;
-            });
-
-            listContainer.innerHTML = htmlContent;
+        if (data.length === 0) {
+            listContainer.innerHTML = `<div class="empty"><i class="fas fa-receipt fa-3x"></i><p>Belum ada transaksi</p></div>`;
+            return;
         }
 
-        // Jalankan saat halaman dibuka
-        window.onload = loadData;
-    </script>
+        // --- INI LOGIKA PALING AMPUH ---
+        // Kita urutkan berdasarkan index atau properti id secara menurun (descending)
+        // Jika data tidak punya ID, kita pakai index aslinya
+        let dataTerbaru = data.map((item, index) => ({...item, originalIndex: index}))
+                              .sort((a, b) => b.originalIndex - a.originalIndex);
+
+        let htmlContent = '';
+        dataTerbaru.forEach(item => {
+            const isMasuk = item.type === 'masuk';
+            const iconClass = isMasuk ? 'fa-wallet' : 'fa-paper-plane';
+            const bgClass = isMasuk ? 'bg-infaq' : 'bg-keluar';
+            const sign = isMasuk ? '' : '-';
+
+            htmlContent += `
+                <div class="trans-item">
+                    <div class="icon-box ${bgClass}">
+                        <i class="fas ${iconClass}"></i>
+                    </div>
+                    <div class="trans-details">
+                        <p class="title">${item.note || (isMasuk ? 'Isi Saldo' : 'Kirim Uang')}</p>
+                        <p class="time">${item.date || 'Baru saja'}</p>
+                    </div>
+                    <div class="trans-amount">
+                        <p class="amount-text">${sign}Rp${parseInt(item.amount).toLocaleString('id-ID')}</p>
+                        <span class="status-badge">Berhasil</span>
+                    </div>
+                </div>
+            `;
+        });
+
+        listContainer.innerHTML = htmlContent;
+    }
+
+    window.onload = loadData;
+</script>
 </body>
 </html>
