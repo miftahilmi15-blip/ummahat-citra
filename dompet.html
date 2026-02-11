@@ -1,179 +1,225 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Master Tanam | Logika Bos</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: #f0f4f8; overflow: hidden; height: 100vh; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Pohon Jariyah</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-        /* --- STAGE (Langit dari Kode Bos) --- */
-        #scene {
-            height: 60vh;
-            background: linear-gradient(to top, #4CAF50 0%, #90CAF9 100%);
-            position: relative;
-            display: flex; justify-content: center; align-items: flex-end;
-            overflow: hidden;
-            transition: background 1s ease;
-        }
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#f0f4f8;overflow:hidden;height:100vh}
 
-        /* --- POHON (Logika Dasar Bos) --- */
-        .tree {
-            position: relative;
-            z-index: 10;
-            margin-bottom: 20px; /* Jarak dari rumput */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+/* ===== SCENE ===== */
+#scene{
+  height:60vh;
+  background:linear-gradient(to top,#4CAF50,#90CAF9);
+  position:relative;
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+  overflow:hidden;
+  transition:background 1s ease;
+}
 
-        .trunk {
-            width: 25px;
-            height: 100px; /* Tinggi awal */
-            background: #6D4C41;
-            border-radius: 4px;
-            transition: height 0.5s ease;
-            order: 2;
-        }
+/* ===== POHON ===== */
+.tree{
+  position:relative;
+  z-index:10;
+  margin-bottom:20px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
 
-        .leaves {
-            position: relative;
-            width: 180px;
-            height: 150px;
-            order: 1;
-            margin-bottom: -20px; /* Biar daun nyambung ke batang */
-        }
+.trunk{
+  width:26px;
+  height:100px;
+  background:#6D4C41;
+  border-radius:6px;
+  transition:height .5s ease;
+}
 
-        .leaf {
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            background: #4CAF50;
-            border-radius: 50% 0 50% 0; /* Bentuk daun lebih cantik */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            animation: pop 0.4s ease forwards;
-        }
+.leaves{
+  position:relative;
+  width:190px;
+  height:150px;
+  margin-bottom:-20px;
+}
 
-        @keyframes pop {
-            from { transform: scale(0) rotate(-45deg); opacity: 0; }
-            to { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
+.leaf{
+  position:absolute;
+  width:24px;
+  height:24px;
+  background:#4CAF50;
+  border-radius:50% 0 50% 0;
+  animation:pop .4s ease forwards;
+}
 
-        .grass {
-            position: absolute; bottom: 0; width: 100%; height: 100px;
-            background: #2E7D32; z-index: 1;
-        }
+@keyframes pop{
+  from{transform:scale(0) rotate(-45deg);opacity:0}
+  to{transform:scale(1) rotate(0);opacity:1}
+}
 
-        /* --- UI PANEL --- */
-        .ui-panel {
-            height: 40vh; background: white; border-radius: 30px 30px 0 0;
-            margin-top: -30px; position: relative; z-index: 20;
-            padding: 25px; text-align: center; box-shadow: 0 -10px 20px rgba(0,0,0,0.1);
-        }
+/* ===== WATER EFFECT (BARU) ===== */
+.water{
+  position:absolute;
+  top:-40px;
+  left:50%;
+  width:10px;
+  height:18px;
+  background:#4FC3F7;
+  border-radius:50%;
+  animation:drop .6s ease forwards;
+}
 
-        .stats-card {
-            background: #f8f9fa; padding: 15px; border-radius: 20px;
-            margin-bottom: 20px; border: 1px solid #eee;
-        }
+@keyframes drop{
+  to{transform:translate(-50%,140px);opacity:0}
+}
 
-        .btn-siram {
-            width: 100%; padding: 18px; 
-            background: linear-gradient(to right, #4CAF50, #2E7D32);
-            color: white; border: none; border-radius: 50px;
-            font-size: 16px; font-weight: 800; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
-        }
+/* ===== GLOW (BARU) ===== */
+.glow{
+  box-shadow:0 0 25px rgba(255,255,255,.8);
+}
 
-        .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; height: 70px;
-            background: white; border-top: 1px solid #eee;
-            display: flex; justify-content: space-around; align-items: center;
-        }
-        .nav-item { text-align: center; color: #bbb; font-size: 10px; flex: 1; }
-        .nav-item.active { color: #108ee9; }
-        .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
-    </style>
+/* ===== BUNGA & BURUNG (BARU) ===== */
+.flower{
+  position:absolute;
+  width:14px;
+  height:14px;
+  background:pink;
+  border-radius:50%;
+}
+
+.bird{
+  position:absolute;
+  top:-15px;
+  right:20px;
+  width:26px;
+  height:14px;
+  background:#333;
+  border-radius:50% 50% 0 0;
+}
+
+/* ===== GROUND ===== */
+.grass{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:100px;
+  background:#2E7D32;
+  z-index:1;
+}
+
+/* ===== UI ===== */
+.ui-panel{
+  height:40vh;
+  background:white;
+  border-radius:30px 30px 0 0;
+  margin-top:-30px;
+  z-index:20;
+  padding:25px;
+  text-align:center;
+}
+
+.stats-card{
+  background:#f8f9fa;
+  padding:15px;
+  border-radius:20px;
+  margin-bottom:20px;
+}
+
+.btn-siram{
+  width:100%;
+  padding:18px;
+  background:linear-gradient(to right,#4CAF50,#2E7D32);
+  color:white;
+  border:none;
+  border-radius:50px;
+  font-size:16px;
+  font-weight:800;
+}
+</style>
 </head>
+
 <body>
 
-    <div id="scene">
-        <div class="tree">
-            <div class="leaves" id="leaves"></div>
-            <div class="trunk" id="trunk"></div>
-        </div>
-        <div class="grass"></div>
-    </div>
+<div id="scene">
+  <div class="tree" id="tree">
+    <div class="leaves" id="leaves"></div>
+    <div class="trunk" id="trunk"></div>
+  </div>
+  <div class="grass"></div>
+</div>
 
-    <div class="ui-panel">
-        <h3 style="color: #444; margin-bottom: 5px;">Pohon Jariyah</h3>
-        <div class="stats-card">
-            <p style="font-size: 12px; color: #888;">Total Sedekah Anda</p>
-            <h2 style="color: #2E7D32;">Rp <span id="total-val">0</span></h2>
-        </div>
+<div class="ui-panel">
+  <h3>Pohon Jariyah</h3>
+  <div class="stats-card">
+    <p>Total Sedekah Anda</p>
+    <h2>Rp <span id="total-val">0</span></h2>
+  </div>
+  <button class="btn-siram" onclick="location.href='kartu.html'">
+    <i class="fas fa-tint"></i> SIRAM SEDEKAH SEKARANG
+  </button>
+</div>
 
-        <button class="btn-siram" onclick="location.href='kartu.html'">
-            <i class="fas fa-tint"></i> SIRAM SEDEKAH SEKARANG
-        </button>
-    </div>
+<script>
+function loadProgress(){
+  let dataRaw = localStorage.getItem('kas_data');
+  let listKas = dataRaw ? JSON.parse(dataRaw) : [];
+  let total = 0;
+  listKas.forEach(t=>{ if(t.type==='masuk') total+=parseInt(t.amount) });
+  document.getElementById("total-val").innerText = total.toLocaleString();
+  updateTreeVisual(total, listKas.length);
+}
 
-    <div class="bottom-nav">
-        <div class="nav-item"><i class="fas fa-home"></i>Beranda</div>
-        <div class="nav-item active"><i class="fas fa-wallet"></i>Dompet</div>
-        <div class="nav-item"><i class="fas fa-user-circle"></i>Saya</div>
-    </div>
+function updateTreeVisual(total,count){
+  const trunk = document.getElementById("trunk");
+  const leaves = document.getElementById("leaves");
+  const scene = document.getElementById("scene");
 
-    <script>
-        // Ambil data dari localStorage (Kas Bos)
-        function loadProgress() {
-            let dataRaw = localStorage.getItem('kas_data');
-            let listKas = dataRaw ? JSON.parse(dataRaw) : [];
-            let total = 0;
-            
-            listKas.forEach(t => { 
-                if(t.type === 'masuk') total += parseInt(t.amount); 
-            });
+  /* Batang */
+  trunk.style.height = 100 + Math.sqrt(total)/5 + "px";
 
-            document.getElementById("total-val").innerText = total.toLocaleString();
-            
-            // Jalankan Logika Pertumbuhan Bos
-            updateTreeVisual(total, listKas.length);
-        }
+  /* Daun */
+  leaves.innerHTML='';
+  for(let i=0;i<count && i<60;i++){
+    const leaf=document.createElement("div");
+    leaf.className="leaf";
+    leaf.style.top=Math.random()*100+"px";
+    leaf.style.left=Math.random()*150+"px";
+    leaves.appendChild(leaf);
+  }
 
-        function updateTreeVisual(total, count) {
-            const trunk = document.getElementById("trunk");
-            const leaves = document.getElementById("leaves");
+  /* Milestone */
+  if(total>1_000_000){
+    scene.style.background="linear-gradient(to top,#2E7D32,#FFD54F)";
+  }
+  if(total>3_000_000 && !document.querySelector(".flower")){
+    const f=document.createElement("div");
+    f.className="flower";
+    f.style.top="60px"; f.style.left="80px";
+    leaves.appendChild(f);
+  }
+  if(total>7_000_000 && !document.querySelector(".bird")){
+    const b=document.createElement("div");
+    b.className="bird";
+    leaves.appendChild(b);
+  }
 
-            // 1. Logika Batang Bos: Tinggi awal 100 + akar nominal
-            let newHeight = 100 + Math.sqrt(total) / 5;
-            trunk.style.height = newHeight + "px";
+  /* Glow */
+  leaves.classList.add("glow");
+  setTimeout(()=>leaves.classList.remove("glow"),400);
 
-            // 2. Logika Daun Bos: Muncul per transaksi
-            leaves.innerHTML = ''; // Bersihkan dulu biar nggak numpuk pas refresh
-            for (let i = 0; i < count; i++) {
-                const leaf = document.createElement("div");
-                leaf.classList.add("leaf");
-                
-                // Posisi acak di area daun
-                leaf.style.top = Math.random() * 100 + "px";
-                leaf.style.left = Math.random() * 150 + "px";
-                
-                // Variasi warna hijau dikit biar natural
-                const colors = ['#4CAF50', '#66BB6A', '#81C784', '#2E7D32'];
-                leaf.style.background = colors[Math.floor(Math.random() * colors.length)];
-                
-                leaves.appendChild(leaf);
-            }
+  /* Water */
+  const w=document.createElement("div");
+  w.className="water";
+  document.getElementById("tree").appendChild(w);
+  setTimeout(()=>w.remove(),600);
+}
 
-            // 3. Milestone Bos
-            if (total >= 1000000) {
-                document.getElementById("scene").style.background = 
-                    "linear-gradient(to top, #2E7D32 0%, #FFD54F 100%)";
-            }
-        }
+window.onload = loadProgress;
+</script>
 
-        window.onload = loadProgress;
-    </script>
 </body>
 </html>
