@@ -3,45 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Master Tanam | Anti Pusing</title>
+    <title>Master Tanam | Logika Bos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        
-        /* Matikan scroll default biar tarikan kita yang kontrol */
-        body { 
-            background: #f0f4f8; 
-            overflow: hidden; 
-            height: 100vh; 
-            touch-action: none; /* Penting buat fitur tarik */
-        }
+        body { background: #f0f4f8; overflow: hidden; height: 100vh; }
 
-        /* --- INDIKATOR REFRESH --- */
-        #refresh-indicator {
-            position: absolute; top: -50px; left: 0; width: 100%;
-            height: 50px; display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 14px; z-index: 100; transition: transform 0.2s;
-        }
-
-        /* --- STAGE POHON --- */
-        #main-content { transition: transform 0.3s cubic-bezier(0,0,0.2,1); height: 100vh; }
-
-        .game-container {
+        /* --- STAGE (Langit dari Kode Bos) --- */
+        #scene {
             height: 60vh;
-            background: linear-gradient(to bottom, #4facfe, #00f2fe);
+            background: linear-gradient(to top, #4CAF50 0%, #90CAF9 100%);
             position: relative;
             display: flex; justify-content: center; align-items: flex-end;
             overflow: hidden;
+            transition: background 1s ease;
         }
 
-        .hill { position: absolute; bottom: -80px; width: 150%; height: 180px; background: #7cb342; border-radius: 50%; z-index: 1; }
-
-        .tree-box {
-            position: relative; z-index: 10; margin-bottom: 20px; width: 250px; height: 250px;
-            animation: sway 4s ease-in-out infinite; transform-origin: bottom center;
+        /* --- POHON (Logika Dasar Bos) --- */
+        .tree {
+            position: relative;
+            z-index: 10;
+            margin-bottom: 20px; /* Jarak dari rumput */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        @keyframes sway { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
+        .trunk {
+            width: 25px;
+            height: 100px; /* Tinggi awal */
+            background: #6D4C41;
+            border-radius: 4px;
+            transition: height 0.5s ease;
+            order: 2;
+        }
+
+        .leaves {
+            position: relative;
+            width: 180px;
+            height: 150px;
+            order: 1;
+            margin-bottom: -20px; /* Biar daun nyambung ke batang */
+        }
+
+        .leaf {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: #4CAF50;
+            border-radius: 50% 0 50% 0; /* Bentuk daun lebih cantik */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            animation: pop 0.4s ease forwards;
+        }
+
+        @keyframes pop {
+            from { transform: scale(0) rotate(-45deg); opacity: 0; }
+            to { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .grass {
+            position: absolute; bottom: 0; width: 100%; height: 100px;
+            background: #2E7D32; z-index: 1;
+        }
 
         /* --- UI PANEL --- */
         .ui-panel {
@@ -50,113 +73,107 @@
             padding: 25px; text-align: center; box-shadow: 0 -10px 20px rgba(0,0,0,0.1);
         }
 
-        .level-badge { background: #8bc34a; color: white; padding: 5px 15px; border-radius: 50px; font-size: 12px; font-weight: 700; display: inline-block; margin-bottom: 10px; }
-        .progress-card { background: #f8f9fa; padding: 15px; border-radius: 20px; margin-bottom: 20px; border: 1px solid #eee; }
-        .bar-bg { width: 100%; height: 12px; background: #eee; border-radius: 10px; margin: 8px 0; overflow: hidden; }
-        .bar-fill { height: 100%; background: #4caf50; width: 0%; transition: 1.5s; }
+        .stats-card {
+            background: #f8f9fa; padding: 15px; border-radius: 20px;
+            margin-bottom: 20px; border: 1px solid #eee;
+        }
 
         .btn-siram {
-            width: 100%; padding: 18px; background: linear-gradient(to right, #ff9800, #f44336);
-            color: white; border: none; border-radius: 50px; font-size: 16px; font-weight: 800;
+            width: 100%; padding: 18px; 
+            background: linear-gradient(to right, #4CAF50, #2E7D32);
+            color: white; border: none; border-radius: 50px;
+            font-size: 16px; font-weight: 800; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
         }
 
         .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; height: 75px;
+            position: fixed; bottom: 0; width: 100%; height: 70px;
             background: white; border-top: 1px solid #eee;
-            display: flex; justify-content: space-around; align-items: center; z-index: 100;
+            display: flex; justify-content: space-around; align-items: center;
         }
         .nav-item { text-align: center; color: #bbb; font-size: 10px; flex: 1; }
         .nav-item.active { color: #108ee9; }
-        .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
+        .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
-    <div id="refresh-indicator"><i class="fas fa-sync-alt fa-spin"></i> &nbsp; Melepaskan untuk segarkan...</div>
+    <div id="scene">
+        <div class="tree">
+            <div class="leaves" id="leaves"></div>
+            <div class="trunk" id="trunk"></div>
+        </div>
+        <div class="grass"></div>
+    </div>
 
-    <div id="main-content">
-        <div class="game-container">
-            <div class="tree-box" id="tree-master">
-                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M90 190 L110 190 L105 130 L95 130 Z" fill="#5d4037" />
-                    <circle cx="70" cy="140" r="35" fill="#2e7d32" />
-                    <circle cx="130" cy="140" r="35" fill="#2e7d32" />
-                    <circle cx="100" cy="150" r="40" fill="#1b5e20" />
-                    <circle cx="75" cy="100" r="40" fill="#388e3c" />
-                    <circle cx="125" cy="100" r="40" fill="#388e3c" />
-                    <circle cx="100" cy="110" r="45" fill="#2e7d32" />
-                    <circle cx="100" cy="70" r="45" fill="#4caf50" />
-                </svg>
-            </div>
-            <div class="hill"></div>
+    <div class="ui-panel">
+        <h3 style="color: #444; margin-bottom: 5px;">Pohon Jariyah</h3>
+        <div class="stats-card">
+            <p style="font-size: 12px; color: #888;">Total Sedekah Anda</p>
+            <h2 style="color: #2E7D32;">Rp <span id="total-val">0</span></h2>
         </div>
 
-        <div class="ui-panel">
-            <div class="level-badge" id="lvl-name">Level 1: Bibit</div>
-            <h2 style="font-weight: 800; color: #333;">Master Tanam</h2>
-            <div class="progress-card">
-                <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700;">
-                    <span>Progres Tumbuh</span>
-                    <span id="percent-txt">0%</span>
-                </div>
-                <div class="bar-bg"><div class="bar-fill" id="progress-bar"></div></div>
-                <p style="font-size: 11px; color: #888;">Sedekah: Rp <span id="total-txt">0</span></p>
-            </div>
-            <button class="btn-siram" onclick="location.href='kartu.html'">SIRAM SEDEKAH</button>
-        </div>
+        <button class="btn-siram" onclick="location.href='kartu.html'">
+            <i class="fas fa-tint"></i> SIRAM SEDEKAH SEKARANG
+        </button>
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item" onclick="location.href='dompet.html'"><i class="fas fa-home"></i>Beranda</div>
-        <div class="nav-item active" onclick="location.href='dompet.html'"><i class="fas fa-wallet"></i>Dompet</div>
-        <div class="nav-item" onclick="location.href='dompet.html'"><i class="fas fa-user-circle"></i>Saya</div>
+        <div class="nav-item"><i class="fas fa-home"></i>Beranda</div>
+        <div class="nav-item active"><i class="fas fa-wallet"></i>Dompet</div>
+        <div class="nav-item"><i class="fas fa-user-circle"></i>Saya</div>
     </div>
 
     <script>
-        // --- LOGIKA UPDATE DATA ---
-        function updateGame() {
-            let data = localStorage.getItem('kas_data');
-            let list = data ? JSON.parse(data) : [];
+        // Ambil data dari localStorage (Kas Bos)
+        function loadProgress() {
+            let dataRaw = localStorage.getItem('kas_data');
+            let listKas = dataRaw ? JSON.parse(dataRaw) : [];
             let total = 0;
-            list.forEach(t => { if(t.type === 'masuk') total += parseInt(t.amount); });
+            
+            listKas.forEach(t => { 
+                if(t.type === 'masuk') total += parseInt(t.amount); 
+            });
 
-            document.getElementById('total-txt').innerText = total.toLocaleString();
-            let p = Math.min((total / 1000000) * 100, 100);
-            document.getElementById('progress-bar').style.width = p + "%";
-            document.getElementById('percent-txt').innerText = Math.floor(p) + "%";
-            let scale = 0.4 + (p / 120);
-            document.getElementById('tree-master').style.transform = `scale(${scale})`;
+            document.getElementById("total-val").innerText = total.toLocaleString();
+            
+            // Jalankan Logika Pertumbuhan Bos
+            updateTreeVisual(total, listKas.length);
         }
 
-        // --- LOGIKA TARIK KE BAWAH (PULL TO REFRESH) ---
-        let startY = 0;
-        const mainContent = document.getElementById('main-content');
-        const indicator = document.getElementById('refresh-indicator');
+        function updateTreeVisual(total, count) {
+            const trunk = document.getElementById("trunk");
+            const leaves = document.getElementById("leaves");
 
-        window.addEventListener('touchstart', (e) => {
-            startY = e.touches[0].pageY;
-        });
+            // 1. Logika Batang Bos: Tinggi awal 100 + akar nominal
+            let newHeight = 100 + Math.sqrt(total) / 5;
+            trunk.style.height = newHeight + "px";
 
-        window.addEventListener('touchmove', (e) => {
-            let moveY = e.touches[0].pageY;
-            let diff = moveY - startY;
-            if (diff > 0 && diff < 100) {
-                mainContent.style.transform = `translateY(${diff}px)`;
-                indicator.style.transform = `translateY(${diff}px)`;
+            // 2. Logika Daun Bos: Muncul per transaksi
+            leaves.innerHTML = ''; // Bersihkan dulu biar nggak numpuk pas refresh
+            for (let i = 0; i < count; i++) {
+                const leaf = document.createElement("div");
+                leaf.classList.add("leaf");
+                
+                // Posisi acak di area daun
+                leaf.style.top = Math.random() * 100 + "px";
+                leaf.style.left = Math.random() * 150 + "px";
+                
+                // Variasi warna hijau dikit biar natural
+                const colors = ['#4CAF50', '#66BB6A', '#81C784', '#2E7D32'];
+                leaf.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                leaves.appendChild(leaf);
             }
-        });
 
-        window.addEventListener('touchend', (e) => {
-            let endY = e.changedTouches[0].pageY;
-            if (endY - startY > 60) {
-                updateGame(); // Jalankan update data
-                alert("Data berhasil diperbarui!"); 
+            // 3. Milestone Bos
+            if (total >= 1000000) {
+                document.getElementById("scene").style.background = 
+                    "linear-gradient(to top, #2E7D32 0%, #FFD54F 100%)";
             }
-            mainContent.style.transform = `translateY(0)`;
-            indicator.style.transform = `translateY(0)`;
-        });
+        }
 
-        window.onload = updateGame;
+        window.onload = loadProgress;
     </script>
 </body>
 </html>
