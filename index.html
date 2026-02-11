@@ -34,7 +34,7 @@
         /* --- HEADER AREA --- */
         .blue-section {
             background: var(--dana-blue);
-            height: 240px; 
+            height: 240px;
             padding: 20px 5%;
             color: white;
             position: relative;
@@ -49,12 +49,13 @@
             justify-content: space-between;
             text-align: center;
             margin-top: 10px;
-            margin-bottom: 25px; 
+            margin-bottom: 25px;
         }
         .action-item { flex: 1; cursor: pointer; }
         .action-item i { font-size: 24px; margin-bottom: 8px; display: block; }
         .action-item p { font-size: 12px; font-weight: 500; }
 
+        /* BUBBLE PENGINGAT AGAMIS */
         .floating-reminder {
             position: absolute;
             background: #ffeb3b; 
@@ -85,7 +86,7 @@
             100% { transform: translateY(0); }
         }
 
-        /* --- MAIN GRID & MAHFUZAT BERGERAK --- */
+        /* --- MAIN CONTENT --- */
         .main-container {
             padding: 0 15px;
             margin-top: -30px;
@@ -93,6 +94,7 @@
             z-index: 10;
         }
         
+        /* MAHFUZAT MARQUEE STYLE */
         .mahfuzat-card {
             background: var(--white);
             padding: 12px 15px;
@@ -100,16 +102,14 @@
             margin-bottom: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border-left: 4px solid var(--dana-blue);
-            overflow: hidden; /* Penting biar teks nggak balapan keluar card */
+            overflow: hidden;
         }
-        .mahfuzat-card h4 { font-size: 10px; color: var(--dana-blue); text-transform: uppercase; margin-bottom: 5px; }
+        .mahfuzat-card h4 { font-size: 10px; color: var(--dana-blue); text-transform: uppercase; margin-bottom: 5px;}
         
-        /* Wadah Teks Berjalan */
         .marquee-wrapper {
             width: 100%;
             overflow: hidden;
             white-space: nowrap;
-            position: relative;
         }
 
         .marquee-text {
@@ -117,8 +117,8 @@
             font-size: 13px;
             font-style: italic;
             color: #555;
-            padding-left: 100%; /* Mulai dari luar kanan */
-            animation: marqueeScroll 15s linear infinite;
+            padding-left: 100%;
+            animation: marqueeScroll 25s linear infinite; /* Kecepatan santai 25 detik */
         }
 
         @keyframes marqueeScroll {
@@ -126,15 +126,44 @@
             100% { transform: translateX(-100%); }
         }
 
-        .menu-white-box { background: var(--white); border-radius: 20px; padding: 20px 10px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px 5px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .menu-white-box {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 20px 10px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px 5px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
         .menu-item { display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; }
         .icon-circle { width: 45px; height: 45px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
         .menu-item h3 { font-size: 11px; font-weight: 500; color: #444; line-height: 1.2; }
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 70px; background: var(--white); border-top: 1px solid #eee; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
+
+        /* --- AKTIVITAS STYLE --- */
+        .activity-card {
+            background: #fff;
+            padding: 12px 15px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        /* --- BOTTOM NAV --- */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; height: 70px;
+            background: var(--white); border-top: 1px solid #eee;
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 1000;
+        }
         .nav-item { text-align: center; color: var(--text-gray); font-size: 10px; cursor: pointer; }
         .nav-item.active { color: var(--dana-blue); }
         .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
         .pay-btn { width: 60px; height: 60px; background: var(--dana-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; margin-top: -35px; border: 5px solid var(--bg-light); box-shadow: 0 4px 10px rgba(16, 142, 233, 0.3); }
+
         .c-infaq { color: #10b981; } .c-jamaah { color: #f59e0b; } .c-sholat { color: #3b82f6; } .c-sosial { color: #ef4444; } .c-jadwal { color: #8b5cf6; } .c-kutipan { color: #ec4899; } .c-kas { color: #06b6d4; } .c-laporan { color: #64748b; }
     </style>
 </head>
@@ -178,7 +207,7 @@
         <div class="mahfuzat-card">
             <h4>MAHFUZAT HARI INI</h4>
             <div class="marquee-wrapper">
-                <span class="marquee-text" id="m-text">Sedang memuat inspirasi...</span>
+                <span class="marquee-text" id="m-text">Memuat pesan bijak...</span>
             </div>
         </div>
 
@@ -192,11 +221,21 @@
             <div class="menu-item" onclick="location.href='infaq.html'"><div class="icon-circle"><i class="fas fa-box-open c-kas"></i></div><h3>Inventaris</h3></div>
             <div class="menu-item" onclick="location.href='laporan.html'"><div class="icon-circle"><i class="fas fa-file-contract c-laporan"></i></div><h3>Laporan</h3></div>
         </div>
+
+        <div style="margin-top: 25px; margin-bottom: 80px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h4 style="font-size: 14px; font-weight: 600; color: #333;">Aktivitas Terakhir</h4>
+                <span onclick="location.href='laporan.html'" style="font-size: 11px; color: var(--dana-blue); font-weight: 600; cursor: pointer;">Lihat Semua</span>
+            </div>
+            <div id="activity-list">
+                <div style="text-align:center; padding: 20px; color:#bbb; font-size:12px;">Belum ada aktivitas.</div>
+            </div>
+        </div>
     </div>
 
     <div class="bottom-nav">
         <div class="nav-item active"><i class="fas fa-home"></i> Beranda</div>
-        <div class="nav-item"><i class="fas fa-history"></i> Aktivitas</div>
+        <div class="nav-item" onclick="location.href='laporan.html'"><i class="fas fa-history"></i> Aktivitas</div>
         <div class="pay-btn"><i class="fas fa-qrcode"></i></div>
         <div class="nav-item"><i class="fas fa-wallet"></i> Dompet</div>
         <div class="nav-item"><i class="fas fa-user-circle"></i> Saya</div>
@@ -211,15 +250,58 @@
             document.getElementById('overlay').classList.toggle('active');
         }
 
-        function updateSaldo() {
-            let listKas = JSON.parse(localStorage.getItem('kas_data')) || [];
-            let masuk = 0; let keluar = 0;
+        // --- SINKRONISASI DATA ---
+        function syncData() {
+            let dataRaw = localStorage.getItem('kas_data');
+            let listKas = dataRaw ? JSON.parse(dataRaw) : [];
+            
+            let masuk = 0;
+            let keluar = 0;
+
             listKas.forEach(t => {
                 if(t.type === 'masuk') masuk += parseInt(t.amount);
                 else keluar += parseInt(t.amount);
             });
+
             totalSaldoGlobal = masuk - keluar;
             renderSaldo();
+            renderActivity(listKas);
+        }
+
+        function renderActivity(data) {
+            const container = document.getElementById('activity-list');
+            if (data.length === 0) return;
+
+            let sortedData = [...data].reverse().slice(0, 4);
+            let html = '';
+
+            sortedData.forEach(item => {
+                const isMasuk = item.type === 'masuk';
+                const color = isMasuk ? '#10b981' : '#ef4444';
+                const icon = isMasuk ? 'fa-arrow-down' : 'fa-arrow-up';
+                const label = isMasuk ? 'Dana Masuk' : 'Dana Keluar';
+
+                html += `
+                    <div class="activity-card">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 35px; height: 35px; background: ${color}15; color: ${color}; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px;">
+                                <i class="fas ${icon}"></i>
+                            </div>
+                            <div>
+                                <p style="font-size: 12px; font-weight: 600; color: #333; margin: 0;">${item.note || label}</p>
+                                <p style="font-size: 10px; color: #999; margin: 0;">${item.date || 'Baru saja'}</p>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <p style="font-size: 13px; font-weight: 700; color: ${isMasuk ? '#333' : '#ef4444'}; margin: 0;">
+                                ${isMasuk ? '+' : '-'}Rp ${parseInt(item.amount).toLocaleString('id-ID')}
+                            </p>
+                            <p style="font-size: 9px; color: #10b981; margin: 0; font-weight:600;">Berhasil</p>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
         }
 
         function toggleMata() { isHidden = !isHidden; renderSaldo(); }
@@ -240,24 +322,21 @@
             "Man jadda wajada - Siapa bersungguh-sungguh akan berhasil.",
             "Man shabara zhafira - Siapa bersabar akan beruntung.",
             "Al-waqtu atsmanu minadz dzahabi - Waktu lebih berharga dari emas.",
-            "Man saro 'ala darbi washola - Barang siapa berjalan pada jalannya, sampailah ia.",
-            "Jarib wa lachid takun 'arifan - Cobalah dan perhatikanlah, niscaya kau jadi orang berilmu."
+            "Al-ilmu bilaa 'amalin kasy syajari bilaa tsamarin - Ilmu tanpa amal bagai pohon tak berbuah."
         ];
 
         const nasihatAgamis = [
             "Sedekah dulu yuk sebelum beraktivitas..",
-            "Jangan lupa tabungan akhirat hari ini, Bos!",
+            "Jangan lupa tabungan akhirat hari ini!",
             "Infaq pagi ini untuk keberkahan hari ini.",
             "Harta tak dibawa mati, amal jariyah abadi."
         ];
 
         window.onload = () => {
-            // Gabungkan semua mahfuzat jadi satu teks panjang biar asik jalannya
-            const textGabungan = mahfuzat.join("   •   ");
-            document.getElementById('m-text').innerText = textGabungan;
-            
+            // Menggabungkan teks Mahfuzat agar berjalan panjang
+            document.getElementById('m-text').innerText = mahfuzat.join("   •   ");
             document.getElementById('nasihat-gerak').innerText = nasihatAgamis[Math.floor(Math.random() * nasihatAgamis.length)];
-            updateSaldo();
+            syncData();
         };
     </script>
 </body>
