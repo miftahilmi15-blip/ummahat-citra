@@ -5,20 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pohon Jariyah | Master Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --dana-blue: #108ee9;
-            --overlay-dark: rgba(0,0,0,0.4);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         
         body { background: #000; overflow: hidden; height: 100vh; }
 
-        /* --- BACKGROUND REALISTIK --- */
+        /* --- BACKGROUND POHON REALISTIK --- */
+        /* Menggunakan gambar pohon rimbun berkualitas tinggi */
         .game-canvas {
             width: 100%;
             height: 100vh;
-            background: url('https://r.jina.ai/i/65757d23f2b14686948512e098485202') no-repeat center center;
+            background: url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') no-repeat center center;
             background-size: cover;
             position: relative;
             display: flex;
@@ -26,73 +27,84 @@
             justify-content: flex-end;
         }
 
-        /* Efek Sinar Matahari Meluncur */
+        /* Overlay gelap bawah agar text terbaca */
+        .game-canvas::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7));
+            z-index: 1;
+        }
+
+        /* Efek Cahaya Matahari */
         .sun-ray {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 20% 20%, rgba(255,255,225,0.2) 0%, transparent 50%);
+            background: radial-gradient(circle at 10% 10%, rgba(255,255,225,0.3) 0%, transparent 60%);
             pointer-events: none;
+            z-index: 2;
         }
 
         /* --- UI OVERLAY --- */
         .bottom-ui {
-            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
-            padding: 40px 20px 100px;
+            padding: 40px 25px 110px;
             color: white;
             z-index: 10;
+            position: relative;
         }
 
         .stats-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
-        .stat-item { text-align: center; }
-        .stat-item h4 { font-size: 10px; opacity: 0.7; text-transform: uppercase; }
-        .stat-item p { font-size: 18px; font-weight: 800; }
+        .stat-item { text-align: left; }
+        .stat-item h4 { font-size: 11px; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-item p { font-size: 22px; font-weight: 800; }
 
         .progress-container {
             background: rgba(255,255,255,0.2);
-            height: 8px;
-            border-radius: 10px;
-            margin: 15px 0;
+            height: 10px;
+            border-radius: 20px;
+            margin: 10px 0 20px;
             overflow: hidden;
+            backdrop-filter: blur(5px);
         }
         .progress-bar {
             height: 100%;
             background: #fff;
-            width: 65%; /* Nanti disinkronkan */
-            box-shadow: 0 0 10px #fff;
-            transition: 1s width ease-in-out;
+            width: 0%; 
+            box-shadow: 0 0 15px rgba(255,255,255,0.8);
+            transition: 1.5s width cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .action-area {
             display: flex;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 12px;
         }
 
         .btn-main {
             flex: 2;
-            padding: 15px;
-            border-radius: 12px;
+            padding: 16px;
+            border-radius: 15px;
             border: none;
             background: #fff;
-            color: #333;
+            color: #111;
             font-weight: 800;
             font-size: 14px;
             cursor: pointer;
-            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
         .btn-circle {
-            flex: 0.5;
-            aspect-ratio: 1;
-            border-radius: 12px;
+            width: 55px;
+            height: 55px;
+            border-radius: 15px;
             border: 1px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
             color: white;
             display: flex;
             align-items: center;
@@ -100,44 +112,34 @@
             font-size: 20px;
         }
 
-        /* Animasi Pohon Bernapas */
-        @keyframes breath {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.01); }
-        }
-        .tree-body {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            animation: breath 5s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        /* Navigasi Bawah Tetap Senada */
+        /* Navigasi Bawah Transparan */
         .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; height: 70px;
-            background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+            position: fixed; bottom: 0; width: 100%; height: 75px;
+            background: rgba(255,255,255,0.1); 
+            backdrop-filter: blur(15px);
             display: flex; justify-content: space-around; align-items: center;
             border-top: 1px solid rgba(255,255,255,0.1);
+            z-index: 100;
         }
-        .nav-item { text-align: center; color: rgba(255,255,255,0.6); font-size: 10px; flex: 1; }
+        .nav-item { text-align: center; color: rgba(255,255,255,0.5); font-size: 10px; flex: 1; cursor: pointer; text-decoration: none; }
         .nav-item.active { color: #fff; }
-        .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
+        .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
     <div class="game-canvas">
         <div class="sun-ray"></div>
-        <div class="tree-body"></div> <div class="bottom-ui">
+
+        <div class="bottom-ui">
             <div class="stats-row">
                 <div class="stat-item">
-                    <h4>Level</h4>
-                    <p id="lvl-display">54</p>
+                    <h4>Pohon Level</h4>
+                    <p id="lvl-display">1</p>
                 </div>
-                <div style="width: 1px; height: 30px; background: rgba(255,255,255,0.2);"></div>
-                <div class="stat-item">
-                    <h4>Pahala</h4>
-                    <p id="progress-val">57.400</p>
+                <div class="stat-item" style="text-align: right;">
+                    <h4>Total Pahala</h4>
+                    <p id="progress-val">0</p>
                 </div>
             </div>
 
@@ -146,7 +148,7 @@
             </div>
 
             <div class="action-area">
-                <div class="btn-circle"><i class="fas fa-info-circle"></i></div>
+                <div class="btn-circle"><i class="fas fa-seedling"></i></div>
                 <button class="btn-main" onclick="location.href='kartu.html'">Siram dengan Sedekah</button>
                 <div class="btn-circle"><i class="fas fa-share-alt"></i></div>
             </div>
@@ -154,30 +156,31 @@
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item" onclick="location.href='index.html'"><i class="fas fa-home"></i> Beranda</div>
-        <div class="nav-item" onclick="location.href='aktivitas.html'"><i class="fas fa-history"></i> Aktivitas</div>
-        <div class="nav-item active"><i class="fas fa-wallet"></i> Dompet</div>
-        <div class="nav-item" onclick="location.href='saya.html'"><i class="fas fa-user-circle"></i> Saya</div>
+        <a href="index.html" class="nav-item"><i class="fas fa-home"></i> Beranda</a>
+        <a href="aktivitas.html" class="nav-item"><i class="fas fa-history"></i> Aktivitas</a>
+        <a href="dompet.html" class="nav-item active"><i class="fas fa-wallet"></i> Dompet</a>
+        <a href="saya.html" class="nav-item"><i class="fas fa-user-circle"></i> Saya</a>
     </div>
 
     <script>
-        // Logika Sinkronisasi Data
         function syncTanam() {
             let dataRaw = localStorage.getItem('kas_data');
             let listKas = dataRaw ? JSON.parse(dataRaw) : [];
             let totalInfaq = 0;
             listKas.forEach(t => { if(t.type === 'masuk') totalInfaq += parseInt(t.amount); });
 
-            // Update Angka
+            // Update Angka dengan format ribuan
             document.getElementById('progress-val').innerText = totalInfaq.toLocaleString('id-ID');
             
-            // Update Level (Contoh: per 10rb naik level)
-            let level = Math.floor(totalInfaq / 10000) + 1;
+            // Logika Level: Setiap 20.000 naik 1 level
+            let level = Math.floor(totalInfaq / 20000) + 1;
             document.getElementById('lvl-display').innerText = level;
 
-            // Update Bar (Max level 1jt misalnya)
-            let percent = Math.min((totalInfaq / 1000000) * 100, 100);
-            document.getElementById('bar-fill').style.width = percent + "%";
+            // Update Bar: Anggap target 1.000.000 untuk bar penuh
+            setTimeout(() => {
+                let percent = Math.min((totalInfaq / 1000000) * 100, 100);
+                document.getElementById('bar-fill').style.width = (percent === 0 ? "5%" : percent + "%");
+            }, 300);
         }
 
         window.onload = syncTanam;
