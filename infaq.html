@@ -20,7 +20,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg-body); color: #334155; line-height: 1.6; }
 
-        /* Header */
         header {
             background: var(--white); padding: 15px 5%; display: flex;
             justify-content: space-between; align-items: center;
@@ -31,7 +30,6 @@
 
         .container { padding: 25px 5%; max-width: 1200px; margin: auto; }
 
-        /* Stats Cards */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .stat-card { 
             background: white; padding: 25px; border-radius: 20px; border: 1px solid #e2e8f0; 
@@ -41,7 +39,6 @@
         .stat-card h4 { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
         .stat-card .amount { font-size: 24px; font-weight: 800; margin-top: 10px; display: flex; align-items: center; justify-content: space-between; }
         
-        /* Form Section */
         .input-section { background: white; border-radius: 24px; border: 1px solid #e2e8f0; padding: 30px; margin-bottom: 30px; }
         .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
         label { font-size: 12px; font-weight: 700; color: var(--blue-dark); margin-bottom: 8px; display: block; }
@@ -56,7 +53,6 @@
         }
         .btn-submit:hover { background: var(--blue-dark); box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3); }
 
-        /* History Table */
         .table-res { background: white; border-radius: 24px; border: 1px solid #e2e8f0; overflow: hidden; }
         table { width: 100%; border-collapse: collapse; }
         th { background: #f8fafc; padding: 18px; text-align: left; font-size: 13px; color: #64748b; font-weight: 600; }
@@ -180,17 +176,23 @@
         return "Rp " + parseInt(angka).toLocaleString('id-ID');
     }
 
+    function togglePrivasi() {
+        isHidden = !isHidden;
+        const icon = document.getElementById('eye-main');
+        icon.className = isHidden ? 'fas fa-eye-slash eye-icon' : 'fas fa-eye eye-icon';
+        updateUI();
+    }
+
     function updateUI() {
         const tbody = document.getElementById('table-body');
         tbody.innerHTML = '';
         let masuk = 0, keluar = 0;
 
-        // --- PAKSA SORTIR BERDASARKAN WAKTU TERBARU ---
-        // Kita urutkan berdasarkan 'id' (timestamp) dari besar ke kecil
-        transactions.sort((a, b) => b.id - a.id);
+        // Sortir berdasarkan ID (Timestamp) terbaru di atas
+        transactions.sort((a, b) => (b.id || 0) - (a.id || 0));
 
-        transactions.forEach((t, index) => {
-            const amt = parseInt(t.amount);
+        transactions.forEach((t) => {
+            const amt = parseInt(t.amount) || 0;
             if(t.type === 'masuk') masuk += amt;
             else keluar += amt;
 
@@ -207,12 +209,11 @@
                         ${formatIDR(amt)}
                     </td>
                     <td>
-                        <div class="delete-btn" onclick="deleteItem(${index})"><i class="fas fa-trash-alt"></i></div>
+                        <div class="delete-btn" onclick="deleteItem(${t.id})"><i class="fas fa-trash-alt"></i></div>
                     </td>
                 </tr>`;
         });
 
-        // Update angka-angka di atas
         const total = masuk - keluar;
         document.getElementById('total-masuk').innerText = formatIDR(masuk);
         document.getElementById('total-keluar').innerText = formatIDR(keluar);
@@ -228,50 +229,46 @@
         const category = document.getElementById('category').value;
         
         const now = new Date();
-        const dateStr = now.toLocaleDateString('id-ID', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
+        // Menambahkan Tahun agar data tidak "belang"
+        const dateStr = now.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'});
 
         if(desc && amount > 0) {
-            // KITA KASIH ID UNIK PAKE MILIDETIK (Timestamp)
             const newTrans = { 
-                id: Date.now(), // Ini penentu urutan (angka pasti naik terus)
+                id: Date.now(), 
                 person, 
                 desc, 
-                amount, 
+                amount: parseInt(amount), 
                 type, 
                 category, 
                 date: dateStr 
             };
 
-            // Masukin ke array
             transactions.push(newTrans);
-            
-            // Simpan ke storage
             localStorage.setItem('kas_data', JSON.stringify(transactions));
-            
-            // Refresh tampilan
             updateUI();
             
-            // Bersihkan form
+            // Reset Form
             document.getElementById('person').value = '';
             document.getElementById('desc').value = '';
             document.getElementById('amount').value = '';
             
-            alert("Selesai Bos! Cek deh paling atas pasti dia.");
+            alert("Berhasil disimpan!");
         } else {
-            alert("Isi dulu dong datanya!");
+            alert("Mohon isi keterangan dan nominal!");
         }
     }
 
-    function deleteItem(index) {
-        if(confirm("Hapus?")) {
-            transactions.splice(index, 1);
+    function deleteItem(targetId) {
+        if(confirm("Hapus transaksi ini?")) {
+            // Filter berdasarkan ID agar akurat
+            transactions = transactions.filter(t => t.id !== targetId);
             localStorage.setItem('kas_data', JSON.stringify(transactions));
             updateUI();
         }
     }
 
     function clearAll() {
-        if(confirm("Hapus semua?")) {
+        if(confirm("Hapus semua riwayat transaksi?")) {
             localStorage.removeItem('kas_data');
             transactions = [];
             updateUI();
