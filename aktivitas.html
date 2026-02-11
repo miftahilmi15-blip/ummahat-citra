@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Aktivitas | Master Pro</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
     <style>
         :root {
             --dana-blue: #108ee9;
@@ -13,52 +15,127 @@
             --text-dark: #333;
             --text-gray: #888;
             --border-color: #f2f2f2;
+            --success: #10b981;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: white; color: var(--text-dark); }
+        body { background: white; color: var(--text-dark); -webkit-tap-highlight-color: transparent; }
 
         /* HEADER AREA */
-        .header-container { position: sticky; top: 0; z-index: 1000; background: var(--dana-blue); }
-        .header-top { padding: 15px 20px; display: flex; align-items: center; color: white; }
-        .header-top h2 { font-size: 18px; font-weight: 500; margin-left: 20px; flex: 1; }
-
-        .search-wrapper { padding: 0 15px 15px; }
-        .search-box { background: white; border-radius: 6px; display: flex; align-items: center; padding: 10px 15px; gap: 12px; }
-        .search-box input { border: none; outline: none; width: 100%; font-size: 14px; }
-        .search-box i { color: var(--dana-blue); }
-
-        /* STATUS UPDATE */
-        .status-bar { padding: 12px 20px; display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-gray); border-bottom: 8px solid var(--bg-light); }
-
-        /* TRANSACTION LIST */
-        .section-header { padding: 15px 20px; font-weight: 700; font-size: 15px; border-bottom: 1px solid var(--border-color); background: #fff; }
-
-        .trans-item {
-            display: flex; align-items: center; padding: 15px 20px; gap: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        /* IKON LAYANAN (BUKAN PANAH) */
-        .icon-box {
-            width: 46px; height: 46px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 20px;
+        .header-container { 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+            background: var(--dana-blue); 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
-        /* Warna Ikon: Biru untuk Masuk, Merah untuk Keluar */
-        .bg-infaq { background: #e6f7ff; color: #108ee9; } 
+        .header-top { 
+            padding: 18px 20px; 
+            display: flex; 
+            align-items: center; 
+            color: white; 
+        }
+        
+        .header-top h2 { font-size: 18px; font-weight: 500; margin-left: 20px; flex: 1; }
+        .header-top i { font-size: 20px; cursor: pointer; }
+
+        .search-wrapper { padding: 0 15px 15px; }
+        .search-box { 
+            background: white; 
+            border-radius: 8px; 
+            display: flex; 
+            align-items: center; 
+            padding: 12px 15px; 
+            gap: 12px; 
+        }
+        
+        .search-box input { 
+            border: none; 
+            outline: none; 
+            width: 100%; 
+            font-size: 14px; 
+            color: var(--text-dark); 
+        }
+        
+        .search-box i { color: var(--dana-blue); font-size: 16px; }
+
+        /* STATUS UPDATE */
+        .status-bar { 
+            padding: 12px 20px; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            font-size: 11px; 
+            color: var(--text-gray); 
+            background: white;
+            border-bottom: 8px solid var(--bg-light); 
+        }
+
+        /* TRANSACTION LIST */
+        .section-header { 
+            padding: 15px 20px; 
+            font-weight: 700; 
+            font-size: 15px; 
+            border-bottom: 1px solid var(--border-color); 
+            background: #fff; 
+            color: #000;
+        }
+
+        .list-container { padding-bottom: 30px; }
+
+        .trans-item {
+            display: flex; 
+            align-items: center; 
+            padding: 18px 20px; 
+            gap: 15px;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s;
+        }
+        
+        .trans-item:active { background: #f9f9f9; }
+
+        .icon-box {
+            width: 48px; 
+            height: 48px; 
+            border-radius: 14px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .bg-infaq { background: #e6f7ff; color: var(--dana-blue); } 
         .bg-keluar { background: #fff1f0; color: #f5222d; } 
 
-        .trans-details { flex: 1; }
-        .trans-details .title { font-size: 14px; font-weight: 600; color: #222; margin-bottom: 2px; }
-        .trans-details .time { font-size: 11px; color: #999; }
+        .trans-details { flex: 1; min-width: 0; }
+        .trans-details .title { 
+            font-size: 14px; 
+            font-weight: 600; 
+            color: #222; 
+            margin-bottom: 2px; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+        }
+        .trans-details .time { font-size: 11px; color: var(--text-gray); }
 
-        .trans-amount { text-align: right; }
-        .amount-text { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: #333; }
-        .status-badge { background: #e6f7ff; color: #108ee9; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+        .trans-amount { text-align: right; flex-shrink: 0; }
+        .amount-text { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: #333; }
+        
+        .status-badge { 
+            background: #e6f7ff; 
+            color: var(--dana-blue); 
+            padding: 3px 10px; 
+            border-radius: 6px; 
+            font-size: 10px; 
+            font-weight: 600; 
+            display: inline-block;
+        }
 
-        .empty { text-align: center; padding: 100px 20px; color: #ccc; }
+        .empty { text-align: center; padding: 120px 20px; color: #bbb; }
+        .empty i { font-size: 60px; margin-bottom: 15px; opacity: 0.3; }
     </style>
 </head>
 <body>
@@ -67,74 +144,99 @@
         <div class="header-top">
             <i class="fas fa-arrow-left" onclick="window.location.href='index.html'"></i>
             <h2>Aktivitas</h2>
-            <i class="fas fa-file-alt"></i>
+            <i class="fas fa-file-invoice"></i>
         </div>
         <div class="search-wrapper">
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="text" placeholder="Cari transaksi">
+                <input type="text" id="searchInput" placeholder="Cari transaksi" onkeyup="filterData()">
             </div>
         </div>
     </div>
 
     <div class="status-bar">
-        <i class="fas fa-sync-alt fa-spin" style="color: #108ee9; font-size: 10px;"></i>
-        <span id="update-text">Memuat transaksi terbaru...</span>
+        <i class="fas fa-sync-alt fa-spin" style="color: var(--dana-blue); font-size: 10px;"></i>
+        <span id="update-text">Menyinkronkan...</span>
     </div>
 
     <div class="section-header">Bulan Ini</div>
 
-    <div id="main-list"></div>
+    <div id="main-list" class="list-container">
+        </div>
 
     <script>
-    function loadData() {
-        const listContainer = document.getElementById('main-list');
-        const rawData = localStorage.getItem('kas_data');
-        let data = rawData ? JSON.parse(rawData) : [];
+        // Data Global agar bisa di-filter
+        let allTransactions = [];
 
-        // Update Waktu Refresh
-        const now = new Date();
-        document.getElementById('update-text').innerText = `Diupdate jam ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}.`;
+        function loadData() {
+            const listContainer = document.getElementById('main-list');
+            const rawData = localStorage.getItem('kas_data');
+            allTransactions = rawData ? JSON.parse(rawData) : [];
 
-        if (data.length === 0) {
-            listContainer.innerHTML = `<div class="empty"><i class="fas fa-receipt fa-3x"></i><p>Belum ada transaksi</p></div>`;
-            return;
+            // Update Jam Refresh
+            const now = new Date();
+            const timeString = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+            document.getElementById('update-text').innerText = `Diupdate jam ${timeString}. Tunggu yang terbaru ya.`;
+
+            renderList(allTransactions);
         }
 
-        // --- INI LOGIKA PALING AMPUH ---
-        // Kita urutkan berdasarkan index atau properti id secara menurun (descending)
-        // Jika data tidak punya ID, kita pakai index aslinya
-        let dataTerbaru = data.map((item, index) => ({...item, originalIndex: index}))
-                              .sort((a, b) => b.originalIndex - a.originalIndex);
+        function renderList(dataToRender) {
+            const listContainer = document.getElementById('main-list');
+            
+            if (dataToRender.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="empty">
+                        <i class="fas fa-receipt"></i>
+                        <p>Belum ada riwayat transaksi</p>
+                    </div>`;
+                return;
+            }
 
-        let htmlContent = '';
-        dataTerbaru.forEach(item => {
-            const isMasuk = item.type === 'masuk';
-            const iconClass = isMasuk ? 'fa-wallet' : 'fa-paper-plane';
-            const bgClass = isMasuk ? 'bg-infaq' : 'bg-keluar';
-            const sign = isMasuk ? '' : '-';
+            // --- LOGIKA URUTAN TERBARU (STRICT) ---
+            // Kita petakan index asli, lalu urutkan terbalik (descending)
+            const sortedData = [...dataToRender]
+                .map((item, index) => ({...item, sortId: index}))
+                .sort((a, b) => b.sortId - a.sortId);
 
-            htmlContent += `
-                <div class="trans-item">
-                    <div class="icon-box ${bgClass}">
-                        <i class="fas ${iconClass}"></i>
+            let htmlContent = '';
+            sortedData.forEach(item => {
+                const isMasuk = item.type === 'masuk';
+                const iconClass = isMasuk ? 'fa-wallet' : 'fa-paper-plane';
+                const bgClass = isMasuk ? 'bg-infaq' : 'bg-keluar';
+                const sign = isMasuk ? '' : '-';
+
+                htmlContent += `
+                    <div class="trans-item">
+                        <div class="icon-box ${bgClass}">
+                            <i class="fas ${iconClass}"></i>
+                        </div>
+                        <div class="trans-details">
+                            <p class="title">${item.note || (isMasuk ? 'Top Up Saldo' : 'Kirim Uang')}</p>
+                            <p class="time">${item.date || 'Baru saja'}</p>
+                        </div>
+                        <div class="trans-amount">
+                            <p class="amount-text">${sign}Rp${parseInt(item.amount).toLocaleString('id-ID')}</p>
+                            <span class="status-badge">Berhasil</span>
+                        </div>
                     </div>
-                    <div class="trans-details">
-                        <p class="title">${item.note || (isMasuk ? 'Isi Saldo' : 'Kirim Uang')}</p>
-                        <p class="time">${item.date || 'Baru saja'}</p>
-                    </div>
-                    <div class="trans-amount">
-                        <p class="amount-text">${sign}Rp${parseInt(item.amount).toLocaleString('id-ID')}</p>
-                        <span class="status-badge">Berhasil</span>
-                    </div>
-                </div>
-            `;
-        });
+                `;
+            });
 
-        listContainer.innerHTML = htmlContent;
-    }
+            listContainer.innerHTML = htmlContent;
+        }
 
-    window.onload = loadData;
-</script>
+        // Fitur Cari (Tambahan biar keren Bos)
+        function filterData() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allTransactions.filter(item => 
+                (item.note && item.note.toLowerCase().includes(query)) || 
+                (item.amount && item.amount.toString().includes(query))
+            );
+            renderList(filtered);
+        }
+
+        window.onload = loadData;
+    </script>
 </body>
 </html>
