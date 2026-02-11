@@ -12,216 +12,127 @@
             --bg-light: #f5f5f5;
             --text-dark: #333;
             --text-gray: #888;
-            --border-color: #f0f0f0;
+            --border-color: #f2f2f2;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        
-        body { 
-            background: white; 
-            color: var(--text-dark); 
-            line-height: 1.4;
-        }
+        body { background: white; color: var(--text-dark); }
 
-        /* --- STICKY HEADER --- */
-        .header-container {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background: var(--dana-blue);
-        }
+        /* HEADER AREA */
+        .header-container { position: sticky; top: 0; z-index: 1000; background: var(--dana-blue); }
+        .header-top { padding: 15px 20px; display: flex; align-items: center; color: white; }
+        .header-top h2 { font-size: 18px; font-weight: 500; margin-left: 20px; flex: 1; }
 
-        .header-top {
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: white;
-        }
-
-        .header-top h2 { font-size: 18px; font-weight: 500; flex: 1; margin-left: 20px; }
-
-        .search-wrapper {
-            padding: 0 15px 15px 15px;
-        }
-
-        .search-box {
-            background: white;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            gap: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .search-box input {
-            border: none;
-            outline: none;
-            width: 100%;
-            font-size: 14px;
-            color: var(--text-dark);
-        }
-
+        .search-wrapper { padding: 0 15px 15px; }
+        .search-box { background: white; border-radius: 6px; display: flex; align-items: center; padding: 10px 15px; gap: 12px; }
+        .search-box input { border: none; outline: none; width: 100%; font-size: 14px; }
         .search-box i { color: var(--dana-blue); }
 
-        /* --- STATUS AREA --- */
-        .status-bar {
-            background: white;
-            padding: 12px 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 11px;
-            color: var(--text-gray);
-            border-bottom: 8px solid var(--bg-light);
-        }
+        /* STATUS UPDATE */
+        .status-bar { padding: 12px 20px; display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-gray); border-bottom: 8px solid var(--bg-light); }
 
-        /* --- TRANSACTION LIST --- */
-        .list-section {
-            padding-bottom: 50px;
-        }
-
-        .section-header {
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: white;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .section-header span { font-weight: 700; font-size: 15px; }
-        .btn-statement { 
-            color: var(--dana-blue); 
-            font-size: 13px; 
-            text-decoration: none; 
-            font-weight: 600;
-        }
+        /* TRANSACTION LIST */
+        .section-header { padding: 15px 20px; font-weight: 700; font-size: 15px; border-bottom: 1px solid var(--border-color); background: #fff; }
 
         .trans-item {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            gap: 15px;
+            display: flex; align-items: center; padding: 15px 20px; gap: 15px;
             border-bottom: 1px solid var(--border-color);
-            transition: background 0.2s;
         }
 
-        .trans-item:active { background: #f9f9f9; }
-
+        /* IKON LAYANAN (BUKAN PANAH) */
         .icon-box {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            background: #fff;
-            border: 1.5px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 46px; height: 46px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
             font-size: 20px;
-            color: var(--dana-blue);
         }
+        
+        /* Warna Ikon: Biru untuk Masuk, Merah untuk Keluar */
+        .bg-infaq { background: #e6f7ff; color: #108ee9; } 
+        .bg-keluar { background: #fff1f0; color: #f5222d; } 
 
         .trans-details { flex: 1; }
-        .trans-details .title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
-        .trans-details .time { font-size: 11px; color: var(--text-gray); }
+        .trans-details .title { font-size: 14px; font-weight: 600; color: #222; margin-bottom: 2px; }
+        .trans-details .time { font-size: 11px; color: #999; }
 
         .trans-amount { text-align: right; }
-        .amount-text { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-        .status-badge {
-            background: var(--dana-blue);
-            color: white;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 10px;
-            display: inline-block;
-        }
+        .amount-text { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: #333; }
+        .status-badge { background: #e6f7ff; color: #108ee9; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; }
 
-        .empty-state {
-            padding: 100px 20px;
-            text-align: center;
-            color: #ccc;
-        }
-
-        .empty-state i { font-size: 50px; margin-bottom: 15px; }
+        .empty { text-align: center; padding: 100px 20px; color: #ccc; }
     </style>
 </head>
 <body>
 
     <div class="header-container">
         <div class="header-top">
-            <i class="fas fa-arrow-left" style="font-size: 20px;" onclick="window.location.href='index.html'"></i>
+            <i class="fas fa-arrow-left" onclick="window.location.href='index.html'"></i>
             <h2>Aktivitas</h2>
-            <i class="fas fa-file-invoice" style="font-size: 20px;"></i>
+            <i class="fas fa-file-alt"></i>
         </div>
         <div class="search-wrapper">
             <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="text" placeholder="Cari transaksi di sini...">
+                <input type="text" placeholder="Cari transaksi">
             </div>
         </div>
     </div>
 
     <div class="status-bar">
-        <i class="fas fa-check-circle" style="color: #10b981;"></i>
-        <span id="update-text">Memperbarui data...</span>
+        <i class="fas fa-sync-alt fa-spin" style="color: #108ee9; font-size: 10px;"></i>
+        <span id="update-text">Memuat transaksi terbaru...</span>
     </div>
 
-    <div class="list-section">
-        <div class="section-header">
-            <span>Bulan Ini</span>
-            <a href="#" class="btn-statement">Statement <i class="fas fa-chevron-right" style="font-size: 10px;"></i></a>
-        </div>
+    <div class="section-header">Bulan Ini</div>
 
-        <div id="main-list">
-            </div>
-    </div>
+    <div id="main-list"></div>
 
     <script>
         function loadData() {
             const listContainer = document.getElementById('main-list');
-            const updateLabel = document.getElementById('update-text');
-            
             // Ambil data dari localStorage
             const rawData = localStorage.getItem('kas_data');
             let data = rawData ? JSON.parse(rawData) : [];
 
-            // Update Jam (WIB)
+            // Update Waktu Refresh
             const now = new Date();
-            updateLabel.innerText = `Diupdate jam ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}. Tunggu yang terbaru ya.`;
+            const jam = now.getHours().toString().padStart(2, '0');
+            const menit = now.getMinutes().toString().padStart(2, '0');
+            document.getElementById('update-text').innerText = `Diupdate jam ${jam}:${menit}.`;
 
             if (data.length === 0) {
                 listContainer.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-history"></i>
+                    <div class="empty">
+                        <i class="fas fa-receipt fa-3x" style="margin-bottom:15px"></i>
                         <p>Belum ada riwayat transaksi</p>
                     </div>`;
                 return;
             }
 
-            // --- KUNCI: URUTAN TERBARU DI ATAS ---
-            // Kita balik array-nya (Reverse)
+            // --- INI KUNCINYA BOS ---
+            // .reverse() membuat data yang terakhir di-push muncul paling ATAS
             const sortedData = [...data].reverse();
 
             let htmlContent = '';
             sortedData.forEach(item => {
                 const isMasuk = item.type === 'masuk';
-                const iconClass = isMasuk ? 'fa-arrow-down' : 'fa-arrow-up';
-                const amountSign = isMasuk ? '' : '-';
+                
+                // Gunakan ikon layanan, bukan panah
+                const iconClass = isMasuk ? 'fa-wallet' : 'fa-paper-plane';
+                const bgClass = isMasuk ? 'bg-infaq' : 'bg-keluar';
+                const sign = isMasuk ? '' : '-';
 
                 htmlContent += `
                     <div class="trans-item">
-                        <div class="icon-box">
+                        <div class="icon-box ${bgClass}">
                             <i class="fas ${iconClass}"></i>
                         </div>
                         <div class="trans-details">
-                            <p class="title">${item.note || (isMasuk ? 'Dana Masuk' : 'Dana Keluar')}</p>
-                            <p class="time">${item.date || 'Baru saja'}</p>
+                            <p class="title">${item.note || (isMasuk ? 'Isi Saldo' : 'Kirim Uang')}</p>
+                            <p class="time">${item.date || 'Hari ini'}</p>
                         </div>
                         <div class="trans-amount">
-                            <p class="amount-text">${amountSign}Rp${parseInt(item.amount).toLocaleString('id-ID')}</p>
-                            <div class="status-badge"><i class="fas fa-wallet"></i></div>
+                            <p class="amount-text">${sign}Rp${parseInt(item.amount).toLocaleString('id-ID')}</p>
+                            <span class="status-badge">Berhasil</span>
                         </div>
                     </div>
                 `;
