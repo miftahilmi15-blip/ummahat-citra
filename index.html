@@ -34,7 +34,7 @@
         /* --- HEADER AREA --- */
         .blue-section {
             background: var(--dana-blue);
-            height: 240px; /* Saya tinggikan dikit biar muat bubble-nya */
+            height: 240px; 
             padding: 20px 5%;
             color: white;
             position: relative;
@@ -49,13 +49,12 @@
             justify-content: space-between;
             text-align: center;
             margin-top: 10px;
-            margin-bottom: 25px; /* Beri jarak untuk bubble di bawahnya */
+            margin-bottom: 25px; 
         }
         .action-item { flex: 1; cursor: pointer; }
         .action-item i { font-size: 24px; margin-bottom: 8px; display: block; }
         .action-item p { font-size: 12px; font-weight: 500; }
 
-        /* MODIFIKASI BUBBLE POSISI BARU: DI ATAS MAHFUZAT */
         .floating-reminder {
             position: absolute;
             background: #ffeb3b; 
@@ -64,7 +63,7 @@
             border-radius: 15px 15px 15px 2px;
             font-size: 10px;
             font-weight: 800;
-            bottom: 45px; /* Nempel di bagian bawah area biru */
+            bottom: 45px;
             left: 20px;
             white-space: nowrap;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
@@ -77,9 +76,7 @@
             position: absolute;
             bottom: -5px;
             left: 8px;
-            border-left: 5px solid transparent;
-            border-right: 5px solid transparent;
-            border-top: 5px solid #ffeb3b;
+            border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #ffeb3b;
         }
 
         @keyframes floatAnim {
@@ -88,7 +85,7 @@
             100% { transform: translateY(0); }
         }
 
-        /* --- MAIN GRID --- */
+        /* --- MAIN GRID & MAHFUZAT BERGERAK --- */
         .main-container {
             padding: 0 15px;
             margin-top: -30px;
@@ -98,16 +95,37 @@
         
         .mahfuzat-card {
             background: var(--white);
-            padding: 15px;
+            padding: 12px 15px;
             border-radius: 15px;
             margin-bottom: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border-left: 4px solid var(--dana-blue);
+            overflow: hidden; /* Penting biar teks nggak balapan keluar card */
         }
-        .mahfuzat-card h4 { font-size: 11px; color: var(--dana-blue); text-transform: uppercase; }
-        .mahfuzat-card p { font-size: 13px; font-style: italic; color: #555; margin-top: 3px; }
+        .mahfuzat-card h4 { font-size: 10px; color: var(--dana-blue); text-transform: uppercase; margin-bottom: 5px; }
+        
+        /* Wadah Teks Berjalan */
+        .marquee-wrapper {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
 
-        /* Menu dan Navbar bawah tetap sama... */
+        .marquee-text {
+            display: inline-block;
+            font-size: 13px;
+            font-style: italic;
+            color: #555;
+            padding-left: 100%; /* Mulai dari luar kanan */
+            animation: marqueeScroll 15s linear infinite;
+        }
+
+        @keyframes marqueeScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
         .menu-white-box { background: var(--white); border-radius: 20px; padding: 20px 10px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px 5px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
         .menu-item { display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; }
         .icon-circle { width: 45px; height: 45px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
@@ -126,7 +144,6 @@
     <div id="sidebar">
         <h2 style="margin-bottom:20px">MASTER PRO</h2>
         <div class="sidebar-menu">
-            <p style="margin-bottom:15px; opacity:0.7">Menu Navigasi</p>
             <a href="#" style="color:white; text-decoration:none; display:block; margin-bottom:15px"><i class="fas fa-home"></i> Beranda</a>
             <a href="#" style="color:white; text-decoration:none; display:block; margin-bottom:15px"><i class="fas fa-user"></i> Profil</a>
             <hr style="opacity:0.2; margin:20px 0">
@@ -160,7 +177,9 @@
     <div class="main-container">
         <div class="mahfuzat-card">
             <h4>MAHFUZAT HARI INI</h4>
-            <p id="m-text">"Man jadda wajada..."</p>
+            <div class="marquee-wrapper">
+                <span class="marquee-text" id="m-text">Sedang memuat inspirasi...</span>
+            </div>
         </div>
 
         <div class="menu-white-box">
@@ -220,19 +239,23 @@
         const mahfuzat = [
             "Man jadda wajada - Siapa bersungguh-sungguh akan berhasil.",
             "Man shabara zhafira - Siapa bersabar akan beruntung.",
-            "Al-waqtu atsmanu minadz dzahabi - Waktu lebih berharga dari emas."
+            "Al-waqtu atsmanu minadz dzahabi - Waktu lebih berharga dari emas.",
+            "Man saro 'ala darbi washola - Barang siapa berjalan pada jalannya, sampailah ia.",
+            "Jarib wa lachid takun 'arifan - Cobalah dan perhatikanlah, niscaya kau jadi orang berilmu."
         ];
 
         const nasihatAgamis = [
             "Sedekah dulu yuk sebelum beraktivitas..",
             "Jangan lupa tabungan akhirat hari ini, Bos!",
             "Infaq pagi ini untuk keberkahan hari ini.",
-            "Sudahkah kita bersyukur dengan berbagi?",
             "Harta tak dibawa mati, amal jariyah abadi."
         ];
 
         window.onload = () => {
-            document.getElementById('m-text').innerText = mahfuzat[Math.floor(Math.random() * mahfuzat.length)];
+            // Gabungkan semua mahfuzat jadi satu teks panjang biar asik jalannya
+            const textGabungan = mahfuzat.join("   •   ");
+            document.getElementById('m-text').innerText = textGabungan;
+            
             document.getElementById('nasihat-gerak').innerText = nasihatAgamis[Math.floor(Math.random() * nasihatAgamis.length)];
             updateSaldo();
         };
