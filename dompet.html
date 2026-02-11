@@ -3,181 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Master Tanam | Premium Edition</title>
+    <title>Master Tanam | Anti Pusing</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        :root {
-            --dana-blue: #108ee9;
-            --shopee-orange: #ee4d2d;
-        }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: #f0f4f8; overflow: hidden; height: 100vh; }
 
-        /* --- AREA GAME (Visual Mewah) --- */
+        /* --- LANGIT & BUKIT --- */
         .game-container {
             height: 60vh;
-            background: linear-gradient(to bottom, #4facfe 0%, #00f2fe 100%);
+            background: linear-gradient(to bottom, #4facfe, #00f2fe);
             position: relative;
+            display: flex; justify-content: center; align-items: flex-end;
             overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
         }
 
-        /* Awan Bergerak */
-        .cloud {
-            position: absolute; color: white; opacity: 0.8;
-            animation: moveClouds 20s linear infinite;
-        }
-        @keyframes moveClouds {
-            from { left: -100px; } to { left: 100%; }
-        }
-
-        /* Bukit Hijau */
         .hill {
-            position: absolute; bottom: -60px; width: 150%; height: 160px;
-            background: #7cb342; border-radius: 50% 50% 0 0; z-index: 1;
+            position: absolute; bottom: -80px; width: 150%; height: 180px;
+            background: #7cb342; border-radius: 50%; z-index: 1;
+            box-shadow: inset 0 20px 30px rgba(0,0,0,0.1);
         }
 
-        /* --- POHON ASLI RINDANG --- */
-        .tree-wrapper {
-            position: relative;
-            z-index: 10;
-            margin-bottom: 25px;
-            text-align: center;
-            transition: 0.5s all cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* --- RAKITAN POHON CSS (PASTI MUNCUL) --- */
+        .tree {
+            position: relative; z-index: 10; margin-bottom: 40px;
+            transform-origin: bottom center; animation: sway 4s ease-in-out infinite;
         }
-        
-        /* Gambar Pohon Rimbun */
-        .tree-real {
-            width: 280px; /* Ukuran rimbun */
-            filter: drop-shadow(0 15px 20px rgba(0,0,0,0.2));
-            animation: sway 4s ease-in-out infinite;
+
+        /* Batang Pohon */
+        .trunk {
+            width: 30px; height: 100px; background: #5d4037;
+            margin: 0 auto; border-radius: 5px; position: relative;
         }
+
+        /* Daun Rimbun (Lapis-lapis) */
+        .leaves {
+            position: absolute; bottom: 40px; left: 50%;
+            transform: translateX(-50%); width: 220px; height: 180px;
+        }
+
+        .leaf-blob {
+            position: absolute; background: #2e7d32; border-radius: 50%;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
+        }
+
+        /* Nyusun Daun Biar Rimbun */
+        .l1 { width: 120px; height: 120px; top: 0; left: 50px; background: #388e3c; }
+        .l2 { width: 100px; height: 100px; top: 30px; left: 0; }
+        .l3 { width: 100px; height: 100px; top: 30px; right: 0; }
+        .l4 { width: 130px; height: 100px; bottom: 0; left: 45px; background: #1b5e20; }
 
         @keyframes sway {
-            0%, 100% { transform: rotate(-1deg); }
+            0%, 100% { transform: rotate(-1deg) scale(1); }
             50% { transform: rotate(1deg) scale(1.02); }
         }
 
         /* --- DASHBOARD UI --- */
-        .ui-container {
-            height: 40vh;
-            background: white;
-            border-radius: 30px 30px 0 0;
-            margin-top: -30px;
-            position: relative;
-            z-index: 20;
-            padding: 25px 20px;
-            box-shadow: 0 -10px 20px rgba(0,0,0,0.1);
-            text-align: center;
+        .ui-panel {
+            height: 40vh; background: white; border-radius: 30px 30px 0 0;
+            margin-top: -30px; position: relative; z-index: 20;
+            padding: 25px; text-align: center; box-shadow: 0 -10px 20px rgba(0,0,0,0.1);
         }
 
-        .level-tag {
-            background: #8bc34a; color: white; padding: 5px 15px;
-            border-radius: 50px; font-size: 12px; font-weight: 700;
-            display: inline-block; margin-bottom: 10px;
-        }
+        .level-tag { background: #8bc34a; color: white; padding: 5px 15px; border-radius: 50px; font-size: 12px; font-weight: 700; margin-bottom: 10px; display: inline-block; }
 
-        .progress-card {
-            background: #f8f9fa; padding: 15px; border-radius: 20px;
-            margin-bottom: 20px; border: 1px solid #eee;
-        }
+        .progress-card { background: #f8f9fa; padding: 15px; border-radius: 20px; margin-bottom: 20px; border: 1px solid #eee; }
         .bar-bg { width: 100%; height: 12px; background: #eee; border-radius: 10px; margin: 8px 0; overflow: hidden; }
         .bar-fill { height: 100%; background: #4caf50; width: 0%; transition: 1.5s; }
 
         .btn-siram {
-            width: 100%; padding: 18px;
-            background: linear-gradient(to right, #ff9800, #f44336);
-            color: white; border: none; border-radius: 50px;
-            font-size: 16px; font-weight: 800; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.3);
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 18px; background: linear-gradient(to right, #ff9800, #f44336);
+            color: white; border: none; border-radius: 50px; font-size: 16px; font-weight: 800;
+            cursor: pointer; box-shadow: 0 5px 15px rgba(244, 67, 54, 0.3);
         }
 
-        /* --- NAVIGASI TERKUNCI (DOMPET SAJA) --- */
+        /* Navigasi Dompet Terkunci */
         .bottom-nav {
             position: fixed; bottom: 0; width: 100%; height: 75px;
             background: white; border-top: 1px solid #eee;
             display: flex; justify-content: space-around; align-items: center;
         }
         .nav-item { text-align: center; color: #bbb; font-size: 10px; flex: 1; cursor: pointer; }
-        .nav-item.active { color: var(--dana-blue); }
+        .nav-item.active { color: #108ee9; }
         .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
     <div class="game-container">
-        <i class="fas fa-cloud cloud" style="top: 40px; font-size: 40px; animation-duration: 25s;"></i>
-        <i class="fas fa-cloud cloud" style="top: 100px; font-size: 30px; animation-duration: 18s; animation-delay: -5s;"></i>
-        
-        <div class="tree-wrapper" id="tree-container">
-            <img src="https://www.pngarts.com/files/3/Green-Tree-PNG-Image-Background.png" class="tree-real" id="tree-img">
+        <div class="tree" id="tree-master">
+            <div class="leaves">
+                <div class="leaf-blob l1"></div>
+                <div class="leaf-blob l2"></div>
+                <div class="leaf-blob l3"></div>
+                <div class="leaf-blob l4"></div>
+            </div>
+            <div class="trunk"></div>
         </div>
-
         <div class="hill"></div>
     </div>
 
-    <div class="ui-container">
+    <div class="ui-panel">
         <div class="level-tag" id="lvl-name">Level 1: Bibit</div>
         <h2 style="font-size: 20px; font-weight: 800; color: #333;">Master Tanam</h2>
         
         <div class="progress-card">
             <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700;">
-                <span>Progress Tumbuh</span>
+                <span>Progres Tumbuh</span>
                 <span id="percent-txt">0%</span>
             </div>
             <div class="bar-bg">
                 <div class="bar-fill" id="progress-bar"></div>
             </div>
-            <p style="font-size: 11px; color: #888;">Total Sedekah: Rp <span id="total-txt">0</span></p>
+            <p style="font-size: 11px; color: #888;">Saldo Terkumpul: Rp <span id="total-txt">0</span></p>
         </div>
 
         <button class="btn-siram" onclick="location.href='kartu.html'">
-            <i class="fas fa-faucet-drip"></i> SIRAM DENGAN SEDEKAH
+            <i class="fas fa-faucet-drip"></i> SIRAM SEDEKAH
         </button>
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item" onclick="location.href='dompet.html'"><i class="fas fa-home"></i> Beranda</div>
-        <div class="nav-item" onclick="location.href='dompet.html'"><i class="fas fa-history"></i> Aktivitas</div>
-        <div class="nav-item active" onclick="location.href='dompet.html'"><i class="fas fa-wallet"></i> Dompet</div>
-        <div class="nav-item" onclick="location.href='dompet.html'"><i class="fas fa-user-circle"></i> Saya</div>
+        <div class="nav-item" onclick="location.href='dompet.html'"><i class="fas fa-home"></i>Beranda</div>
+        <div class="nav-item" onclick="location.href='dompet.html'"><i class="fas fa-history"></i>Aktivitas</div>
+        <div class="nav-item active" onclick="location.href='dompet.html'"><i class="fas fa-wallet"></i>Dompet</div>
+        <div class="nav-item" onclick="location.href='dompet.html'"><i class="fas fa-user-circle"></i>Saya</div>
     </div>
 
     <script>
-        function updateLevel() {
-            let dataRaw = localStorage.getItem('kas_data');
-            let listKas = dataRaw ? JSON.parse(dataRaw) : [];
+        function updateGame() {
+            let data = localStorage.getItem('kas_data');
+            let list = data ? JSON.parse(data) : [];
             let total = 0;
-            listKas.forEach(t => { if(t.type === 'masuk') total += parseInt(t.amount); });
+            list.forEach(t => { if(t.type === 'masuk') total += parseInt(t.amount); });
 
             document.getElementById('total-txt').innerText = total.toLocaleString();
             
-            const treeImg = document.getElementById('tree-img');
-            const lvlName = document.getElementById('lvl-name');
-            const bar = document.getElementById('progress-bar');
-            const pTxt = document.getElementById('percent-txt');
+            let p = Math.min((total / 1000000) * 100, 100);
+            document.getElementById('progress-bar').style.width = p + "%";
+            document.getElementById('percent-txt').innerText = Math.floor(p) + "%";
 
-            // Logika Tumbuh (Skala Gambar)
-            let progress = Math.min((total / 1000000) * 100, 100);
-            bar.style.width = progress + "%";
-            pTxt.innerText = Math.floor(progress) + "%";
-
-            if(progress < 30) {
-                treeImg.style.transform = "scale(0.5)";
-                lvlName.innerText = "Level 1: Bibit Kebaikan";
-            } else if(progress < 70) {
-                treeImg.style.transform = "scale(0.8)";
-                lvlName.innerText = "Level 2: Tunas Harapan";
-            } else {
-                treeImg.style.transform = "scale(1.1)";
-                lvlName.innerText = "Level 3: Pohon Jariyah";
-            }
+            // Efek Pohon Membesar sesuai Sedekah
+            let scale = 0.5 + (p / 100);
+            document.getElementById('tree-master').style.transform = `scale(${scale})`;
+            
+            if(p > 80) document.getElementById('lvl-name').innerText = "Level 3: Pohon Rimbun";
+            else if(p > 30) document.getElementById('lvl-name').innerText = "Level 2: Tunas Harapan";
         }
-
-        window.onload = updateLevel;
+        window.onload = updateGame;
     </script>
 </body>
 </html>
