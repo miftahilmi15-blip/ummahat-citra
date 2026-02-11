@@ -2,151 +2,178 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kartu Rekening Yayasan</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kartu Yayasan | Master Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: #f1f5f9;
+            background-color: #f0f2f5;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
         }
-        /* Desain Kartu ATM Style */
-        .card {
+
+        /* Container Kartu (Mirip Screenshot) */
+        .card-container {
             width: 100%;
-            max-width: 380px;
-            background: linear-gradient(135deg, #064e3b 0%, #059669 100%); /* Warna Hijau BSI */
-            border-radius: 24px;
+            max-width: 340px;
+            background: linear-gradient(135deg, #00529b 0%, #108ee9 100%); /* Warna Biru */
+            aspect-ratio: 1 / 1.5; /* Proporsi kartu tegak sesuai foto */
+            border-radius: 30px;
+            position: relative;
             padding: 30px;
             color: white;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            position: relative;
+            box-shadow: 0 15px 35px rgba(16, 142, 233, 0.3);
             overflow: hidden;
+            background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.05) 0%, transparent 20%),
+                              url('https://www.transparenttextures.com/patterns/batik-thin.png'); /* Pola batik halus */
         }
-        /* Chip & Logo Simbolis */
-        .card-top {
+
+        /* Elemen Kuning Melengkung (Khas Jago) */
+        .jago-shape {
+            position: absolute;
+            bottom: 15%;
+            left: -10%;
+            width: 80%;
+            height: 50%;
+            background: #ffeb3b;
+            border-radius: 100px;
+            transform: rotate(-10deg);
+            opacity: 0.9;
+            box-shadow: inset -10px 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .logo-area { display: flex; justify-content: space-between; align-items: flex-start; z-index: 2; position: relative; }
+        .logo-text { font-weight: 800; font-size: 22px; line-height: 1; }
+        .logo-text span { display: block; font-size: 12px; font-weight: 400; opacity: 0.8; }
+        
+        .chip {
+            width: 50px;
+            height: 40px;
+            background: linear-gradient(135deg, #cfd8dc, #90a4ae);
+            border-radius: 8px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-type {
+            position: absolute;
+            right: 30px;
+            top: 130px;
+            font-weight: 600;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .holder-name {
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            font-size: 20px;
+            font-weight: 700;
+            text-align: right;
+            z-index: 3;
+        }
+
+        .gpn-logo {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            z-index: 3;
+        }
+
+        /* Saldo & Rekening Area */
+        .info-bottom {
+            margin-top: 30px;
+            width: 100%;
+            max-width: 340px;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
-        .chip {
-            width: 45px;
-            height: 35px;
-            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
-            border-radius: 8px;
-        }
-        .bank-name {
-            font-weight: 800;
-            font-size: 18px;
-            letter-spacing: 1px;
-        }
-        .rekening-number {
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: 3px;
-            margin: 20px 0 10px 0;
-            display: block;
-        }
-        .holder-name {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.9;
-        }
-        /* Tombol Aksi */
-        .actions {
-            margin-top: 30px;
+
+        .btn-action {
             width: 100%;
-            max-width: 380px;
-        }
-        .btn {
-            width: 100%;
-            padding: 16px;
-            border-radius: 16px;
+            max-width: 340px;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 15px;
             border: none;
-            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            transition: 0.3s;
+            transition: 0.2s;
         }
-        .btn-copy {
-            background-color: white;
-            color: #064e3b;
-        }
-        .btn-wa {
-            background-color: #25d366;
-            color: white;
-        }
-        .btn:active { transform: scale(0.98); }
+        .btn-copy { background: #e0f2fe; color: #0369a1; }
+        .btn-wa { background: #25d366; color: white; margin-bottom: 50px;}
         
-        .footer-info {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #64748b;
-            text-align: center;
-        }
+        .btn-back { position: fixed; top: 20px; left: 20px; color: #333; text-decoration: none; font-weight: 600; }
     </style>
 </head>
 <body>
 
-<div style="width: 100%; max-width: 380px;">
-    <div class="card">
-        <div class="card-top">
-            <div class="chip"></div>
-            <div class="bank-name">BSI</div>
+    <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Kembali</a>
+
+    <div style="margin-top: 60px; font-weight: 800; font-size: 24px; margin-bottom: 20px;">Kartu</div>
+
+    <div class="card-container">
+        <div class="jago-shape"></div>
+        
+        <div class="logo-area">
+            <div class="logo-text">
+                <span>syariah</span>
+                Master Pro
+            </div>
+            <i class="fas fa-gift" style="font-size: 20px;"></i>
         </div>
-        
-        <span class="rekening-number" id="norek">7123456789</span>
-        <div class="holder-name">YAYASAN MASTER PRO</div>
-        
-        <div style="margin-top: 30px; font-size: 11px; opacity: 0.7;">
-            BANK SYARIAH INDONESIA
+
+        <div class="chip"></div>
+        <div class="card-type">debit</div>
+
+        <div class="holder-name">Miftah Ilmi</div>
+
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/GPN_logo.svg/1200px-GPN_logo.svg.png" class="gpn-logo" alt="GPN">
+    </div>
+
+    <div class="info-bottom">
+        <div>
+            <p style="font-size: 12px; color: #888;">Nomor Rekening</p>
+            <p style="font-size: 18px; font-weight: 700; color: #333;" id="norek">7209005888</p>
         </div>
+        <i class="fas fa-university" style="color: #108ee9; font-size: 20px;"></i>
     </div>
 
-    <div class="actions">
-        <button class="btn btn-copy" onclick="copyNorek()">
-            <i class="far fa-copy"></i> SALIN NO. REKENING
-        </button>
-        
-        <button class="btn btn-wa" onclick="shareWA()">
-            <i class="fab fa-whatsapp"></i> KIRIM KE DONATUR
-        </button>
-    </div>
+    <button class="btn-action btn-copy" onclick="copyNorek()">
+        <i class="far fa-copy"></i> SALIN NOMOR REKENING
+    </button>
 
-    <div class="footer-info">
-        <i class="fas fa-lock"></i> Informasi Rekening Resmi Yayasan
-    </div>
-</div>
+    <button class="btn-action btn-wa" onclick="shareWA()">
+        <i class="fab fa-whatsapp"></i> BAGIKAN KE DONATUR
+    </button>
 
-<script>
-    function copyNorek() {
-        const norek = document.getElementById('norek').innerText;
-        navigator.clipboard.writeText(norek);
-        alert("Nomor Rekening Berhasil Disalin!");
-    }
+    <script>
+        function copyNorek() {
+            const norek = document.getElementById('norek').innerText;
+            navigator.clipboard.writeText(norek);
+            alert("Nomor rekening berhasil disalin!");
+        }
 
-    function shareWA() {
-        const text = `*INFO REKENING YAYASAN*%0A%0A` +
-                     `Assalamu'alaikum, berikut rekening resmi Yayasan kami:%0A%0A` +
-                     `🏦 *Bank Syariah Indonesia (BSI)*%0A` +
-                     `🔢 *7123456789*%0A` +
-                     `👤 *A.n YAYASAN MASTER PRO*%0A%0A` +
-                     `Jazakumullah Khairan.`;
-        window.open(`https://wa.me/?text=${text}`, '_blank');
-    }
-</script>
-
+        function shareWA() {
+            const msg = `*INFO REKENING YAYASAN*%0A%0ABank: *BSI (Bank Syariah Indonesia)*%0ANomor: *7209005888*%0AA.n: *Miftah Ilmi*%0A%0A_Jazakumullah Khairan Katsiran._`;
+            window.open(`https://wa.me/?text=${msg}`, '_blank');
+        }
+    </script>
 </body>
 </html>
