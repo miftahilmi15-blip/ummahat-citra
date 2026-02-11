@@ -3,74 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pohon Kebaikan | Master Pro</title>
+    <title>Master Tanam | Sedekah Jariyah</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root {
             --dana-blue: #108ee9;
-            --grass-green: #2ecc71;
-            --sky-blue: #e3f2fd;
+            --shopee-orange: #ee4d2d;
+            --grass-green: #7cfc00;
+            --sky-blue: #87ceeb;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: #f0f4f8; overflow-x: hidden; }
+        body { background: #f0f4f8; overflow: hidden; height: 100vh; }
 
-        /* Area Langit & Pohon */
-        .garden-area {
-            width: 100%;
-            height: 400px;
+        /* --- AREA GAME (LANGIT & BUKIT) --- */
+        .game-container {
+            height: 60vh;
             background: linear-gradient(to bottom, #4facfe 0%, #00f2fe 100%);
             position: relative;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: flex-end;
-            overflow: hidden;
-            border-bottom: 8px solid #8d6e63; /* Tanah */
         }
 
-        /* Awan Bergerak */
+        /* Awan */
         .cloud {
-            position: absolute;
-            color: white;
-            opacity: 0.8;
+            position: absolute; color: white; opacity: 0.8;
             animation: moveClouds 20s linear infinite;
         }
-
         @keyframes moveClouds {
-            from { left: -50px; }
-            to { left: 100%; }
+            from { left: -100px; } to { left: 100%; }
         }
 
-        /* Visual Pohon Berdasarkan Level */
-        .tree-container {
+        /* Bukit Hijau */
+        .hill {
+            position: absolute;
+            bottom: -50px;
+            width: 150%;
+            height: 150px;
+            background: #7cb342;
+            border-radius: 50% 50% 0 0;
+            z-index: 1;
+        }
+
+        /* Pohon */
+        .tree-wrapper {
+            position: relative;
             z-index: 10;
-            margin-bottom: -10px;
-            transition: all 1s ease;
+            margin-bottom: 30px;
             text-align: center;
         }
-
         .tree-icon {
-            font-size: 150px; /* Ukuran default */
+            font-size: 180px;
             color: #2e7d32;
             filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
-            transition: 0.5s transform cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: 0.5s all cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         
-        .tree-container:active { transform: scale(1.1); }
+        /* Animasi Siram */
+        .shake { animation: shakeTree 0.5s; }
+        @keyframes shakeTree {
+            0% { transform: rotate(0); }
+            25% { transform: rotate(5deg); }
+            50% { transform: rotate(-5deg); }
+            100% { transform: rotate(0); }
+        }
 
-        /* Info Dashboard */
-        .stats-container {
-            padding: 25px 20px;
+        /* Efek Tetesan Air */
+        .water-drop {
+            position: absolute;
+            top: -40px; left: 50%;
+            transform: translateX(-50%);
+            color: #e3f2fd;
+            font-size: 40px;
+            opacity: 0;
+            z-index: 11;
+        }
+        .animate-drop { animation: dropEffect 0.6s ease-in; }
+        @keyframes dropEffect {
+            0% { top: -40px; opacity: 1; }
+            100% { top: 80px; opacity: 0; }
+        }
+
+        /* --- DASHBOARD UI --- */
+        .ui-container {
+            height: 40vh;
             background: white;
             border-radius: 30px 30px 0 0;
             margin-top: -30px;
             position: relative;
             z-index: 20;
+            padding: 25px 20px;
             box-shadow: 0 -10px 20px rgba(0,0,0,0.1);
-            min-height: 400px;
         }
 
-        .level-badge {
-            background: var(--grass-green);
+        .level-tag {
+            background: #8bc34a;
             color: white;
             padding: 5px 15px;
             border-radius: 50px;
@@ -80,127 +108,135 @@
             margin-bottom: 10px;
         }
 
-        .progress-box {
+        .progress-card {
             background: #f8f9fa;
-            padding: 20px;
+            padding: 15px;
             border-radius: 20px;
-            margin-top: 10px;
+            margin-bottom: 20px;
         }
+        .bar-bg { width: 100%; height: 12px; background: #eee; border-radius: 10px; margin: 8px 0; overflow: hidden; }
+        .bar-fill { height: 100%; background: #4caf50; width: 0%; transition: 1s; }
 
-        .bar-bg { width: 100%; height: 12px; background: #eee; border-radius: 10px; margin: 10px 0; overflow: hidden;}
-        .bar-fill { height: 100%; background: var(--grass-green); border-radius: 10px; transition: 1s width; }
-
-        .btn-water {
+        .btn-siram {
             width: 100%;
             padding: 18px;
-            background: var(--dana-blue);
+            background: linear-gradient(to right, #ff9800, #f44336);
             color: white;
             border: none;
             border-radius: 50px;
             font-size: 16px;
             font-weight: 800;
-            margin-top: 25px;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(16, 142, 233, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.3);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
+        .btn-siram:active { transform: scale(0.98); }
 
-        .back-btn {
-            position: absolute;
-            top: 40px;
-            left: 20px;
-            background: rgba(255,255,255,0.3);
-            padding: 10px 15px;
-            border-radius: 50px;
-            color: white;
-            text-decoration: none;
-            backdrop-filter: blur(5px);
-            z-index: 100;
+        /* Navigasi */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; height: 70px;
+            background: white; border-top: 1px solid #eee;
+            display: flex; justify-content: space-around; align-items: center;
         }
+        .nav-item { text-align: center; color: #888; font-size: 10px; flex: 1; cursor: pointer; }
+        .nav-item.active { color: var(--dana-blue); }
+        .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
-    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Kembali</a>
-
-    <div class="garden-area">
-        <i class="fas fa-cloud cloud" style="top: 80px; font-size: 40px; animation-duration: 25s;"></i>
-        <i class="fas fa-cloud cloud" style="top: 150px; font-size: 30px; animation-duration: 18s; animation-delay: -5s;"></i>
+    <div class="game-container">
+        <i class="fas fa-cloud cloud" style="top: 40px; animation-duration: 25s;"></i>
+        <i class="fas fa-cloud cloud" style="top: 100px; animation-duration: 18s; animation-delay: -5s;"></i>
         
-        <div class="tree-container" id="tree-stage">
-            <i class="fas fa-seedling tree-icon" id="main-tree"></i>
+        <i class="fas fa-tint water-drop" id="water-anim"></i>
+
+        <div class="tree-wrapper" id="tree-container">
+            <i class="fas fa-seedling tree-icon" id="tree-img"></i>
         </div>
+
+        <div class="hill"></div>
     </div>
 
-    <div class="stats-container">
-        <div class="level-badge" id="level-name">Level 1: Bibit Kebaikan</div>
-        <h2 style="font-size: 24px; font-weight: 800; color: #333;">Pohon Kebaikan Kamu</h2>
-        <p style="font-size: 13px; color: #777;">Tingkatkan donasi untuk menumbuhkan pohonmu menjadi rimbun dan berbuah pahala.</p>
-
-        <div class="progress-box">
+    <div class="ui-container">
+        <div class="level-tag" id="lvl-name">Level 1: Bibit</div>
+        <h2 style="font-size: 20px; font-weight: 800; color: #333;">Master Tanam</h2>
+        
+        <div class="progress-card">
             <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700;">
                 <span>Progress Tumbuh</span>
-                <span id="percent-text">20%</span>
+                <span id="percent-txt">0%</span>
             </div>
             <div class="bar-bg">
-                <div class="bar-fill" id="progress-bar" style="width: 20%;"></div>
+                <div class="bar-fill" id="progress-bar"></div>
             </div>
-            <p style="font-size: 11px; color: #888;" id="exp-text">Butuh Rp 80.000 lagi untuk naik level.</p>
+            <p style="font-size: 10px; color: #888;" id="status-txt">Siram dengan sedekah untuk melihat hasil.</p>
         </div>
 
-        <button class="btn-water" onclick="location.href='kartu.html'">
-            <i class="fas fa-tint"></i> SIRAM DENGAN SEDEKAH
+        <button class="btn-siram" onclick="siramAction()">
+            <i class="fas fa-faucet-drip"></i> SIRAM DENGAN SEDEKAH
         </button>
+    </div>
 
-        <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
-            <h4 style="font-size: 14px; margin-bottom: 10px;">Manfaat Pohon Kebaikan:</h4>
-            <ul style="font-size: 12px; color: #666; padding-left: 15px; line-height: 1.8;">
-                <li>Menjadi saksi amal jariyah di akhirat.</li>
-                <li>Membantu renovasi dan operasional yayasan.</li>
-                <li>Setiap daun mewakili keberkahan bagi donatur.</li>
-            </ul>
-        </div>
+    <div class="bottom-nav">
+        <div class="nav-item" onclick="location.href='index.html'"><i class="fas fa-home"></i> Beranda</div>
+        <div class="nav-item active"><i class="fas fa-wallet"></i> Dompet</div>
+        <div class="nav-item" onclick="location.href='saya.html'"><i class="fas fa-user-circle"></i> Saya</div>
     </div>
 
     <script>
-        // Logika Sederhana untuk Simulasi Tumbuh
-        function updateTree() {
-            // Kita ambil dari saldo (simulasi)
-            let dataRaw = localStorage.getItem('kas_data');
-            let listKas = dataRaw ? JSON.parse(dataRaw) : [];
-            let totalDonasi = 0;
-            listKas.forEach(t => { if(t.type === 'masuk') totalDonasi += parseInt(t.amount); });
-
-            const tree = document.getElementById('main-tree');
-            const levelText = document.getElementById('level-name');
-            const bar = document.getElementById('progress-bar');
-            const percent = document.getElementById('percent-text');
-
-            if (totalDonasi < 100000) {
-                tree.className = "fas fa-seedling tree-icon";
-                tree.style.color = "#81c784";
-                levelText.innerText = "Level 1: Bibit Kebaikan";
-            } else if (totalDonasi < 500000) {
-                tree.className = "fas fa-potted-plant tree-icon";
-                tree.style.color = "#4caf50";
-                levelText.innerText = "Level 2: Tunas Harapan";
-            } else {
-                tree.className = "fas fa-tree tree-icon";
-                tree.style.color = "#2e7d32";
-                levelText.innerText = "Level 3: Pohon Rimbun";
-                tree.style.fontSize = "200px";
-            }
+        function siramAction() {
+            // Efek Air Menetes
+            const drop = document.getElementById('water-anim');
+            drop.classList.add('animate-drop');
             
-            // Update bar (maksimal simulasi level 1 ke 2 di 100rb)
-            let p = Math.min((totalDonasi / 100000) * 100, 100);
-            bar.style.width = p + "%";
-            percent.innerText = Math.floor(p) + "%";
+            // Efek Pohon Goyang
+            const tree = document.getElementById('tree-container');
+            tree.classList.add('shake');
+
+            setTimeout(() => {
+                drop.classList.remove('animate-drop');
+                tree.classList.remove('shake');
+                // Arahkan ke halaman sedekah
+                location.href = 'kartu.html';
+            }, 600);
         }
 
-        window.onload = updateTree;
+        function updateLevel() {
+            let dataRaw = localStorage.getItem('kas_data');
+            let listKas = dataRaw ? JSON.parse(dataRaw) : [];
+            let total = 0;
+            listKas.forEach(t => { if(t.type === 'masuk') total += parseInt(t.amount); });
+
+            const treeImg = document.getElementById('tree-img');
+            const lvlName = document.getElementById('lvl-name');
+            const bar = document.getElementById('progress-bar');
+            const pTxt = document.getElementById('percent-txt');
+            const sTxt = document.getElementById('status-txt');
+
+            // Logika Level
+            if(total < 100000) {
+                treeImg.className = "fas fa-seedling tree-icon";
+                lvlName.innerText = "Level 1: Bibit Kebaikan";
+                sTxt.innerText = "Butuh " + (100000 - total).toLocaleString() + " lagi untuk jadi tunas.";
+            } else if(total < 500000) {
+                treeImg.className = "fas fa-leaf tree-icon";
+                treeImg.style.color = "#4caf50";
+                lvlName.innerText = "Level 2: Tunas Harapan";
+                sTxt.innerText = "Sedikit lagi pohonmu rimbun!";
+            } else {
+                treeImg.className = "fas fa-tree tree-icon";
+                treeImg.style.color = "#1b5e20";
+                lvlName.innerText = "Level 3: Pohon Jariyah";
+                sTxt.innerText = "MasyaAllah! Pohonmu sudah rimbun.";
+            }
+
+            let progress = Math.min((total / 500000) * 100, 100);
+            bar.style.width = progress + "%";
+            pTxt.innerText = Math.floor(progress) + "%";
+        }
+
+        window.onload = updateLevel;
     </script>
 </body>
 </html>
