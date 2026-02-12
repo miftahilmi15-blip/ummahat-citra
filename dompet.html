@@ -95,11 +95,14 @@
         }
 
         function initAnalysis() {
-            const data = getLedger();
+            let data = getLedger();
+            
+            // SORTING: Pastikan candle urut dari transaksi terlama ke terbaru
+            data.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
+
             let currentBalance = 0;
             let ohlcData = [];
 
-            // Mapping setiap transaksi jadi satu candle
             data.forEach((trx, index) => {
                 let nominal = parseInt(trx.nominal) || 0;
                 let open = currentBalance;
@@ -114,8 +117,12 @@
                 let high = Math.max(open, close);
                 let low = Math.min(open, close);
 
+                // Mengambil waktu asli dari input, jika tidak ada pakai waktu sekarang
+                // Tambahkan (index * 1000) sebagai pengaman jika waktu transaksi sama persis (detik)
+                let trxTime = trx.tanggal ? new Date(trx.tanggal).getTime() : new Date().getTime();
+
                 ohlcData.push({
-                    x: trx.tanggal ? new Date(trx.tanggal).getTime() + (index * 1000) : new Date().getTime() + (index * 1000),
+                    x: trxTime + (index * 10), 
                     y: [open, high, low, close]
                 });
             });
@@ -133,7 +140,6 @@
                     background: 'transparent',
                     zoom: { enabled: true }
                 },
-                // INI PENTOLNYA: Menunjukkan Harga Running Terakhir
                 annotations: {
                     yaxis: [{
                         y: currentBalance,
@@ -154,7 +160,10 @@
                 },
                 xaxis: {
                     type: 'datetime',
-                    labels: { style: { fontSize: '9px', colors: '#888' } }
+                    labels: { 
+                        datetimeUTC: false, // MATIKAN UTC BIAR SESUAI JAM LOKAL (WIB)
+                        style: { fontSize: '9px', colors: '#888' } 
+                    }
                 },
                 yaxis: {
                     labels: { 
@@ -170,12 +179,15 @@
                             downward: '#ef5350' 
                         },
                         wick: { useFillColor: true },
-                        columnWidth: '15%' // Slim bar ala TradingView
+                        columnWidth: '15%'
                     }
                 },
                 stroke: { width: 1 },
                 grid: { borderColor: '#2b2b2b', strokeDashArray: 2 },
-                tooltip: { theme: 'dark' }
+                tooltip: { 
+                    theme: 'dark',
+                    x: { format: 'dd MMM HH:mm' } // Tooltip munculin Jam & Menit
+                }
             };
 
             var chart = new ApexCharts(document.querySelector("#crypto-candle-chart"), options);
