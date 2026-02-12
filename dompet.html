@@ -51,7 +51,6 @@
 
         .btn-back { color: var(--dana-blue); text-decoration: none; font-size: 18px; }
         
-        /* Merapikan tampilan teks grafik */
         .apexcharts-xaxis-texts-g text, .apexcharts-yaxis-texts-g text { fill: #888 !important; font-size: 10px !important; }
         .apexcharts-tooltip { background: #1e1e1e !important; color: white !important; border: 1px solid #333 !important; }
     </style>
@@ -74,7 +73,7 @@
                     <span style="font-weight: 600; font-size: 14px; color: #fff;">KAS/IDR</span>
                     <span style="font-size: 10px; background: #333; padding: 2px 5px; border-radius: 4px; margin-left: 5px;">1D</span>
                 </div>
-                <span style="font-size: 11px; color: #888;" id="date-now">---</span>
+                <span style="font-size: 11px; color: #888;" id="date-range">Analisis Waktu</span>
             </div>
             
             <div id="crypto-candle-chart"></div>
@@ -110,11 +109,7 @@
             let currentBalance = 0;
             let ohlcData = [];
             let balances = [0];
-            
-            // Set Tanggal Hari Ini
-            document.getElementById('date-now').innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
 
-            // Kelompokkan data per tanggal
             const grouped = {};
             data.forEach(t => {
                 const date = t.tanggal || new Date().toISOString().split('T')[0];
@@ -122,7 +117,6 @@
                 grouped[date].push(t);
             });
 
-            // Bangun Data OHLC
             Object.keys(grouped).sort().forEach(date => {
                 let open = currentBalance;
                 let high = open;
@@ -146,7 +140,6 @@
                 });
             });
 
-            // Update Statistik UI
             document.getElementById('top-balance').innerText = "Rp " + currentBalance.toLocaleString('id-ID');
             document.getElementById('ath-val').innerText = "Rp " + Math.max(...balances).toLocaleString('id-ID');
             document.getElementById('atl-val').innerText = "Rp " + Math.min(...balances).toLocaleString('id-ID');
@@ -156,13 +149,12 @@
             const avg = sum / (data.filter(x => x.tipe === 'masuk').length || 1);
             document.getElementById('avg-val').innerText = "Rp " + Math.round(avg).toLocaleString('id-ID');
 
-            // Render Chart dengan Konfigurasi Slim (Diet)
             var options = {
                 series: [{ data: ohlcData }],
                 chart: {
                     type: 'candlestick',
                     height: 280,
-                    toolbar: { show: false }, // Toolbar dimatikan biar gak sempit
+                    toolbar: { show: false },
                     background: 'transparent',
                     zoom: { enabled: true }
                 },
@@ -171,13 +163,12 @@
                     labels: { 
                         datetimeFormatter: { day: 'dd MMM' },
                         style: { fontSize: '10px' } 
-                    },
-                    axisBorder: { show: false },
-                    axisTicks: { show: false }
+                    }
                 },
                 yaxis: {
                     labels: { 
-                        formatter: val => "Rp " + (val/1000) + "k", // Singkat jadi 'k' biar gak penuh
+                        // Bos, format 'k' sudah dihapus, nominal muncul utuh sekarang
+                        formatter: val => val.toLocaleString('id-ID'),
                         style: { fontSize: '10px' } 
                     }
                 },
@@ -185,10 +176,10 @@
                     candlestick: {
                         colors: { upward: '#10b981', downward: '#ef4444' },
                         wick: { useFillColor: true },
-                        columnWidth: '35%' // INI BIAR LILINNYA LANGSING BOSKUH!
+                        columnWidth: '35%' // Lilin tetap langsing pro
                     }
                 },
-                stroke: { width: 1 }, // Sumbu lilin jadi tajam
+                stroke: { width: 1 },
                 grid: { borderColor: '#333', strokeDashArray: 4 },
                 tooltip: {
                     theme: 'dark',
