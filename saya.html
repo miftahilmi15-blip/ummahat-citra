@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalender Pendidikan Nasional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <style>
+        :root { --dana-blue: #108ee9; --bg-dark: #121212; --card-dark: #1e1e1e; --red-cal: #ff4d4f; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg-dark); color: #fff; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+
+        .calendar-container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--card-dark);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .header-date { text-align: center; margin-bottom: 20px; }
+        .day-name { font-size: 14px; color: var(--dana-blue); text-transform: uppercase; letter-spacing: 2px; }
+        .big-date { font-size: 80px; font-weight: 800; line-height: 1; margin: 5px 0; }
+        .month-year { font-size: 18px; color: #888; }
+
+        .holiday-section {
+            margin-top: 25px;
+            border-top: 1px dashed #444;
+            padding-top: 15px;
+        }
+
+        .holiday-title {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .holiday-list { max-height: 200px; overflow-y: auto; }
+        
+        .holiday-item {
+            background: rgba(255, 77, 79, 0.1);
+            border-left: 3px solid var(--red-cal);
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .holiday-info h4 { font-size: 11px; color: #eee; font-weight: 600; }
+        .holiday-info p { font-size: 10px; color: var(--red-cal); }
+
+        /* Scrollbar styling */
+        .holiday-list::-webkit-scrollbar { width: 4px; }
+        .holiday-list::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="calendar-container">
+        <div class="header-date">
+            <p id="txt-hari" class="day-name">Memuat...</p>
+            <h1 id="txt-tgl" class="big-date">--</h1>
+            <p id="txt-bln-thn" class="month-year">-- ----</p>
+        </div>
+
+        <div class="holiday-section">
+            <div class="holiday-title">
+                <i class="fas fa-calendar-check"></i> AGENDA LIBUR NASIONAL 2026
+            </div>
+            <div id="list-libur" class="holiday-list">
+                <p style="font-size: 10px; color: #555;">Mengambil data API...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set Waktu Lokal
+        function initCalendar() {
+            const skrg = new Date();
+            const opsi = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const format = skrg.toLocaleDateString('id-ID', opsi).split(' ');
+
+            document.getElementById('txt-hari').innerText = format[0].replace(',', '');
+            document.getElementById('txt-tgl').innerText = skrg.getDate();
+            document.getElementById('txt-bln-thn').innerText = format[2] + " " + format[3];
+            
+            fetchHolidays(skrg.getFullYear());
+        }
+
+        // TEMBAK API LIBUR NASIONAL
+        async function fetchHolidays(year) {
+            try {
+                // Menggunakan API Hari Libur Indonesia
+                const response = await fetch(`https://dayoffapi.vercel.app/api?year=${year}`);
+                const data = await response.json();
+                
+                const listContainer = document.getElementById('list-libur');
+                listContainer.innerHTML = ''; // Clear loading
+
+                // Filter libur yang akan datang saja
+                const today = new Date();
+                const upcomingHolidays = data.filter(h => new Date(h.tanggal) >= today);
+
+                if (upcomingHolidays.length === 0) {
+                    listContainer.innerHTML = '<p style="font-size:10px; color:#555;">Tidak ada libur terdekat.</p>';
+                    return;
+                }
+
+                upcomingHolidays.forEach(libur => {
+                    const tglLibur = new Date(libur.tanggal);
+                    const tglFormat = tglLibur.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+                    
+                    const item = `
+                        <div class="holiday-item">
+                            <div class="holiday-info">
+                                <h4>${libur.keterangan}</h4>
+                                <p>${tglFormat}</p>
+                            </div>
+                            <i class="fas fa-thumbtack" style="font-size:10px; color:#444;"></i>
+                        </div>
+                    `;
+                    listContainer.innerHTML += item;
+                });
+
+            } catch (error) {
+                console.error("Gagal ambil API:", error);
+                document.getElementById('list-libur').innerHTML = '<p style="font-size:10px; color:red;">Gagal memuat agenda nasional.</p>';
+            }
+        }
+
+        window.onload = initCalendar;
+    </script>
+</body>
+</html>
