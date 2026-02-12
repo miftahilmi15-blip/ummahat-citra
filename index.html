@@ -16,6 +16,7 @@
             --bg-light: #f5f5f5;
             --text-dark: #333333;
             --text-gray: #888888;
+            --kaldik-color: #ff4757; /* Warna khas kalender */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -148,7 +149,7 @@
 
         /* Icon Colors */
         .c-infaq { color: #10b981; } .c-jamaah { color: #f59e0b; } .c-sholat { color: #3b82f6; } .c-sosial { color: #ef4444; } 
-        .c-jadwal { color: #8b5cf6; } .c-kutipan { color: #ec4899; } .c-kas { color: #06b6d4; } .c-laporan { color: #64748b; }
+        .c-jadwal { color: #8b5cf6; } .c-kaldik { color: var(--kaldik-color); } .c-kas { color: #06b6d4; } .c-laporan { color: #64748b; }
     </style>
 </head>
 <body>
@@ -193,7 +194,7 @@
 
     <div class="main-container">
         <div class="mahfuzat-card">
-            <h4>MAHFUZAT HARI INI</h4>
+            <h4>PESAN HARI INI</h4>
             <div class="marquee-wrapper">
                 <span class="marquee-text" id="m-text">Memuat pesan bijak...</span>
             </div>
@@ -205,7 +206,14 @@
             <div class="menu-item" onclick="location.href='waktusholat.html'"><div class="icon-circle"><i class="fas fa-mosque c-sholat"></i></div><h3>Sholat</h3></div>
             <div class="menu-item" onclick="location.href='sosial.html'"><div class="icon-circle"><i class="fas fa-heartbeat c-sosial"></i></div><h3>Sosial</h3></div>
             <div class="menu-item" onclick="location.href='jadwal.html'"><div class="icon-circle"><i class="fas fa-calendar-alt c-jadwal"></i></div><h3>Jadwal</h3></div>
-            <div class="menu-item" onclick="location.href='mahfuzat.html'"><div class="icon-circle"><i class="fas fa-quote-left c-kutipan"></i></div><h3>Kutipan</h3></div>
+            
+            <div class="menu-item" onclick="location.href='kalender.html'">
+                <div class="icon-circle">
+                    <i class="fas fa-calendar-check c-kaldik"></i>
+                </div>
+                <h3>Kaldik</h3>
+            </div>
+
             <div class="menu-item" onclick="location.href='inventaris.html'"><div class="icon-circle"><i class="fas fa-box-open c-kas"></i></div><h3>Inventaris</h3></div>
             <div class="menu-item" onclick="location.href='laporan.html'"><div class="icon-circle"><i class="fas fa-file-contract c-laporan"></i></div><h3>Laporan</h3></div>
         </div>
@@ -229,7 +237,7 @@
             document.getElementById('overlay').classList.toggle('active');
         }
 
-        // --- FUNGSI SYNC DATA BLOCKCHAIN ---
+        // --- FUNGSI SYNC DATA ---
         function syncData() {
             let dataRaw = localStorage.getItem('kas_ledger');
             let listKas = dataRaw ? JSON.parse(dataRaw) : [];
@@ -261,9 +269,9 @@
             }
         }
 
-        // --- ONLOAD (SEMUA JADI SATU DISINI) ---
+        // --- ONLOAD ---
         window.onload = () => {
-            // 1. Load Mahfuzat & Nasihat
+            // 1. Load Mahfuzat & Nasihat (Tetap berjalan di card atas)
             const mahfuzat = [
                 "Man jadda wajada - Siapa bersungguh-sungguh akan berhasil.",
                 "Man shabara zhafira - Siapa bersabar akan beruntung.",
@@ -277,8 +285,11 @@
                 "Harta tak dibawa mati, amal jariyah abadi."
             ];
             
-            document.getElementById('m-text').innerText = mahfuzat.join("   •   ");
-            document.getElementById('nasihat-gerak').innerText = nasihatAgamis[Math.floor(Math.random() * nasihatAgamis.length)];
+            const mTextElem = document.getElementById('m-text');
+            if(mTextElem) mTextElem.innerText = mahfuzat.join("   •   ");
+            
+            const nTextElem = document.getElementById('nasihat-gerak');
+            if(nTextElem) nTextElem.innerText = nasihatAgamis[Math.floor(Math.random() * nasihatAgamis.length)];
             
             // 2. Jalankan Sinkronisasi Saldo
             syncData();
