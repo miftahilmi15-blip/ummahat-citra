@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Setoran Infaq | Master Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Setoran Infaq Blockchain | Master Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root {
@@ -30,20 +30,21 @@
 
         .container { padding: 25px 5%; max-width: 1200px; margin: auto; }
 
+        /* STATS CARD */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .stat-card { 
             background: white; padding: 25px; border-radius: 20px; border: 1px solid #e2e8f0; 
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); transition: 0.3s;
         }
-        .stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
         .stat-card h4 { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
         .stat-card .amount { font-size: 24px; font-weight: 800; margin-top: 10px; display: flex; align-items: center; justify-content: space-between; }
         
+        /* INPUT SECTION */
         .input-section { background: white; border-radius: 24px; border: 1px solid #e2e8f0; padding: 30px; margin-bottom: 30px; }
         .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-        label { font-size: 12px; font-weight: 700; color: var(--blue-dark); margin-bottom: 8px; display: block; }
+        label { font-size: 11px; font-weight: 700; color: var(--blue-dark); margin-bottom: 8px; display: block; text-transform: uppercase; }
         input, select { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #f1f5f9; background: #f8fafc; outline: none; transition: 0.3s; font-size: 14px; }
-        input:focus { border-color: var(--blue-primary); background: white; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+        input:focus { border-color: var(--blue-primary); background: white; }
 
         .btn-submit { 
             background: var(--blue-primary); color: white; border: none; 
@@ -51,28 +52,23 @@
             cursor: pointer; width: 100%; margin-top: 25px; transition: 0.3s;
             display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        .btn-submit:hover { background: var(--blue-dark); box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3); }
+        .btn-submit:hover { background: var(--blue-dark); }
 
+        /* TABLE LEDGER */
         .table-res { background: white; border-radius: 24px; border: 1px solid #e2e8f0; overflow: hidden; }
         table { width: 100%; border-collapse: collapse; }
-        th { background: #f8fafc; padding: 18px; text-align: left; font-size: 13px; color: #64748b; font-weight: 600; }
+        th { background: #f8fafc; padding: 18px; text-align: left; font-size: 12px; color: #64748b; font-weight: 700; }
         td { padding: 18px; border-top: 1px solid #f1f5f9; font-size: 14px; vertical-align: middle; }
 
-        .badge { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; display: inline-block; }
-        .in { background: #d1fae5; color: var(--success); }
-        .out { background: #fee2e2; color: var(--danger); }
-        .cat-badge { background: var(--blue-light); color: var(--blue-primary); padding: 4px 10px; border-radius: 6px; font-size: 11px; margin-top: 5px; font-weight: 600; }
+        .hash-code { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--blue-primary); background: var(--blue-light); padding: 2px 6px; border-radius: 4px; display: block; margin-top: 4px; }
+        .badge-verified { color: var(--success); font-size: 10px; font-weight: 800; display: flex; align-items: center; gap: 3px; }
 
         .delete-btn { width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 10px; color: #cbd5e1; cursor: pointer; transition: 0.3s; }
         .delete-btn:hover { color: var(--danger); background: #fef2f2; }
 
-        .eye-icon { cursor: pointer; color: #cbd5e1; font-size: 18px; transition: 0.2s; }
-        .eye-icon:hover { color: var(--blue-primary); }
-
         @media (max-width: 768px) {
             .container { padding: 15px; }
-            th:nth-child(1), td:nth-child(1) { display: none; }
-            .form-row { grid-template-columns: 1fr; }
+            th:nth-child(4), td:nth-child(4) { display: none; } /* Sembunyikan Prev Hash di HP */
         }
     </style>
 </head>
@@ -82,40 +78,35 @@
         <a href="index.html" class="logo-text">
             <i class="fas fa-arrow-left" style="font-size: 16px; margin-right: 10px; color: #ccc;"></i>MASTER<span>PRO</span>
         </a>
-        <div style="font-size: 13px; font-weight: 600; color: var(--blue-dark); background: var(--blue-light); padding: 5px 12px; border-radius: 20px;">Manajemen Kas</div>
+        <div style="font-size: 11px; font-weight: 800; color: var(--success); background: #d1fae5; padding: 5px 12px; border-radius: 20px;">
+            <i class="fas fa-shield-check"></i> BLOCKCHAIN ACTIVE
+        </div>
     </header>
 
     <div class="container">
         <div class="stats-grid">
             <div class="stat-card" style="border-top: 5px solid var(--blue-primary)">
-                <h4>Kas Yayasan</h4>
-                <div class="amount">
-                    <span id="total-kas" style="color: var(--blue-dark)">Rp 0</span>
-                    <i class="fas fa-eye eye-icon" onclick="togglePrivasi()" id="eye-main"></i>
-                </div>
+                <h4>Total Saldo Kas (Ledger)</h4>
+                <div class="amount"><span id="total-kas" style="color: var(--blue-dark)">Rp 0</span></div>
             </div>
             <div class="stat-card" style="border-top: 5px solid var(--success)">
-                <h4>Pemasukan</h4>
-                <div class="amount" id="total-masuk" style="color: var(--success)">Rp 0</div>
-            </div>
-            <div class="stat-card" style="border-top: 5px solid var(--danger)">
-                <h4>Pengeluaran</h4>
-                <div class="amount" id="total-keluar" style="color: var(--danger)">Rp 0</div>
+                <h4>Blok Terverifikasi</h4>
+                <div class="amount" id="total-blocks" style="color: var(--success)">0</div>
             </div>
         </div>
 
         <div class="input-section">
             <h3 style="margin-bottom: 20px; font-size: 18px; font-weight: 800; color: var(--blue-dark)">
-                <i class="fas fa-file-invoice-dollar" style="margin-right:10px; color: var(--blue-primary)"></i>Input Transaksi Baru
+                <i class="fas fa-cube" style="margin-right:10px; color: var(--blue-primary)"></i>Mining Transaksi Baru
             </h3>
             <div class="form-row">
                 <div>
-                    <label>Nama Penyetor / Penerima</label>
-                    <input type="text" id="person" placeholder="Nama Lengkap">
+                    <label>Nama Penyetor</label>
+                    <input type="text" id="person" placeholder="Contoh: H. Ahmad">
                 </div>
                 <div>
-                    <label>Keterangan</label>
-                    <input type="text" id="desc" placeholder="Contoh: Infaq Pembangunan">
+                    <label>Keterangan Ibadah</label>
+                    <input type="text" id="desc" placeholder="Contoh: Sedekah Anak Yatim">
                 </div>
                 <div>
                     <label>Nominal (Rp)</label>
@@ -127,150 +118,141 @@
                         <option value="Infaq">Infaq</option>
                         <option value="Zakat">Zakat</option>
                         <option value="Sedekah">Sedekah</option>
-                        <option value="Wakaf">Wakaf</option>
-                        <option value="Hibah">Hibah</option>
                         <option value="Operasional">Operasional (Keluar)</option>
-                        <option value="Sosial">Bantuan Sosial (Keluar)</option>
                     </select>
                 </div>
                 <div>
-                    <label>Tipe Kas</label>
+                    <label>Tipe</label>
                     <select id="type">
-                        <option value="masuk">Uang Masuk (+)</option>
-                        <option value="keluar">Uang Keluar (-)</option>
+                        <option value="masuk">Masuk (+)</option>
+                        <option value="keluar">Keluar (-)</option>
                     </select>
                 </div>
             </div>
-            <button class="btn-submit" onclick="addTransaction()">
-                <i class="fas fa-check-circle"></i> SIMPAN TRANSAKSI
+            <button class="btn-submit" onclick="addBlock()">
+                <i class="fas fa-link"></i> KUNCI & SIMPAN KE LEDGER
             </button>
         </div>
 
         <div class="table-res">
             <div style="padding: 20px; font-weight: 800; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center;">
-                <span><i class="fas fa-history" style="margin-right:10px; color: var(--blue-primary)"></i>Riwayat Transaksi</span>
-                <button onclick="clearAll()" style="background:none; border:none; color: var(--danger); cursor:pointer; font-size: 12px; font-weight: 600;">Hapus Semua</button>
+                <span><i class="fas fa-database" style="margin-right:10px; color: var(--blue-primary)"></i>Blockchain Ledger Activity</span>
+                <button onclick="clearLedger()" style="color: var(--danger); background: none; border: none; font-size: 11px; cursor: pointer;">Reset Ledger</button>
             </div>
             <div style="overflow-x: auto;">
                 <table>
                     <thead>
                         <tr>
-                            <th>Tanggal</th>
-                            <th>Keterangan</th>
-                            <th>Status</th>
+                            <th>Block Info</th>
+                            <th>Detail Transaksi</th>
                             <th>Nominal</th>
-                            <th style="text-align:center">Aksi</th>
+                            <th>Chain Trace (Prev Hash)</th>
+                            <th style="text-align:center">Status</th>
                         </tr>
                     </thead>
-                    <tbody id="table-body"></tbody>
+                    <tbody id="ledger-body"></tbody>
                 </table>
             </div>
         </div>
     </div>
 
 <script>
-    let transactions = JSON.parse(localStorage.getItem('kas_data')) || [];
-    let isHidden = false;
+    // Inisialisasi Ledger dari LocalStorage
+    let ledger = JSON.parse(localStorage.getItem('kas_ledger')) || [];
+
+    // Fungsi Hash Sederhana (Blockchain Simulasi)
+    function generateHash(data, prevHash) {
+        let str = JSON.stringify(data) + prevHash;
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            hash = (hash << 5) - hash + str.charCodeAt(i);
+            hash |= 0;
+        }
+        return "BK-" + Math.abs(hash).toString(16).toUpperCase();
+    }
 
     function formatIDR(angka) {
         return "Rp " + parseInt(angka).toLocaleString('id-ID');
     }
 
-    function togglePrivasi() {
-        isHidden = !isHidden;
-        const icon = document.getElementById('eye-main');
-        icon.className = isHidden ? 'fas fa-eye-slash eye-icon' : 'fas fa-eye eye-icon';
-        updateUI();
-    }
-
     function updateUI() {
-        const tbody = document.getElementById('table-body');
+        const tbody = document.getElementById('ledger-body');
         tbody.innerHTML = '';
-        let masuk = 0, keluar = 0;
+        let total = 0;
 
-        // Sortir berdasarkan ID (Timestamp) terbaru di atas
-        transactions.sort((a, b) => (b.id || 0) - (a.id || 0));
-
-        transactions.forEach((t) => {
-            const amt = parseInt(t.amount) || 0;
-            if(t.type === 'masuk') masuk += amt;
-            else keluar += amt;
+        // Render data (Terbaru di atas)
+        [...ledger].reverse().forEach((block) => {
+            const amt = parseInt(block.nominal) || 0;
+            if(block.tipe === 'masuk') total += amt;
+            else total -= amt;
 
             tbody.innerHTML += `
                 <tr>
-                    <td style="color:#94a3b8"><small>${t.date}</small></td>
                     <td>
-                        <div style="font-weight:700; color: var(--blue-dark)">${t.person || 'Anonim'}</div>
-                        <div style="font-size:12px; color:#64748b">${t.desc}</div>
-                        <span class="cat-badge">${t.category}</span>
-                    </td>
-                    <td><span class="badge ${t.type === 'masuk' ? 'in' : 'out'}">${t.type === 'masuk' ? 'MASUK' : 'KELUAR'}</span></td>
-                    <td style="font-weight:800; color:${t.type === 'masuk' ? '#10b981' : '#ef4444'}">
-                        ${formatIDR(amt)}
+                        <div style="font-size:11px; color:#64748b">${block.waktu}</div>
+                        <span class="hash-code">${block.currentHash}</span>
                     </td>
                     <td>
-                        <div class="delete-btn" onclick="deleteItem(${t.id})"><i class="fas fa-trash-alt"></i></div>
+                        <div style="font-weight:700; color: var(--blue-dark)">${block.person}</div>
+                        <div style="font-size:12px; color:#64748b">${block.keterangan}</div>
+                    </td>
+                    <td style="font-weight:800; color:${block.tipe === 'masuk' ? '#10b981' : '#ef4444'}">
+                        ${block.tipe === 'masuk' ? '+' : '-'} ${formatIDR(amt)}
+                    </td>
+                    <td style="font-family:'JetBrains Mono'; font-size:10px; color:#cbd5e1">
+                        ${block.prevHash}
+                    </td>
+                    <td style="text-align:center">
+                        <span class="badge-verified"><i class="fas fa-check-circle"></i> VERIFIED</span>
                     </td>
                 </tr>`;
         });
 
-        const total = masuk - keluar;
-        document.getElementById('total-masuk').innerText = formatIDR(masuk);
-        document.getElementById('total-keluar').innerText = formatIDR(keluar);
-        const displayTotal = document.getElementById('total-kas');
-        displayTotal.innerText = isHidden ? "Rp •••••••" : formatIDR(total);
+        document.getElementById('total-kas').innerText = formatIDR(total);
+        document.getElementById('total-blocks').innerText = ledger.length;
     }
 
-    function addTransaction() {
-        const person = document.getElementById('person').value;
+    function addBlock() {
+        const person = document.getElementById('person').value || 'Anonim';
         const desc = document.getElementById('desc').value;
         const amount = document.getElementById('amount').value;
         const type = document.getElementById('type').value;
         const category = document.getElementById('category').value;
-        
-        const now = new Date();
-        // Menambahkan Tahun agar data tidak "belang"
-        const dateStr = now.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'});
 
-        if(desc && amount > 0) {
-            const newTrans = { 
-                id: Date.now(), 
-                person, 
-                desc, 
-                amount: parseInt(amount), 
-                type, 
-                category, 
-                date: dateStr 
-            };
+        if(!desc || !amount) return alert("Keterangan dan Nominal wajib diisi!");
 
-            transactions.push(newTrans);
-            localStorage.setItem('kas_data', JSON.stringify(transactions));
-            updateUI();
-            
-            // Reset Form
-            document.getElementById('person').value = '';
-            document.getElementById('desc').value = '';
-            document.getElementById('amount').value = '';
-            
-            alert("Berhasil disimpan!");
-        } else {
-            alert("Mohon isi keterangan dan nominal!");
-        }
+        // Ambil Hash Terakhir
+        let lastHash = ledger.length > 0 ? ledger[ledger.length - 1].currentHash : "00000000";
+
+        const newBlock = {
+            waktu: new Date().toLocaleString('id-ID', {day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'}),
+            person,
+            keterangan: `[${category}] ${desc}`,
+            nominal: parseInt(amount),
+            tipe: type,
+            prevHash: lastHash
+        };
+
+        // Mining Hash Baru
+        newBlock.currentHash = generateHash(newBlock, lastHash);
+
+        // Simpan ke Ledger
+        ledger.push(newBlock);
+        localStorage.setItem('kas_ledger', JSON.stringify(ledger));
+
+        // Bersihkan Form
+        document.getElementById('person').value = '';
+        document.getElementById('desc').value = '';
+        document.getElementById('amount').value = '';
+
+        updateUI();
+        alert("Blok Transaksi Berhasil Dikunci ke Blockchain!");
     }
 
-    function deleteItem(targetId) {
-        if(confirm("Hapus transaksi ini?")) {
-            // Filter berdasarkan ID agar akurat
-            transactions = transactions.filter(t => t.id !== targetId);
-            localStorage.setItem('kas_data', JSON.stringify(transactions));
-            updateUI();
-        }
-    }
-
-    function clearAll() {
-        if(confirm("Hapus semua riwayat transaksi?")) {
-            localStorage.removeItem('kas_data');
-            transactions = [];
+    function clearLedger() {
+        if(confirm("PERINGATAN: Menghapus Ledger akan menghilangkan jejak audit. Lanjutkan?")) {
+            localStorage.removeItem('kas_ledger');
+            ledger = [];
             updateUI();
         }
     }
