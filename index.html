@@ -30,6 +30,11 @@
         #sidebar.active { left: 0; }
         .overlay { position: fixed; display: none; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2500; backdrop-filter: blur(2px); }
         .overlay.active { display: block; }
+        
+        .sidebar-menu a {
+            color: white; text-decoration: none; display: block; margin-bottom: 25px; font-size: 14px;
+        }
+        .sidebar-menu i { width: 30px; font-size: 18px; }
 
         /* --- HEADER AREA --- */
         .blue-section {
@@ -151,12 +156,15 @@
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
     
     <div id="sidebar">
-        <h2 style="margin-bottom:25px; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px;">MASTER PRO</h2>
+        <h2 style="margin-bottom:25px; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px;">ADMIN PANEL</h2>
         <div class="sidebar-menu">
-            <a href="#" onclick="toggleSidebar()" style="color:white; text-decoration:none; display:block; margin-bottom:20px"><i class="fas fa-home" style="width:25px"></i> Beranda</a>
-            <a href="saya.html" style="color:white; text-decoration:none; display:block; margin-bottom:20px"><i class="fas fa-user" style="width:25px"></i> Profil</a>
+            <a href="admin.html"><i class="fas fa-user-shield"></i> Menu Admin Utama</a>
+            <a href="database.html"><i class="fas fa-database"></i> Backup Database</a>
+            <a href="pengaturan.html"><i class="fas fa-cog"></i> Pengaturan Sistem</a>
+            <a href="log.html"><i class="fas fa-history"></i> Log Aktivitas</a>
+            <a href="bantuan.html"><i class="fas fa-question-circle"></i> Bantuan</a>
             <hr style="opacity:0.2; margin:20px 0">
-            <a href="#" onclick="location.reload()" style="color:#ffb2b2; text-decoration:none;"><i class="fas fa-power-off" style="width:25px"></i> Keluar</a>
+            <a href="#" onclick="location.reload()" style="color:#ffb2b2;"><i class="fas fa-power-off"></i> Keluar</a>
         </div>
     </div>
 
@@ -215,39 +223,34 @@
         let isHidden = false;
         let totalSaldoGlobal = 0;
 
+        // --- FUNGSI SIDEBAR ---
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+
+        // --- FUNGSI SYNC DATA BLOCKCHAIN ---
         function syncData() {
-            // 1. Ambil data dari sistem Blockchain
             let dataRaw = localStorage.getItem('kas_ledger');
             let listKas = dataRaw ? JSON.parse(dataRaw) : [];
-            let masuk = 0; 
-            let keluar = 0;
+            let masuk = 0; let keluar = 0;
 
-            // 2. Kalkulasi saldo dari rantai blok
             listKas.forEach(t => {
                 let nilai = parseInt(t.nominal) || 0;
-                if(t.tipe === 'masuk') {
-                    masuk += nilai;
-                } else {
-                    keluar += nilai;
-                }
+                if(t.tipe === 'masuk') masuk += nilai;
+                else keluar += nilai;
             });
 
             totalSaldoGlobal = masuk - keluar;
-            renderSaldo(); // Langsung update tampilan
+            renderSaldo();
         }
 
-        // 3. Fungsi buat klik icon mata
-        function toggleMata() { 
-            isHidden = !isHidden; 
-            renderSaldo(); 
-        }
+        function toggleMata() { isHidden = !isHidden; renderSaldo(); }
 
-        // 4. Update Tampilan ke HTML
         function renderSaldo() {
             const display = document.getElementById('angka-saldo');
             const icon = document.getElementById('icon-mata');
-            
-            if(!display || !icon) return; // Guard biar gak error kalau ID beda
+            if(!display || !icon) return;
 
             if(isHidden) {
                 display.innerText = "Rp •••••••";
@@ -258,28 +261,26 @@
             }
         }
 
-        // Jalankan saat halaman dibuka
-        window.onload = function() {
-            syncData();
-        };
-
-        const mahfuzat = [
-            "Man jadda wajada - Siapa bersungguh-sungguh akan berhasil.",
-            "Man shabara zhafira - Siapa bersabar akan beruntung.",
-            "Al-waqtu atsmanu minadz dzahabi - Waktu lebih berharga dari emas.",
-            "Al-ilmu bilaa 'amalin kasy syajari bilaa tsamarin - Ilmu tanpa amal bagai pohon tak berbuah."
-        ];
-
-        const nasihatAgamis = [
-            "Sedekah dulu yuk sebelum beraktivitas..",
-            "Jangan lupa tabungan akhirat hari ini!",
-            "Infaq pagi ini untuk keberkahan hari ini.",
-            "Harta tak dibawa mati, amal jariyah abadi."
-        ];
-
+        // --- ONLOAD (SEMUA JADI SATU DISINI) ---
         window.onload = () => {
+            // 1. Load Mahfuzat & Nasihat
+            const mahfuzat = [
+                "Man jadda wajada - Siapa bersungguh-sungguh akan berhasil.",
+                "Man shabara zhafira - Siapa bersabar akan beruntung.",
+                "Al-waqtu atsmanu minadz dzahabi - Waktu lebih berharga dari emas.",
+                "Al-ilmu bilaa 'amalin kasy syajari bilaa tsamarin - Ilmu tanpa amal bagai pohon tak berbuah."
+            ];
+            const nasihatAgamis = [
+                "Sedekah dulu yuk sebelum beraktivitas..",
+                "Jangan lupa tabungan akhirat hari ini!",
+                "Infaq pagi ini untuk keberkahan hari ini.",
+                "Harta tak dibawa mati, amal jariyah abadi."
+            ];
+            
             document.getElementById('m-text').innerText = mahfuzat.join("   •   ");
             document.getElementById('nasihat-gerak').innerText = nasihatAgamis[Math.floor(Math.random() * nasihatAgamis.length)];
+            
+            // 2. Jalankan Sinkronisasi Saldo
             syncData();
         };
     </script>
