@@ -215,30 +215,40 @@
         let isHidden = false;
         let totalSaldoGlobal = 0;
 
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('overlay').classList.toggle('active');
-        }
-
         function syncData() {
-            let dataRaw = localStorage.getItem('kas_data');
+            // 1. Ambil data dari sistem Blockchain
+            let dataRaw = localStorage.getItem('kas_ledger');
             let listKas = dataRaw ? JSON.parse(dataRaw) : [];
-            let masuk = 0; let keluar = 0;
+            let masuk = 0; 
+            let keluar = 0;
 
+            // 2. Kalkulasi saldo dari rantai blok
             listKas.forEach(t => {
-                if(t.type === 'masuk') masuk += parseInt(t.amount);
-                else keluar += parseInt(t.amount);
+                let nilai = parseInt(t.nominal) || 0;
+                if(t.tipe === 'masuk') {
+                    masuk += nilai;
+                } else {
+                    keluar += nilai;
+                }
             });
 
             totalSaldoGlobal = masuk - keluar;
-            renderSaldo();
+            renderSaldo(); // Langsung update tampilan
         }
 
-        function toggleMata() { isHidden = !isHidden; renderSaldo(); }
+        // 3. Fungsi buat klik icon mata
+        function toggleMata() { 
+            isHidden = !isHidden; 
+            renderSaldo(); 
+        }
 
+        // 4. Update Tampilan ke HTML
         function renderSaldo() {
             const display = document.getElementById('angka-saldo');
             const icon = document.getElementById('icon-mata');
+            
+            if(!display || !icon) return; // Guard biar gak error kalau ID beda
+
             if(isHidden) {
                 display.innerText = "Rp •••••••";
                 icon.classList.replace('fa-eye', 'fa-eye-slash');
@@ -247,6 +257,11 @@
                 icon.classList.replace('fa-eye-slash', 'fa-eye');
             }
         }
+
+        // Jalankan saat halaman dibuka
+        window.onload = function() {
+            syncData();
+        };
 
         const mahfuzat = [
             "Man jadda wajada - Siapa bersungguh-sungguh akan berhasil.",
