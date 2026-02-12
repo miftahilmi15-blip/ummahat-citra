@@ -99,7 +99,7 @@
             let currentBalance = 0;
             let ohlcData = [];
 
-            // KUNCINYA DI SINI: Mapping per transaksi, bukan per hari
+            // Mapping setiap transaksi jadi satu candle
             data.forEach((trx, index) => {
                 let nominal = parseInt(trx.nominal) || 0;
                 let open = currentBalance;
@@ -111,13 +111,11 @@
                 }
                 
                 let close = currentBalance;
-                // High dan Low kita buat dinamis per transaksi
                 let high = Math.max(open, close);
                 let low = Math.min(open, close);
 
                 ohlcData.push({
-                    // Gunakan index atau timestamp unik agar setiap transaksi punya candle sendiri
-                    x: trx.tanggal ? new Date(trx.tanggal).getTime() + index : new Date().getTime() + index,
+                    x: trx.tanggal ? new Date(trx.tanggal).getTime() + (index * 1000) : new Date().getTime() + (index * 1000),
                     y: [open, high, low, close]
                 });
             });
@@ -135,14 +133,33 @@
                     background: 'transparent',
                     zoom: { enabled: true }
                 },
+                // INI PENTOLNYA: Menunjukkan Harga Running Terakhir
+                annotations: {
+                    yaxis: [{
+                        y: currentBalance,
+                        borderColor: '#108ee9',
+                        label: {
+                            borderColor: '#108ee9',
+                            style: {
+                                color: '#fff',
+                                background: '#108ee9',
+                                fontSize: '10px',
+                                fontWeight: 700
+                            },
+                            text: 'SALDO: Rp ' + currentBalance.toLocaleString('id-ID'),
+                            position: 'right',
+                            offsetX: 0
+                        }
+                    }]
+                },
                 xaxis: {
                     type: 'datetime',
-                    labels: { style: { fontSize: '9px' } }
+                    labels: { style: { fontSize: '9px', colors: '#888' } }
                 },
                 yaxis: {
                     labels: { 
                         formatter: val => val.toLocaleString('id-ID'),
-                        style: { fontSize: '9px' } 
+                        style: { fontSize: '9px', colors: '#888' } 
                     },
                     opposite: true
                 },
@@ -153,11 +170,11 @@
                             downward: '#ef5350' 
                         },
                         wick: { useFillColor: true },
-                        columnWidth: '20%' // Slim bar
+                        columnWidth: '15%' // Slim bar ala TradingView
                     }
                 },
                 stroke: { width: 1 },
-                grid: { borderColor: '#2b2b2b' },
+                grid: { borderColor: '#2b2b2b', strokeDashArray: 2 },
                 tooltip: { theme: 'dark' }
             };
 
