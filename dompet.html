@@ -11,48 +11,57 @@ body{background:#eef3f7;height:100vh;overflow:hidden}
 
 /* ===== SCENE ===== */
 #scene{
-  height:60vh;
+  height:55vh;
   background:linear-gradient(to top,#4CAF50,#90CAF9);
   display:flex;
   justify-content:center;
   align-items:flex-end;
   position:relative;
-  transition:1s;
-}
-
-/* Wrapper untuk efek tumbuh */
-.tree-wrapper{
   overflow:hidden;
-  transition:1s ease;
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
+  transition:1s;
+  padding-top:20px;
 }
 
-/* Gambar pohon */
-.tree-img{
-  width:320px;
+/* ===== TREE ===== */
+.tree-wrapper{
+  height:260px;                /* START KECIL */
+  overflow:hidden;             /* CROP BAWAH */
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
   transition:1s ease;
+  z-index:2;
+}
+
+.tree-img{
+  width:65%;                   /* UKURAN AWAL KECIL */
+  max-width:240px;
   transform-origin:bottom center;
+  transition:transform .8s cubic-bezier(.22,1,.36,1), filter .6s;
 }
 
 /* Glow milestone */
-.glow{
-  filter:drop-shadow(0 0 20px rgba(255,255,200,0.8));
+.tree-glow{
+  filter:drop-shadow(0 0 18px rgba(255,255,200,0.9));
 }
 
-/* Tanah */
-.grass{
+/* ===== PARTICLE LIGHT ===== */
+.light{
   position:absolute;
   bottom:0;
-  width:100%;
-  height:100px;
-  background:#2E7D32;
+  width:6px;
+  height:6px;
+  background:rgba(255,255,255,.7);
+  border-radius:50%;
+  animation:floatUp 2s ease forwards;
+}
+@keyframes floatUp{
+  to{transform:translateY(-140px);opacity:0}
 }
 
 /* ===== UI ===== */
 .panel{
-  height:40vh;
+  height:45vh;
   background:white;
   border-radius:30px 30px 0 0;
   margin-top:-30px;
@@ -69,6 +78,18 @@ body{background:#eef3f7;height:100vh;overflow:hidden}
   color:white;
   font-weight:700;
   border-radius:40px;
+  margin-top:16px;
+}
+
+/* Milestone text */
+#milestone{
+  position:absolute;
+  bottom:130px;
+  color:white;
+  font-weight:600;
+  opacity:0;
+  transition:.6s;
+  z-index:3;
 }
 </style>
 </head>
@@ -79,14 +100,13 @@ body{background:#eef3f7;height:100vh;overflow:hidden}
   <div class="tree-wrapper" id="treeWrapper">
     <img src="tree.png" id="treeImg" class="tree-img">
   </div>
-  <div class="grass"></div>
+  <div id="milestone"></div>
 </div>
 
 <div class="panel">
   <h3>Pohon Jariyah</h3>
   <p>Total Sedekah</p>
   <h2>Rp <span id="total">0</span></h2>
-  <br>
   <button class="btn" onclick="location.href='kartu.html'">💧 Siram Sedekah</button>
 </div>
 
@@ -108,38 +128,83 @@ function loadProgress(){
   growTree(total, count);
 }
 
+/* ===== CORE GROWTH ===== */
 function growTree(total, count){
+  applyScaling(total);
+  applyReveal(total);
+  applyHealth(count);
+  applyMilestone(total);
+  spawnLight();
+}
+
+/* ===== 1. SCALING DINAMIS + BOUNCE ===== */
+function applyScaling(total){
   const tree = document.getElementById("treeImg");
+
+  let scale = 0.6 + Math.log10(total + 1) * 0.15;
+  scale = Math.min(Math.max(scale,0.6),1.2);
+
+  tree.style.transform = `scale(${scale + 0.05})`;
+  setTimeout(()=>{
+    tree.style.transform = `scale(${scale})`;
+  },180);
+}
+
+/* ===== 2. REVEAL DARI BAWAH ===== */
+function applyReveal(total){
   const wrapper = document.getElementById("treeWrapper");
-  const scene = document.getElementById("scene");
+  let h = 160 + Math.sqrt(total)/2;
+  if(h > 360) h = 360;
+  wrapper.style.height = h + "px";
+}
 
-  /* ===== 1. REVEAL HEIGHT (tumbuh dari bawah) ===== */
-  let revealHeight = 120 + Math.sqrt(total)/2;
-  if(revealHeight > 420) revealHeight = 420;
-  wrapper.style.height = revealHeight + "px";
-
-  /* ===== 2. SCALE HALUS ===== */
-  let scale = 0.7 + Math.sqrt(total)/8000;
-  if(scale > 1.15) scale = 1.15;
-  tree.style.transform = `scale(${scale})`;
-
-  /* ===== 3. KESEHATAN (brightness dari konsistensi) ===== */
-  let health = Math.min(count*0.05, 0.4);
+/* ===== 3. KESEHATAN (KONSISTENSI) ===== */
+function applyHealth(count){
+  const tree = document.getElementById("treeImg");
+  let health = Math.min(count * 0.05, 0.4);
   tree.style.filter = `brightness(${0.85 + health})`;
+}
 
-  /* ===== 4. LEVEL ENVIRONMENT ===== */
-  if(total > 10000000){
+/* ===== 4. MILESTONE & ENVIRONMENT ===== */
+function applyMilestone(total){
+  const scene = document.getElementById("scene");
+  const tree  = document.getElementById("treeImg");
+  const text  = document.getElementById("milestone");
+
+  tree.classList.remove("tree-glow");
+
+  if(total >= 10000000){
     scene.style.background="linear-gradient(to top,#1B5E20,#FFD54F)";
-    tree.classList.add("glow");
-  } 
-  else if(total > 3000000){
+    tree.classList.add("tree-glow");
+    showText("Kebaikanmu menjadi berkah ✨");
+  }
+  else if(total >= 5000000){
     scene.style.background="linear-gradient(to top,#2E7D32,#90CAF9)";
-    tree.classList.remove("glow");
-  } 
+    showText("Pohonmu semakin memberi manfaat 🌳");
+  }
+  else if(total >= 1000000){
+    showText("Sedekahmu mulai menumbuhkan kebaikan 🌱");
+  }
   else{
     scene.style.background="linear-gradient(to top,#4CAF50,#90CAF9)";
-    tree.classList.remove("glow");
   }
+}
+
+function showText(msg){
+  const el = document.getElementById("milestone");
+  el.innerText = msg;
+  el.style.opacity = 1;
+  setTimeout(()=>el.style.opacity=0,1500);
+}
+
+/* ===== 5. PARTIKEL CAHAYA ===== */
+function spawnLight(){
+  const scene = document.getElementById("scene");
+  const p = document.createElement("div");
+  p.className="light";
+  p.style.left=Math.random()*100+"%";
+  scene.appendChild(p);
+  setTimeout(()=>p.remove(),2000);
 }
 
 window.onload = loadProgress;
