@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ustadz Master AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --dana-blue: #108ee9;
+            --white: #ffffff;
+            --bg-light: #f5f5f5;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg-light); height: 100vh; display: flex; flex-direction: column; }
+
+        /* HEADER */
+        .header { 
+            background: var(--dana-blue); 
+            color: white; 
+            padding: 15px 5%; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header i { cursor: pointer; font-size: 18px; }
+        .ustadz-info h4 { font-size: 15px; font-weight: 600; }
+        .ustadz-info p { font-size: 10px; opacity: 0.8; }
+
+        /* CHAT BOX */
+        #chat-box { 
+            flex: 1; 
+            padding: 20px 15px; 
+            overflow-y: auto; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px;
+        }
+
+        .msg { 
+            max-width: 85%; 
+            padding: 12px 16px; 
+            font-size: 13px; 
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .ai { 
+            background: white; 
+            color: #333; 
+            align-self: flex-start; 
+            border-radius: 18px 18px 18px 2px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+        }
+
+        .user { 
+            background: var(--dana-blue); 
+            color: white; 
+            align-self: flex-end; 
+            border-radius: 18px 18px 2px 18px;
+            box-shadow: 0 4px 12px rgba(16, 142, 233, 0.2);
+        }
+
+        /* TYING STATUS */
+        .typing {
+            font-size: 11px;
+            color: var(--text-gray);
+            margin-left: 15px;
+            margin-bottom: 10px;
+            display: none;
+            font-style: italic;
+        }
+
+        /* INPUT AREA */
+        .input-container {
+            background: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .input-container input {
+            flex: 1;
+            background: #f0f2f5;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 25px;
+            outline: none;
+            font-size: 13px;
+        }
+
+        .btn-send {
+            background: var(--dana-blue);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-send:active { transform: scale(0.9); }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <i class="fas fa-arrow-left" onclick="history.back()"></i>
+        <div class="ustadz-info">
+            <h4>Ustadz Master Pro</h4>
+            <p><i class="fas fa-circle" style="color: #4cd964; font-size: 8px;"></i> Online | Pembimbing Jamaah</p>
+        </div>
+    </div>
+
+    <div id="chat-box">
+        <div class="msg ai">
+            Assalamu'alaikum warahmatullahi wabarakatuh, Ikhwan/Akhwat yang dirahmati Allah. 
+            <br><br>
+            Ada yang bisa Ustadz bantu hari ini? Silakan sampaikan keluh kesah atau pertanyaan antum, insya Allah Ustadz dengarkan.
+        </div>
+    </div>
+
+    <div class="typing" id="typing-status">Ustadz sedang mengetik...</div>
+
+    <div class="input-container">
+        <input type="text" id="user-input" placeholder="Tulis pesan..." onkeypress="handleEnter(event)">
+        <button class="btn-send" onclick="sendMessage()">
+            <i class="fas fa-paper-plane"></i>
+        </button>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const typingStatus = document.getElementById('typing-status');
+
+        // GANTI URL INI DENGAN URL WORKER CLOUDFLARE BOS NANTI
+        const CLOUDFLARE_WORKER_URL = 'https://nama-worker-bos.workers.dev';
+
+        function appendMessage(role, text) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `msg ${role}`;
+            msgDiv.innerHTML = text.replace(/\n/g, '<br>'); // Supaya enter di AI terbaca
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            // Tampilkan pesan User
+            appendMessage('user', text);
+            userInput.value = '';
+            
+            // Tampilkan status ngetik
+            typingStatus.style.display = 'block';
+
+            try {
+                const response = await fetch(CLOUDFLARE_WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: text })
+                });
+
+                const data = await response.json();
+                
+                typingStatus.style.display = 'none';
+                
+                // Ambil jawaban dari Cloudflare AI (tergantung struktur json responsenya)
+                // Biasanya data.response atau data.result.response
+                const aiReply = data.response || data.result?.response || "Afwan, Ikhwan/Akhwat. Sepertinya Ustadz sedang ada kendala. Bisa diulangi?";
+                
+                appendMessage('ai', aiReply);
+
+            } catch (error) {
+                typingStatus.style.display = 'none';
+                appendMessage('ai', "Astagfirullah, koneksi terputus. Mohon periksa internet antum, Ikhwan/Akhwat.");
+                console.error(error);
+            }
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+    </script>
+</body>
+</html>
