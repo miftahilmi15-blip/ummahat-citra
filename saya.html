@@ -3,181 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kaldik Pro Dana Blue</title>
+    <title>Kaldik Yayasan Pro - Kemenag Source</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/locale/id.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/xsoh/moment-hijri@master/moment-hijri.js"></script>
 
     <style>
         :root {
             --dana-blue: #108ee9;
-            --dana-dark: #0c7cd5;
-            --bg: #f5f7fa;
-            --text-main: #2d3436;
+            --bg-light: #f4f7fa;
             --holiday-red: #eb4d4b;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg); color: var(--text-main); }
+        body { background: var(--bg-light); color: #333; }
 
         header { 
-            background: var(--dana-blue); padding: 40px 20px; text-align: center; 
-            border-radius: 0 0 40px 40px; box-shadow: 0 10px 20px rgba(16, 142, 233, 0.2);
-            position: relative;
+            background: var(--dana-blue); 
+            padding: 50px 20px 80px; /* Padding bawah lebih besar */
+            text-align: center; 
+            border-radius: 0 0 40px 40px;
         }
 
-        .back-btn { position: absolute; top: 30px; left: 20px; color: #fff; font-size: 20px; }
-        .title-4d { font-family: 'Montserrat', sans-serif; font-size: 22px; color: #fff; letter-spacing: 1px; }
+        .title-4d { 
+            font-family: 'Montserrat', sans-serif; 
+            font-size: 24px; 
+            color: #fff; 
+            text-transform: uppercase;
+        }
 
-        main { max-width: 450px; margin: -30px auto 0; padding: 0 15px; }
+        main { max-width: 450px; margin: -40px auto 0; padding: 0 15px; }
 
-        .selector-box { 
+        /* Jarak antar elemen ditingkatkan */
+        .month-selector { 
             display: flex; justify-content: space-between; align-items: center; 
-            background: #fff; padding: 15px; border-radius: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px;
+            background: #fff; padding: 20px; border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
+            margin-bottom: 30px; /* Jarak ke kalender diperlebar */
         }
 
-        .selector-box button { 
-            background: var(--bg); border: none; width: 40px; height: 40px; 
-            border-radius: 50%; color: var(--dana-blue); cursor: pointer; transition: 0.3s;
-        }
-        .selector-box button:hover { background: var(--dana-blue); color: #fff; }
-        .month-label { font-weight: 800; color: var(--dana-blue); font-size: 18px; }
+        .month-label { font-weight: 800; color: var(--dana-blue); font-size: 20px; }
 
-        .calendar-grid { 
-            background: #fff; padding: 20px; border-radius: 25px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05); display: grid; 
-            grid-template-columns: repeat(7, 1fr); gap: 10px;
+        .calendar-box { 
+            background: #fff; padding: 25px; border-radius: 30px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
         }
 
-        .day-name { text-align: center; font-weight: 700; font-size: 12px; color: #b2bec3; padding-bottom: 10px; }
-        .day-name.sunday { color: var(--holiday-red); }
+        .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; }
+
+        .day-name { 
+            text-align: center; font-weight: 700; font-size: 12px; 
+            color: #b2bec3; margin-bottom: 15px;
+        }
 
         .day { 
-            aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center; 
-            justify-content: center; border-radius: 15px; font-weight: 700; 
-            cursor: pointer; position: relative; transition: 0.2s; background: #fafafa;
+            aspect-ratio: 1/1; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; border-radius: 15px; 
+            font-weight: 700; cursor: pointer; background: #f9f9f9;
+            position: relative; transition: 0.2s;
         }
-        .day:hover { background: #f0f7ff; transform: translateY(-2px); }
 
         .day span { font-size: 16px; }
-        .day .hijri { font-size: 9px; font-weight: 400; color: #636e72; }
+        .day .hijri { font-size: 9px; font-weight: 400; color: #888; margin-top: 2px; }
 
-        /* Status Styles */
-        .day.today { background: var(--dana-blue) !important; color: #fff; }
-        .day.today .hijri { color: rgba(255,255,255,0.8); }
+        /* States */
+        .day.today { background: var(--dana-blue); color: #fff; }
+        .day.today .hijri { color: #eee; }
         .day.holiday { color: var(--holiday-red); }
         .day.holiday .hijri { color: var(--holiday-red); opacity: 0.6; }
 
-        .holiday-dot { width: 5px; height: 5px; background: var(--holiday-red); border-radius: 50%; position: absolute; bottom: 5px; }
+        .dot { width: 4px; height: 4px; background: var(--holiday-red); border-radius: 50%; position: absolute; bottom: 6px; }
 
         /* Popup */
         #popup { 
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); 
-            backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 99; 
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); 
+            backdrop-filter: blur(8px); justify-content: center; align-items: center; z-index: 100; 
         }
-        .popup-box { background: #fff; padding: 30px; border-radius: 30px; width: 85%; max-width: 350px; text-align: center; }
-        .popup-box h3 { color: var(--dana-blue); margin-bottom: 10px; }
-        .popup-btn { background: var(--dana-blue); color: #fff; border: none; padding: 12px; width: 100%; border-radius: 15px; margin-top: 20px; font-weight: 700; }
+        .popup-card { background: #fff; padding: 30px; border-radius: 30px; width: 85%; max-width: 350px; text-align: center; }
+        .btn-close { background: var(--dana-blue); color: #fff; border: none; padding: 12px; width: 100%; border-radius: 15px; margin-top: 20px; font-weight: 700; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <header>
-    <i class="fas fa-chevron-left back-btn"></i>
-    <h1 class="title-4d">KALENDER 2026</h1>
+    <h1 class="title-4d">Kaldik Yayasan</h1>
 </header>
 
 <main>
-    <div class="selector-box">
-        <button onclick="changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
-        <div id="monthYear" class="month-label">Februari 2026</div>
-        <button onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
+    <div class="month-selector">
+        <button onclick="moveMonth(-1)" style="border:none; background:none; color:var(--dana-blue); cursor:pointer;"><i class="fas fa-chevron-left fa-lg"></i></button>
+        <div id="monthYear" class="month-label">...</div>
+        <button onclick="moveMonth(1)" style="border:none; background:none; color:var(--dana-blue); cursor:pointer;"><i class="fas fa-chevron-right fa-lg"></i></button>
     </div>
 
-    <div class="calendar-grid" id="calendar"></div>
+    <div class="calendar-box">
+        <div class="grid" id="calendar"></div>
+    </div>
 </main>
 
 <div id="popup">
-    <div class="popup-box">
-        <h3 id="popDate">Tanggal</h3>
-        <p id="popHijri" style="color:#636e72; font-size:14px; margin-bottom:15px;"></p>
-        <p id="popMsg" style="font-weight:600;"></p>
-        <button class="popup-btn" onclick="closePopup()">TUTUP</button>
+    <div class="popup-card">
+        <h3 id="popTgl" style="color:var(--dana-blue)"></h3>
+        <p id="popHijri" style="margin: 10px 0; font-size: 14px; color: #888;"></p>
+        <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
+        <p id="popKet" style="font-weight: 600; color: #333;"></p>
+        <button class="btn-close" onclick="closePop()">OK, TUTUP</button>
     </div>
 </div>
 
 <script>
-    let currDate = new Date();
-    let holidayList = [];
+    moment.locale('id');
+    let viewDate = moment();
+    let holidays = [];
 
-    async function loadHolidays() {
+    // Tembak API (Menggunakan API yang mengambil data resmi Kemenag/Pemerintah)
+    async function fetchKemenagData() {
         try {
-            // Tembak API yang lebih akurat untuk Indonesia
-            const res = await fetch(`https://api-harilibur.vercel.app/api?year=${currDate.getFullYear()}`);
-            holidayList = await res.json();
+            const year = viewDate.year();
+            const response = await fetch(`https://dayoffapi.vercel.app/api?year=${year}`);
+            holidays = await response.json();
             render();
         } catch (e) {
-            console.log("API Error, Fallback mode");
+            console.error("Gagal ambil data");
             render();
         }
     }
 
     function render() {
         const grid = document.getElementById('calendar');
+        const label = document.getElementById('monthYear');
         grid.innerHTML = '';
         
-        const year = currDate.getFullYear();
-        const month = currDate.getMonth();
-        
-        document.getElementById('monthYear').innerText = moment(currDate).format('MMMM YYYY');
+        label.innerText = viewDate.format('MMMM YYYY');
 
-        const dayLabels = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
-        dayLabels.forEach((d, i) => {
-            grid.innerHTML += `<div class="day-name ${i===0?'sunday':''}">${d}</div>`;
-        });
+        const days = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+        days.forEach(d => grid.innerHTML += `<div class="day-name">${d}</div>`);
 
-        const startDay = new Date(year, month, 1).getDay();
-        const totalDays = new Date(year, month + 1, 0).getDate();
+        const firstDay = viewDate.clone().startOf('month').day();
+        const daysInMonth = viewDate.daysInMonth();
 
-        for(let i=0; i<startDay; i++) grid.innerHTML += `<div></div>`;
+        for(let i=0; i<firstDay; i++) grid.innerHTML += `<div></div>`;
 
-        for(let d=1; d<=totalDays; d++) {
-            const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-            const m = moment(dateStr, 'YYYY-MM-DD');
-            const hijriDay = m.format('iD'); // Menggunakan moment-hijri agar akurat
+        for(let d=1; d<=daysInMonth; d++) {
+            const currentLoop = viewDate.clone().date(d);
+            const dateStr = currentLoop.format('YYYY-MM-DD');
             
-            const isToday = moment().isSame(m, 'day');
-            const isSunday = dateObj = new Date(year, month, d).getDay() === 0;
-            const holiday = holidayList.find(h => h.holiday_date === dateStr);
+            // Konversi Hijriyah (Akurasi Tinggi)
+            const hDay = currentLoop.format('iD');
+            
+            const isToday = moment().isSame(currentLoop, 'day');
+            const isSun = currentLoop.day() === 0;
+            const hldy = holidays.find(h => h.tanggal === dateStr);
 
-            let classes = ['day'];
-            if(isToday) classes.push('today');
-            if(isSunday || holiday) classes.push('holiday');
+            let dayClass = 'day';
+            if(isToday) dayClass += ' today';
+            if(isSun || hldy) dayClass += ' holiday';
 
             grid.innerHTML += `
-                <div class="${classes.join(' ')}" onclick="showPop('${dateStr}', '${holiday?holiday.holiday_name:''}', ${isSunday})">
+                <div class="${dayClass}" onclick="openPop('${dateStr}', '${hldy?hldy.keterangan:''}', ${isSun})">
                     <span>${d}</span>
-                    <span class="hijri">${hijriDay}</span>
-                    ${holiday ? '<div class="holiday-dot"></div>' : ''}
+                    <span class="hijri">${hDay}</span>
+                    ${hldy ? '<div class="dot"></div>' : ''}
                 </div>
             `;
         }
     }
 
-    function showPop(date, name, isSunday) {
+    function openPop(date, msg, isSun) {
         const m = moment(date);
-        document.getElementById('popDate').innerText = m.format('DD MMMM YYYY');
+        document.getElementById('popTgl').innerText = m.format('DD MMMM YYYY');
         document.getElementById('popHijri').innerText = m.format('iD iMMMM iYYYY') + ' H';
-        document.getElementById('popMsg').innerText = name || (isSunday ? "Libur Akhir Pekan" : "Agenda Nasional Nihil");
+        document.getElementById('popKet').innerText = msg || (isSun ? "Libur Akhir Pekan" : "Tidak ada agenda");
         document.getElementById('popup').style.display = 'flex';
     }
 
-    function closePopup() { document.getElementById('popup').style.display = 'none'; }
-    function changeMonth(val) { currDate.setMonth(currDate.getMonth() + val); render(); }
+    function closePop() { document.getElementById('popup').style.display = 'none'; }
+    function moveMonth(n) { viewDate.add(n, 'month'); fetchKemenagData(); }
 
-    window.onload = loadHolidays;
+    window.onload = fetchKemenagData;
 </script>
 </body>
 </html>
