@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Blockchain Ledger - Master Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --dana-blue: #108ee9;
+            --safe-green: #4cd964;
+            --danger-red: #ff3b30;
+            --tech-gray: #2c3e50;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #f8f9fb; color: #333; }
+
+        /* HEADER */
+        .header { 
+            background: var(--dana-blue); 
+            color: white; 
+            padding: 20px 5%; 
+            display: flex; 
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h3 { font-size: 16px; font-weight: 600; }
+
+        /* STATS CARD */
+        .status-card {
+            background: white;
+            margin: -20px 5% 20px;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .status-info p { font-size: 10px; color: #888; }
+        .status-info h4 { font-size: 14px; color: var(--safe-green); }
+
+        /* LEDGER LIST */
+        .ledger-container { padding: 0 5%; }
+        .block {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--dana-blue);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* HASH TEXT (Gaya Koding) */
+        .hash-id { 
+            font-family: 'JetBrains Mono', monospace; 
+            font-size: 10px; 
+            background: #f0f2f5; 
+            padding: 4px 8px; 
+            border-radius: 4px;
+            color: var(--tech-gray);
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .block-info { display: flex; justify-content: space-between; align-items: flex-start; }
+        .block-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+        .block-time { font-size: 10px; color: #aaa; }
+        
+        .nominal { font-weight: 700; font-size: 14px; }
+        .plus { color: var(--safe-green); }
+        .minus { color: var(--danger-red); }
+
+        .chain-link {
+            font-size: 10px;
+            color: #bbb;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #eee;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .verified-badge {
+            position: absolute;
+            right: -10px;
+            top: 20px;
+            transform: rotate(15deg);
+            background: rgba(76, 217, 100, 0.1);
+            color: var(--safe-green);
+            font-size: 8px;
+            padding: 2px 15px;
+            font-weight: bold;
+            border: 1px solid var(--safe-green);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <i class="fas fa-arrow-left" onclick="history.back()"></i>
+        <h3>Blockchain Ledger Kas</h3>
+        <i class="fas fa-shield-halved"></i>
+    </div>
+
+    <div class="status-card">
+        <div class="status-info">
+            <p>Sistem Integritas Data</p>
+            <h4><i class="fas fa-check-circle"></i> Semua Data Terverifikasi</h4>
+        </div>
+        <div class="status-info" style="text-align: right;">
+            <p>Total Block</p>
+            <h4 id="block-count" style="color: var(--tech-gray);">150</h4>
+        </div>
+    </div>
+
+    <div class="ledger-container" id="ledger-list">
+        </div>
+
+    <script>
+        // Simulasi Data Ledger (Ini bisa diambil dari localStorage)
+        const dummyLedger = [
+            {
+                id: "BK-88219X",
+                prevHash: "BK-000000",
+                keterangan: "Infaq Jumat Barokah",
+                nominal: 2500000,
+                tipe: "masuk",
+                waktu: "12 Feb 2026, 10:00"
+            },
+            {
+                id: "BK-99120Z",
+                prevHash: "BK-88219X",
+                keterangan: "Beli Token Listrik Masjid",
+                nominal: 200000,
+                tipe: "keluar",
+                waktu: "12 Feb 2026, 14:30"
+            }
+        ];
+
+        function renderLedger() {
+            const container = document.getElementById('ledger-list');
+            document.getElementById('block-count').innerText = dummyLedger.length;
+
+            dummyLedger.reverse().forEach(data => {
+                const block = document.createElement('div');
+                block.className = 'block';
+                block.innerHTML = `
+                    <div class="verified-badge">VERIFIED</div>
+                    <span class="hash-id">HASH: ${data.id}</span>
+                    <div class="block-info">
+                        <div>
+                            <div class="block-title">${data.keterangan}</div>
+                            <div class="block-time">${data.waktu}</div>
+                        </div>
+                        <div class="nominal ${data.tipe === 'masuk' ? 'plus' : 'minus'}">
+                            ${data.tipe === 'masuk' ? '+' : '-'} Rp ${data.nominal.toLocaleString()}
+                        </div>
+                    </div>
+                    <div class="chain-link">
+                        <i class="fas fa-link"></i> Prev Hash: ${data.prevHash}
+                    </div>
+                `;
+                container.appendChild(block);
+            });
+        }
+
+        renderLedger();
+    </script>
+</body>
+</html>
