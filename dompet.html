@@ -51,7 +51,8 @@
 
         .btn-back { color: var(--dana-blue); text-decoration: none; font-size: 18px; }
         
-        .apexcharts-xaxis-texts-g text, .apexcharts-yaxis-texts-g text { fill: #888 !important; font-size: 10px !important; }
+        /* Font angka di sumbu grafik diperkecil biar fokus ke barnya */
+        .apexcharts-xaxis-texts-g text, .apexcharts-yaxis-texts-g text { fill: #888 !important; font-size: 9px !important; }
         .apexcharts-tooltip { background: #1e1e1e !important; color: white !important; border: 1px solid #333 !important; }
     </style>
 </head>
@@ -153,34 +154,47 @@
                 series: [{ data: ohlcData }],
                 chart: {
                     type: 'candlestick',
-                    height: 280,
+                    height: 300,
                     toolbar: { show: false },
                     background: 'transparent',
-                    zoom: { enabled: true }
+                    zoom: { enabled: true },
+                    sparkline: { enabled: false }
                 },
                 xaxis: {
                     type: 'datetime',
                     labels: { 
                         datetimeFormatter: { day: 'dd MMM' },
-                        style: { fontSize: '10px' } 
-                    }
+                        style: { fontSize: '9px' } 
+                    },
+                    axisBorder: { show: false },
+                    axisTicks: { show: false }
                 },
                 yaxis: {
                     labels: { 
-                        // Bos, format 'k' sudah dihapus, nominal muncul utuh sekarang
                         formatter: val => val.toLocaleString('id-ID'),
-                        style: { fontSize: '10px' } 
-                    }
+                        style: { fontSize: '9px' } 
+                    },
+                    opposite: true // Biar harga di kanan ala TradingView
                 },
                 plotOptions: {
                     candlestick: {
-                        colors: { upward: '#10b981', downward: '#ef4444' },
+                        colors: { 
+                            upward: '#26a69a', // Hijau TradingView
+                            downward: '#ef5350' // Merah TradingView
+                        },
                         wick: { useFillColor: true },
-                        columnWidth: '35%' // Lilin tetap langsing pro
+                        columnWidth: '15%' // INI YANG BIKIN SLIM PERSIS GAMBAR BOS!
                     }
                 },
-                stroke: { width: 1 },
-                grid: { borderColor: '#333', strokeDashArray: 4 },
+                stroke: { 
+                    width: 1,
+                    colors: ['#333'] 
+                },
+                grid: { 
+                    borderColor: '#2b2b2b', 
+                    strokeDashArray: 2,
+                    xaxis: { lines: { show: true } }
+                },
                 tooltip: {
                     theme: 'dark',
                     x: { format: 'dd MMM yyyy' }
