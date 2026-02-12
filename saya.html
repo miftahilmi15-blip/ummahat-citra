@@ -99,7 +99,7 @@
             cursor: pointer;
         }
         .menu-item:last-child { border-bottom: none; }
-        .menu-item:active { background: #f9f9f9; }
+        .menu-item:active { background: #f9f9f9; transform: scale(0.98); }
         
         .menu-left { display: flex; align-items: center; gap: 15px; }
         .menu-left i { width: 20px; font-size: 18px; color: var(--dana-blue); }
@@ -125,9 +125,23 @@
             background: white; display: flex; justify-content: space-around; align-items: center;
             border-top: 1px solid #eee; z-index: 1000;
         }
-        .nav-item { text-align: center; color: #888; font-size: 10px; flex: 1; }
+        .nav-item { text-align: center; color: #888; font-size: 10px; flex: 1; cursor: pointer; }
         .nav-item.active { color: var(--dana-blue); }
         .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
+        
+        .pay-btn { 
+            width: 55px; height: 55px; 
+            background: var(--dana-blue); 
+            border-radius: 50%; 
+            margin-top: -35px; 
+            border: 5px solid var(--bg-light); 
+            display: flex; align-items: center; justify-content: center; 
+            color: white; font-size: 22px; 
+            box-shadow: 0 4px 10px rgba(16, 142, 233, 0.3); 
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .pay-btn:active { transform: scale(0.9); }
     </style>
 </head>
 <body>
@@ -172,10 +186,6 @@
                 <div class="menu-left"><i class="fas fa-shield-alt"></i><span>PIN & Biometrik</span></div>
                 <div class="menu-right">Aktif <i class="fas fa-chevron-right"></i></div>
             </div>
-            <div class="menu-item">
-                <div class="menu-left"><i class="fas fa-envelope"></i><span>Email & Notifikasi</span></div>
-                <div class="menu-right"><i class="fas fa-chevron-right"></i></div>
-            </div>
         </div>
 
         <p style="font-size: 11px; font-weight: 700; color: #888; margin: 0 0 10px 10px;">DASHBOARD ADMIN</p>
@@ -185,35 +195,39 @@
                 <div class="menu-right"><i class="fas fa-chevron-right"></i></div>
             </div>
             <div class="menu-item">
-                <div class="menu-left"><i class="fas fa-users-cog"></i><span>Kelola Admin</span></div>
-                <div class="menu-right">3 Orang <i class="fas fa-chevron-right"></i></div>
-            </div>
-            <div class="menu-item">
                 <div class="menu-left"><i class="fas fa-cloud-download-alt"></i><span>Export Data (Excel)</span></div>
                 <div class="menu-right"><i class="fas fa-chevron-right"></i></div>
             </div>
         </div>
 
-        <div class="logout-btn" onclick="alert('Keluar Sistem...')">
+        <div class="logout-btn" onclick="confirmLogout()">
             KELUAR APLIKASI
         </div>
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item" onclick="location.href='index.html'"><i class="fas fa-home"></i> Beranda</div>
-        <div class="nav-item"><i class="fas fa-history"></i> Aktivitas</div>
+        <div class="nav-item" onclick="location.href='index.html'">
+            <i class="fas fa-home"></i> Beranda
+        </div>
+        <div class="nav-item" onclick="location.href='aktivitas.html'">
+            <i class="fas fa-history"></i> Aktivitas
+        </div>
         <div style="flex:1; display:flex; justify-content:center;">
-            <div style="width:55px; height:55px; background:var(--dana-blue); border-radius:50%; margin-top:-35px; border:5px solid var(--bg-light); display:flex; align-items:center; justify-content:center; color:white; font-size:22px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+            <div class="pay-btn" onclick="location.href='kartu.html'">
                 <i class="fas fa-qrcode"></i>
             </div>
         </div>
-        <div class="nav-item"><i class="fas fa-wallet"></i> Dompet</div>
-        <div class="nav-item active"><i class="fas fa-user-circle"></i> Saya</div>
+        <div class="nav-item" onclick="location.href='dompet.html'">
+            <i class="fas fa-wallet"></i> Dompet
+        </div>
+        <div class="nav-item active" onclick="location.href='saya.html'">
+            <i class="fas fa-user-circle"></i> Saya
+        </div>
     </div>
 
     <script>
-        // Ambil saldo dari localStorage yang sama dengan index.html
-        window.onload = () => {
+        // Fungsi Sinkronisasi Saldo
+        function syncProfileData() {
             let dataRaw = localStorage.getItem('kas_ledger');
             let listKas = dataRaw ? JSON.parse(dataRaw) : [];
             let masuk = 0; let keluar = 0;
@@ -226,7 +240,15 @@
 
             let total = masuk - keluar;
             document.getElementById('total-impact').innerText = "Rp " + total.toLocaleString('id-ID');
-        };
+        }
+
+        function confirmLogout() {
+            if(confirm("Apakah Anda yakin ingin keluar?")) {
+                location.href='index.html';
+            }
+        }
+
+        window.onload = syncProfileData;
     </script>
 </body>
 </html>
