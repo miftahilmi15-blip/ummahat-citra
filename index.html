@@ -18,6 +18,16 @@
             --text-gray: #888888;
             --kaldik-color: #ff4757; /* Warna khas kalender */
         }
+        .menu-item:active {
+    transform: scale(0.9);
+    transition: 0.1s;
+}
+.icon-circle {
+    transition: transform 0.2s ease;
+}
+.menu-item:hover .icon-circle {
+    transform: rotate(5deg) scale(1.1);
+}
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg-light); color: var(--text-dark); overflow-x: hidden; padding-bottom: 80px; }
