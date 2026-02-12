@@ -4,10 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pohon Jariyah</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
 body{background:#eef3f7;height:100vh;overflow:hidden}
 
 /* ===== SCENE ===== */
@@ -18,48 +17,31 @@ body{background:#eef3f7;height:100vh;overflow:hidden}
   justify-content:center;
   align-items:flex-end;
   position:relative;
+  transition:1s;
+}
+
+/* Wrapper untuk efek tumbuh */
+.tree-wrapper{
   overflow:hidden;
-  transition:background 1s ease;
-}
-
-/* ===== POHON ===== */
-.tree{
-  position:relative;
+  transition:1s ease;
   display:flex;
-  flex-direction:column;
-  align-items:center;
-  margin-bottom:20px;
-}
-
-/* BATANG */
-.trunk{
-  width:28px;
-  height:110px;
-  background:#6D4C41;
-  border-radius:8px;
-  transition:height .6s ease;
-  z-index:2;
-}
-
-/* KANOPI */
-.leaves{
-  position:relative;
-  display:flex;
-  justify-content:center;
   align-items:flex-end;
-  margin-bottom:-35px;
+  justify-content:center;
 }
 
-.canopy{
-  width:170px;
-  height:130px;
-  background:#66BB6A;
-  border-radius:50%;
-  transition:all .6s ease;
-  box-shadow:inset -10px -10px 20px rgba(0,0,0,.08);
+/* Gambar pohon */
+.tree-img{
+  width:320px;
+  transition:1s ease;
+  transform-origin:bottom center;
 }
 
-/* RUMPUT */
+/* Glow milestone */
+.glow{
+  filter:drop-shadow(0 0 20px rgba(255,255,200,0.8));
+}
+
+/* Tanah */
 .grass{
   position:absolute;
   bottom:0;
@@ -69,38 +51,24 @@ body{background:#eef3f7;height:100vh;overflow:hidden}
 }
 
 /* ===== UI ===== */
-.ui-panel{
+.panel{
   height:40vh;
   background:white;
   border-radius:30px 30px 0 0;
   margin-top:-30px;
-  padding:25px;
+  padding:24px;
   text-align:center;
   box-shadow:0 -10px 25px rgba(0,0,0,.08);
 }
 
-.stats-card{
-  background:#f7f9fb;
-  padding:15px;
-  border-radius:20px;
-  margin-bottom:20px;
-}
-
-.btn-siram{
+.btn{
   width:100%;
-  padding:18px;
+  padding:16px;
   background:linear-gradient(to right,#4CAF50,#2E7D32);
-  color:white;
   border:none;
-  border-radius:50px;
-  font-size:16px;
+  color:white;
   font-weight:700;
-  cursor:pointer;
-  transition:.3s;
-}
-
-.btn-siram:active{
-  transform:scale(.96);
+  border-radius:40px;
 }
 </style>
 </head>
@@ -108,69 +76,69 @@ body{background:#eef3f7;height:100vh;overflow:hidden}
 <body>
 
 <div id="scene">
-  <div class="tree">
-    <div class="leaves">
-      <div class="canopy" id="canopy"></div>
-    </div>
-    <div class="trunk" id="trunk"></div>
+  <div class="tree-wrapper" id="treeWrapper">
+    <img src="tree.png" id="treeImg" class="tree-img">
   </div>
   <div class="grass"></div>
 </div>
 
-<div class="ui-panel">
-  <h3 style="margin-bottom:10px;">Pohon Jariyah</h3>
-  <div class="stats-card">
-    <p style="color:#777;font-size:13px;">Total Sedekah Anda</p>
-    <h2 style="color:#2E7D32;">Rp <span id="total-val">0</span></h2>
-  </div>
-  <button class="btn-siram" onclick="location.href='kartu.html'">
-    <i class="fas fa-tint"></i> SIRAM SEDEKAH SEKARANG
-  </button>
+<div class="panel">
+  <h3>Pohon Jariyah</h3>
+  <p>Total Sedekah</p>
+  <h2>Rp <span id="total">0</span></h2>
+  <br>
+  <button class="btn" onclick="location.href='kartu.html'">💧 Siram Sedekah</button>
 </div>
 
 <script>
 function loadProgress(){
-  let dataRaw = localStorage.getItem('kas_data');
-  let listKas = dataRaw ? JSON.parse(dataRaw) : [];
-  let total = 0;
+  let data = JSON.parse(localStorage.getItem('kas_data') || '[]');
 
-  listKas.forEach(t=>{
-    if(t.type==='masuk') total += parseInt(t.amount);
+  let total = 0;
+  let count = 0;
+
+  data.forEach(t=>{
+    if(t.type === 'masuk'){
+      total += parseInt(t.amount);
+      count++;
+    }
   });
 
-  document.getElementById("total-val").innerText = total.toLocaleString();
-  updateTree(total);
+  document.getElementById("total").innerText = total.toLocaleString();
+  growTree(total, count);
 }
 
-function updateTree(total){
-  const trunk = document.getElementById("trunk");
-  const canopy = document.getElementById("canopy");
+function growTree(total, count){
+  const tree = document.getElementById("treeImg");
+  const wrapper = document.getElementById("treeWrapper");
   const scene = document.getElementById("scene");
 
-  /* Tinggi batang */
-  let trunkHeight = 110 + Math.sqrt(total)/4;
-  trunk.style.height = trunkHeight + "px";
+  /* ===== 1. REVEAL HEIGHT (tumbuh dari bawah) ===== */
+  let revealHeight = 120 + Math.sqrt(total)/2;
+  if(revealHeight > 420) revealHeight = 420;
+  wrapper.style.height = revealHeight + "px";
 
-  /* Besar kanopi */
-  let size = 170 + Math.sqrt(total)/3;
-  canopy.style.width = size + "px";
-  canopy.style.height = size*0.75 + "px";
+  /* ===== 2. SCALE HALUS ===== */
+  let scale = 0.7 + Math.sqrt(total)/8000;
+  if(scale > 1.15) scale = 1.15;
+  tree.style.transform = `scale(${scale})`;
 
-  /* Level visual */
-  let level = 1;
-  if(total > 500000) level = 2;
-  if(total > 2000000) level = 3;
-  if(total > 5000000) level = 4;
-  if(total > 10000000) level = 5;
+  /* ===== 3. KESEHATAN (brightness dari konsistensi) ===== */
+  let health = Math.min(count*0.05, 0.4);
+  tree.style.filter = `brightness(${0.85 + health})`;
 
-  /* Warna per level */
-  if(level==1) canopy.style.background="#81C784";
-  if(level==2) canopy.style.background="#66BB6A";
-  if(level==3) canopy.style.background="#43A047";
-  if(level==4) canopy.style.background="#2E7D32";
-  if(level==5){
-    canopy.style.background="gold";
-    scene.style.background="linear-gradient(to top,#2E7D32,#FFD54F)";
+  /* ===== 4. LEVEL ENVIRONMENT ===== */
+  if(total > 10000000){
+    scene.style.background="linear-gradient(to top,#1B5E20,#FFD54F)";
+    tree.classList.add("glow");
+  } 
+  else if(total > 3000000){
+    scene.style.background="linear-gradient(to top,#2E7D32,#90CAF9)";
+    tree.classList.remove("glow");
+  } 
+  else{
+    scene.style.background="linear-gradient(to top,#4CAF50,#90CAF9)";
+    tree.classList.remove("glow");
   }
 }
 
