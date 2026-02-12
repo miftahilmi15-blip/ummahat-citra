@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kaldik Fix Sabtu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/locale/id.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/xsoh/moment-hijri@master/moment-hijri.js"></script>
+
+    <style>
+        :root { --dana-blue: #108ee9; --holiday: #eb4d4b; --bg: #f4f7fa; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body { background: var(--bg); padding-bottom: 50px; }
+        header { background: var(--dana-blue); padding: 50px 20px 90px; text-align: center; border-radius: 0 0 40px 40px; }
+        .title { font-family: 'Montserrat'; color: #fff; text-transform: uppercase; font-size: 24px; }
+
+        main { max-width: 450px; margin: -50px auto 0; padding: 0 10px; }
+
+        .card { background: #fff; border-radius: 30px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        
+        /* NAVIGASI */
+        .nav-month { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 0 10px; }
+        .nav-month h2 { color: var(--dana-blue); font-weight: 800; font-size: 20px; }
+
+        /* GRID FIX: Pakai Table Layout agar 7 kolom presisi mati */
+        .calendar-wrapper { width: 100%; display: table; table-layout: fixed; border-spacing: 5px; }
+        .cal-row { display: table-row; }
+        
+        .cal-cell { 
+            display: table-cell; 
+            vertical-align: middle;
+            text-align: center;
+            height: 55px; /* Kunci tinggi biar simetris */
+            border-radius: 12px;
+            background: #f8fafc;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .header-cell { 
+            display: table-cell; 
+            text-align: center; 
+            font-weight: 800; 
+            font-size: 11px; 
+            color: #b2bec3; 
+            padding-bottom: 15px;
+            text-transform: uppercase;
+        }
+        .header-cell.sun { color: var(--holiday); }
+
+        /* Status */
+        .cal-cell span { font-size: 16px; font-weight: 700; display: block; line-height: 1; }
+        .cal-cell .hijri { font-size: 9px; font-weight: 400; color: #95a5a6; margin-top: 3px; }
+        
+        .is-sun { color: var(--holiday); background: #fff5f5; }
+        .is-today { background: var(--dana-blue) !important; color: #fff !important; }
+        .is-today .hijri { color: #d1e9ff; }
+        
+        .dot { width: 4px; height: 4px; background: var(--holiday); border-radius: 50%; position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); }
+
+        /* MODAL */
+        #pop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 99; justify-content: center; align-items: center; }
+        .pop-card { background: #fff; padding: 30px; border-radius: 30px; width: 85%; text-align: center; }
+        .pop-btn { background: var(--dana-blue); color: #fff; border: none; padding: 12px; width: 100%; border-radius: 15px; margin-top: 20px; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+<header><h1 class="title">Kaldik Pro</h1></header>
+
+<main>
+    <div class="card">
+        <div class="nav-month">
+            <i class="fas fa-chevron-left" onclick="move(-1)" style="cursor:pointer; color:var(--dana-blue)"></i>
+            <h2 id="mTitle">Januari 2026</h2>
+            <i class="fas fa-chevron-right" onclick="move(1)" style="cursor:pointer; color:var(--dana-blue)"></i>
+        </div>
+        
+        <div class="calendar-wrapper" id="calGrid"></div>
+    </div>
+</main>
+
+<div id="pop">
+    <div class="pop-card">
+        <h3 id="pTgl" style="color:var(--dana-blue)"></h3>
+        <p id="pHij" style="color:#95a5a6; margin:5px 0 15px"></p>
+        <p id="pKet" style="font-weight:700"></p>
+        <button class="pop-btn" onclick="document.getElementById('pop').style.display='none'">TUTUP</button>
+    </div>
+</div>
+
+<script>
+    moment.locale('id');
+    let vDate = moment();
+    let holidays = {};
+
+    async function getApi() {
+        try {
+            // API Nager Date (Stabil & No CORS)
+            const res = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${vDate.year()}/ID`);
+            const data = await res.json();
+            holidays = {}; // Reset
+            data.forEach(h => { holidays[h.date] = h.localName; });
+            render();
+        } catch(e) { render(); }
+    }
+
+    function render() {
+        const grid = document.getElementById('calGrid');
+        grid.innerHTML = '';
+        document.getElementById('mTitle').innerText = vDate.format('MMMM YYYY');
+
+        // 1. Header Hari (Sen - Sab)
+        const headRow = document.createElement('div');
+        headRow.className = 'cal-row';
+        ['Min','Sen','Sel','Rab','Kam','Jum','Sab'].forEach((h, i) => {
+            headRow.innerHTML += `<div class="header-cell ${i===0?'sun':''}">${h}</div>`;
+        });
+        grid.appendChild(headRow);
+
+        // 2. Isi Tanggal
+        const startDay = vDate.clone().startOf('month').day();
+        const daysInMonth = vDate.daysInMonth();
+        let currentDay = 1;
+        
+        for (let r = 0; r < 6; r++) { // Maks 6 baris
+            const row = document.createElement('div');
+            row.className = 'cal-row';
+            
+            for (let c = 0; c < 7; c++) {
+                const cell = document.createElement('div');
+                cell.className = 'cal-cell';
+                
+                const dayIdx = r * 7 + c;
+                
+                if (dayIdx >= startDay && currentDay <= daysInMonth) {
+                    const m = vDate.clone().date(currentDay);
+                    const key = m.format('YYYY-MM-DD');
+                    const isSun = c === 0;
+                    const isToday = moment().isSame(m, 'day');
+                    const libur = holidays[key];
+
+                    if (isSun || libur) cell.classList.add('is-sun');
+                    if (isToday) cell.classList.add('is-today');
+
+                    cell.innerHTML = `<span>${currentDay}</span><span class="hijri">${m.format('iD')}</span>`;
+                    if (libur) cell.innerHTML += `<div class="dot"></div>`;
+                    
+                    const msg = libur || (isSun ? "Libur Pekanan" : "KBM Efektif");
+                    cell.onclick = () => {
+                        document.getElementById('pTgl').innerText = m.format('DD MMMM YYYY');
+                        document.getElementById('pHij').innerText = m.format('iD iMMMM iYYYY') + ' H';
+                        document.getElementById('pKet').innerText = msg;
+                        document.getElementById('pop').style.display = 'flex';
+                    };
+                    currentDay++;
+                }
+                row.appendChild(cell);
+            }
+            grid.appendChild(row);
+            if (currentDay > daysInMonth) break;
+        }
+    }
+
+    function move(n) { vDate.add(n, 'month'); getApi(); }
+    window.onload = getApi;
+</script>
+</body>
+</html>
