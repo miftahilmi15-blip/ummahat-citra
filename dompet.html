@@ -51,7 +51,6 @@
 
         .btn-back { color: var(--dana-blue); text-decoration: none; font-size: 18px; }
         
-        /* Font angka di sumbu grafik diperkecil biar fokus ke barnya */
         .apexcharts-xaxis-texts-g text, .apexcharts-yaxis-texts-g text { fill: #888 !important; font-size: 9px !important; }
         .apexcharts-tooltip { background: #1e1e1e !important; color: white !important; border: 1px solid #333 !important; }
     </style>
@@ -61,41 +60,31 @@
     <div class="header-analisis">
         <a href="index.html" class="btn-back"><i class="fas fa-chevron-left"></i> Market</a>
         <div style="text-align: right;">
-            <p style="font-size: 10px; color: #10b981;">● LIVE ANALYSIS</p>
+            <p style="font-size: 10px; color: #10b981;">● TRANSACTION FLOW</p>
             <h3 id="top-balance" style="font-size: 18px;">Rp 0</h3>
         </div>
     </div>
 
     <div class="main-container">
-        
         <div class="chart-box">
             <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
                     <span style="font-weight: 600; font-size: 14px; color: #fff;">KAS/IDR</span>
-                    <span style="font-size: 10px; background: #333; padding: 2px 5px; border-radius: 4px; margin-left: 5px;">1D</span>
+                    <span style="font-size: 10px; background: #333; padding: 2px 5px; border-radius: 4px; margin-left: 5px;">LIVE</span>
                 </div>
-                <span style="font-size: 11px; color: #888;" id="date-range">Analisis Waktu</span>
+                <span style="font-size: 11px; color: #888;" id="date-range">Real-time Candles</span>
             </div>
-            
             <div id="crypto-candle-chart"></div>
         </div>
 
         <div class="stats-grid">
             <div class="stat-card">
-                <p>Volume (Trx)</p>
+                <p>Total Trx</p>
                 <h2 id="vol-count">0</h2>
             </div>
             <div class="stat-card" style="border-left-color: #10b981;">
-                <p>All-Time High</p>
+                <p>Current Balance</p>
                 <h2 id="ath-val">Rp 0</h2>
-            </div>
-            <div class="stat-card" style="border-left-color: #ef4444;">
-                <p>Support Level</p>
-                <h2 id="atl-val">Rp 0</h2>
-            </div>
-            <div class="stat-card" style="border-left-color: #f59e0b;">
-                <p>Avg. Infaq</p>
-                <h2 id="avg-val">Rp 0</h2>
             </div>
         </div>
     </div>
@@ -109,96 +98,67 @@
             const data = getLedger();
             let currentBalance = 0;
             let ohlcData = [];
-            let balances = [0];
 
-            const grouped = {};
-            data.forEach(t => {
-                const date = t.tanggal || new Date().toISOString().split('T')[0];
-                if (!grouped[date]) grouped[date] = [];
-                grouped[date].push(t);
-            });
-
-            Object.keys(grouped).sort().forEach(date => {
+            // KUNCINYA DI SINI: Mapping per transaksi, bukan per hari
+            data.forEach((trx, index) => {
+                let nominal = parseInt(trx.nominal) || 0;
                 let open = currentBalance;
-                let high = open;
-                let low = open;
                 
-                grouped[date].forEach(trx => {
-                    let nominal = parseInt(trx.nominal) || 0;
-                    if (trx.tipe === 'masuk') currentBalance += nominal;
-                    else currentBalance -= nominal;
-                    
-                    if (currentBalance > high) high = currentBalance;
-                    if (currentBalance < low) low = currentBalance;
-                });
-
+                if (trx.tipe === 'masuk') {
+                    currentBalance += nominal;
+                } else {
+                    currentBalance -= nominal;
+                }
+                
                 let close = currentBalance;
-                balances.push(currentBalance);
+                // High dan Low kita buat dinamis per transaksi
+                let high = Math.max(open, close);
+                let low = Math.min(open, close);
 
                 ohlcData.push({
-                    x: new Date(date).getTime(),
+                    // Gunakan index atau timestamp unik agar setiap transaksi punya candle sendiri
+                    x: trx.tanggal ? new Date(trx.tanggal).getTime() + index : new Date().getTime() + index,
                     y: [open, high, low, close]
                 });
             });
 
             document.getElementById('top-balance').innerText = "Rp " + currentBalance.toLocaleString('id-ID');
-            document.getElementById('ath-val').innerText = "Rp " + Math.max(...balances).toLocaleString('id-ID');
-            document.getElementById('atl-val').innerText = "Rp " + Math.min(...balances).toLocaleString('id-ID');
-            document.getElementById('vol-count').innerText = data.length + " Trx";
-            
-            const sum = data.filter(x => x.tipe === 'masuk').reduce((a, b) => a + (parseInt(b.nominal) || 0), 0);
-            const avg = sum / (data.filter(x => x.tipe === 'masuk').length || 1);
-            document.getElementById('avg-val').innerText = "Rp " + Math.round(avg).toLocaleString('id-ID');
+            document.getElementById('ath-val').innerText = "Rp " + currentBalance.toLocaleString('id-ID');
+            document.getElementById('vol-count').innerText = data.length;
 
             var options = {
                 series: [{ data: ohlcData }],
                 chart: {
                     type: 'candlestick',
-                    height: 300,
+                    height: 350,
                     toolbar: { show: false },
                     background: 'transparent',
-                    zoom: { enabled: true },
-                    sparkline: { enabled: false }
+                    zoom: { enabled: true }
                 },
                 xaxis: {
                     type: 'datetime',
-                    labels: { 
-                        datetimeFormatter: { day: 'dd MMM' },
-                        style: { fontSize: '9px' } 
-                    },
-                    axisBorder: { show: false },
-                    axisTicks: { show: false }
+                    labels: { style: { fontSize: '9px' } }
                 },
                 yaxis: {
                     labels: { 
                         formatter: val => val.toLocaleString('id-ID'),
                         style: { fontSize: '9px' } 
                     },
-                    opposite: true // Biar harga di kanan ala TradingView
+                    opposite: true
                 },
                 plotOptions: {
                     candlestick: {
                         colors: { 
-                            upward: '#26a69a', // Hijau TradingView
-                            downward: '#ef5350' // Merah TradingView
+                            upward: '#26a69a', 
+                            downward: '#ef5350' 
                         },
                         wick: { useFillColor: true },
-                        columnWidth: '15%' // INI YANG BIKIN SLIM PERSIS GAMBAR BOS!
+                        columnWidth: '20%' // Slim bar
                     }
                 },
-                stroke: { 
-                    width: 1,
-                    colors: ['#333'] 
-                },
-                grid: { 
-                    borderColor: '#2b2b2b', 
-                    strokeDashArray: 2,
-                    xaxis: { lines: { show: true } }
-                },
-                tooltip: {
-                    theme: 'dark',
-                    x: { format: 'dd MMM yyyy' }
-                }
+                stroke: { width: 1 },
+                grid: { borderColor: '#2b2b2b' },
+                tooltip: { theme: 'dark' }
             };
 
             var chart = new ApexCharts(document.querySelector("#crypto-candle-chart"), options);
