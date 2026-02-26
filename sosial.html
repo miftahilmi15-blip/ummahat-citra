@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sosial & Majelis Live | Master Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <style>
+        :root {
+            --dana-blue: #108ee9;
+            --bg-light: #f5f5f5;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg-light); padding-bottom: 20px; }
+
+        /* HEADER */
+        .header-sosial {
+            background: var(--dana-blue);
+            padding: 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* ZOOM VIDEO AREA */
+        .video-container {
+            width: 100%;
+            background: #000;
+            aspect-ratio: 16 / 9;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #555;
+            background: #1a1a1a;
+        }
+
+        /* AI TRANSCRIBER LAYER */
+        .transcriber-box {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px;
+            border-radius: 8px;
+            min-height: 50px;
+            border-left: 3px solid #ffeb3b;
+            display: none; /* Hidden by default */
+        }
+
+        .transcriber-text {
+            color: #fff;
+            font-size: 13px;
+            font-style: italic;
+            line-height: 1.4;
+        }
+
+        /* LIVE CONTROLS */
+        .live-controls {
+            display: flex;
+            justify-content: space-around;
+            background: var(--white);
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .ctrl-btn {
+            text-align: center;
+            font-size: 11px;
+            color: #444;
+            cursor: pointer;
+        }
+
+        .ctrl-btn i {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 5px;
+            color: var(--dana-blue);
+        }
+
+        .ctrl-btn.active i { color: #ff4757; }
+
+        /* FEED SOSIAL */
+        .feed-container { padding: 15px; }
+        .card-post {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .user-info { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .user-info img { width: 35px; height: 35px; border-radius: 50%; background: #ddd; }
+        .user-name { font-size: 13px; font-weight: 600; }
+        .post-time { font-size: 10px; color: #888; }
+
+        .post-content { font-size: 13px; color: #444; margin-bottom: 10px; }
+
+        .btn-join {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* FLOATING ACTION */
+        .fab-ask {
+            position: fixed;
+            bottom: 30px;
+            right: 20px;
+            background: #ff4757;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+            cursor: pointer;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-sosial">
+        <i class="fas fa-arrow-left" onclick="history.back()"></i>
+        <h3 style="font-size: 18px; font-weight: 700;">Majelis Sosial Live</h3>
+    </div>
+
+    <div class="video-container">
+        <div class="video-placeholder" id="zoom-frame">
+            <i class="fas fa-video-slash fa-3x" style="margin-bottom: 10px;"></i>
+            <p style="font-size: 14px;">Kajian Belum Dimulai</p>
+        </div>
+        
+        <div class="transcriber-box" id="ai-box">
+            <div class="transcriber-text" id="ai-text">
+                [AI Transcriber Aktif] Mendengarkan suara ustadz...
+            </div>
+        </div>
+    </div>
+
+    <div class="live-controls">
+        <div class="ctrl-btn" onclick="startZoom()"><i class="fas fa-play-circle"></i>Join Zoom</div>
+        <div class="ctrl-btn" id="btn-cc" onclick="toggleAI()"><i class="fas fa-closed-captioning"></i>AI Subtitle</div>
+        <div class="ctrl-btn" onclick="location.href='infaq.html'"><i class="fas fa-heart"></i>Infaq Live</div>
+        <div class="ctrl-btn" onclick="alert('Link disalin!')"><i class="fas fa-share-alt"></i>Bagikan</div>
+    </div>
+
+    <div class="feed-container">
+        <button class="btn-join" onclick="startZoom()">MASUK MAJELIS SEKARANG</button>
+
+        <h4 style="margin: 20px 0 10px; font-size: 14px; color: #555;">DISKUSI JAMAAH</h4>
+        
+        <div class="card-post">
+            <div class="user-info">
+                <img src="https://ui-avatars.com/api/?name=Hamba+Allah" alt="ava">
+                <div>
+                    <div class="user-name">Hamba Allah</div>
+                    <div class="post-time">2 menit yang lalu</div>
+                </div>
+            </div>
+            <p class="post-content">MasyaAllah, penjelasan ustadz soal sedekah subuh sangat menyentuh. Izin bertanya ustadz...</p>
+        </div>
+    </div>
+
+    <div class="fab-ask" onclick="alert('Fitur Tanya Ustadz Terbuka!')">
+        <i class="fas fa-comment-medical fa-lg"></i>
+    </div>
+
+    <script>
+        let aiActive = false;
+        
+        function startZoom() {
+            const frame = document.getElementById('zoom-frame');
+            frame.innerHTML = `
+                <iframe src="https://zoom.us/wc/MEETING_ID/join?prefer=1&un=TUFTVEVSX0FETUlO" 
+                width="100%" height="100%" frameborder="0" allow="microphone; camera"></iframe>
+            `;
+            alert("Menyambung ke server Zoom Yayasan...");
+        }
+
+        function toggleAI() {
+            aiActive = !aiActive;
+            const box = document.getElementById('ai-box');
+            const btn = document.getElementById('btn-cc');
+            
+            if(aiActive) {
+                box.style.display = 'block';
+                btn.classList.add('active');
+                simulateAI();
+            } else {
+                box.style.display = 'none';
+                btn.classList.remove('active');
+            }
+        }
+
+        // SIMULASI AI TRANSCRIBER
+        function simulateAI() {
+            const texts = [
+                "Ustadz: Dan ketahuilah bahwa harta tidak akan berkurang karena sedekah...",
+                "Ustadz: Justru Allah akan menambah keberkahan dalam setiap rupiahnya...",
+                "Ustadz: Mari kita manfaatkan aplikasi ini untuk kebaikan bersama."
+            ];
+            let i = 0;
+            const interval = setInterval(() => {
+                if(!aiActive) clearInterval(interval);
+                document.getElementById('ai-text').innerText = texts[i % texts.length];
+                i++;
+            }, 4000);
+        }
+    </script>
+</body>
+</html>
