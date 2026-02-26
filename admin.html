@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Control Panel | Master Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <style>
+        :root {
+            --dana-blue: #108ee9;
+            --dana-dark: #0a7cc2;
+            --success: #27ae60;
+            --bg-light: #f5f5f5;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg-light); padding-bottom: 50px; }
+
+        .header-admin {
+            background: var(--dana-blue);
+            padding: 30px 20px;
+            color: white;
+            border-radius: 0 0 25px 25px;
+            margin-bottom: 20px;
+        }
+
+        .container { padding: 0 15px; }
+
+        .card-admin {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .card-admin h4 {
+            font-size: 14px;
+            color: var(--dana-blue);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 11px; color: #888; margin-bottom: 5px; font-weight: 600; }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 13px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--dana-blue); }
+
+        .btn-update {
+            background: var(--dana-blue);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-update:active { transform: scale(0.95); background: var(--dana-dark); }
+
+        .status-badge {
+            background: #e8f5e9;
+            color: #27ae60;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            float: right;
+        }
+
+        /* QUICK STATS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .stat-box i { font-size: 18px; color: var(--dana-blue); margin-bottom: 5px; }
+        .stat-box p { font-size: 10px; color: #888; }
+        .stat-box h5 { font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <div class="header-admin">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <i class="fas fa-arrow-left" onclick="location.href='index.html'"></i>
+            <h2 style="font-weight: 800; font-size: 20px;">MASTER CONTROL</h2>
+            <i class="fas fa-user-shield"></i>
+        </div>
+        <p style="font-size: 11px; opacity: 0.8; margin-top: 5px;">Kelola jadwal & link majelis secara real-time</p>
+    </div>
+
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-box">
+                <i class="fas fa-video"></i>
+                <p>Status Live</p>
+                <h5 id="stat-status">OFFLINE</h5>
+            </div>
+            <div class="stat-box">
+                <i class="fas fa-users"></i>
+                <p>Estimasi Jamaah</p>
+                <h5>1.2k+</h5>
+            </div>
+        </div>
+
+        <div class="card-admin">
+            <span class="status-badge" id="live-indicator">Ready</span>
+            <h4><i class="fas fa-link"></i> LINK ZOOM TERBARU</h4>
+            
+            <div class="form-group">
+                <label>TOPIK KAJIAN</label>
+                <input type="text" id="zoom-topic" placeholder="Contoh: Kajian Kitab Kuning">
+            </div>
+
+            <div class="form-group">
+                <label>LINK ZOOM (GABUNGAN / URL)</label>
+                <input type="text" id="zoom-url" placeholder="Paste link zoom disini...">
+            </div>
+
+            <div class="form-group">
+                <label>PASSWORD (OPSIONAL)</label>
+                <input type="text" id="zoom-pass" placeholder="miftah">
+            </div>
+
+            <button class="btn-update" onclick="pushUpdate()">
+                <i class="fas fa-paper-plane"></i> UPDATE KE JAMAAH
+            </button>
+        </div>
+
+        <div class="card-admin">
+            <h4><i class="fas fa-closed-captioning"></i> AI TRANSCRIBER</h4>
+            <div class="form-group">
+                <label>MODE TRANSKRIP</label>
+                <select id="ai-mode">
+                    <option value="id-ID">Bahasa Indonesia</option>
+                    <option value="ar-SA">Bahasa Arab (Coming Soon)</option>
+                    <option value="en-US">English</option>
+                </select>
+            </div>
+            <p style="font-size: 10px; color: #888; line-height: 1.4;">
+                *Pastikan Cloudflare Worker dalam kondisi aktif sebelum menyalakan fitur transkrip.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Load data lama saat buka halaman
+        window.onload = () => {
+            document.getElementById('zoom-topic').value = localStorage.getItem('zoom_topic') || "";
+            document.getElementById('zoom-url').value = localStorage.getItem('zoom_link_terbaru') || "";
+            document.getElementById('zoom-pass').value = localStorage.getItem('zoom_pass_terbaru') || "";
+        }
+
+        function pushUpdate() {
+            const topic = document.getElementById('zoom-topic').value;
+            const url = document.getElementById('zoom-url').value;
+            const pass = document.getElementById('zoom-pass').value;
+
+            if(!url) return alert("Link Zoom wajib diisi Bos!");
+
+            // SIMPAN DATA (Sementara pakai LocalStorage, nanti kita ganti Cloudflare KV)
+            localStorage.setItem('zoom_topic', topic);
+            localStorage.setItem('zoom_link_terbaru', url);
+            localStorage.setItem('zoom_pass_terbaru', pass);
+            localStorage.setItem('zoom_is_live', 'true');
+
+            // Efek loading simpel
+            const btn = document.querySelector('.btn-update');
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> MENGIRIM...';
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> BERHASIL DI-PUSH!';
+                btn.style.background = '#27ae60';
+                document.getElementById('stat-status').innerText = "ONLINE";
+                document.getElementById('stat-status').style.color = "#27ae60";
+                
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-paper-plane"></i> UPDATE KE JAMAAH';
+                    btn.style.background = '#108ee9';
+                }, 2000);
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
