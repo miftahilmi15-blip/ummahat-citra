@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mining Suara | Yayasan Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <style>
+        :root {
+            --neon-blue: #00d2ff;
+            --matrix-green: #00ff41;
+            --dark-bg: #0a0b10;
+            --panel-bg: #161b22;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: var(--dark-bg); 
+            color: #e6edf3; 
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* HEADER MINING */
+        .mining-header {
+            background: var(--panel-bg);
+            padding: 20px;
+            border-bottom: 2px solid var(--neon-blue);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-terminal {
+            font-family: 'Fira Code', monospace;
+            font-size: 10px;
+            color: var(--matrix-green);
+        }
+
+        /* DASHBOARD AREA */
+        .container { padding: 20px 15px; }
+
+        .mining-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--panel-bg);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #30363d;
+            text-align: center;
+        }
+
+        .stat-card i { color: var(--neon-blue); margin-bottom: 5px; }
+        .stat-card h5 { font-size: 10px; text-transform: uppercase; color: #8b949e; }
+        .stat-card p { font-family: 'Fira Code', monospace; font-size: 14px; font-weight: 700; }
+
+        /* POLL MINING CARD */
+        .poll-box {
+            background: var(--panel-bg);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+            position: relative;
+        }
+
+        .poll-question {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            border-left: 3px solid var(--matrix-green);
+            padding-left: 10px;
+        }
+
+        /* MINING OPTIONS */
+        .mine-option {
+            margin-bottom: 15px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-container {
+            height: 45px;
+            background: #0d1117;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #108ee9, var(--neon-blue));
+            transition: width 1.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+            position: relative;
+        }
+
+        /* Animasi garis-garis mining */
+        .progress-fill::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background-image: linear-gradient(-45deg, rgba(255,255,255,.1) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.1) 50%, rgba(255,255,255,.1) 75%, transparent 75%, transparent);
+            background-size: 50px 50px;
+            animation: move 2s linear infinite;
+        }
+
+        @keyframes move {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        .option-content {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            font-size: 12px;
+            font-family: 'Fira Code', monospace;
+            z-index: 2;
+        }
+
+        /* FOOTER CONSOLE */
+        .console-output {
+            margin-top: 20px;
+            background: #000;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Fira Code', monospace;
+            font-size: 9px;
+            color: var(--matrix-green);
+            height: 80px;
+            overflow-y: hidden;
+            border: 1px solid #333;
+        }
+
+        .btn-mine {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            background: transparent;
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+            font-family: 'Fira Code', monospace;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .btn-mine:active { background: var(--neon-blue); color: #000; }
+        .selected .progress-container { border-color: var(--matrix-green); }
+    </style>
+</head>
+<body>
+
+    <div class="mining-header">
+        <div>
+            <h4 style="color: var(--neon-blue); font-size: 16px;">POLLS_MINER_V1</h4>
+            <div class="status-terminal" id="terminal-status">STATUS: CONNECTED...</div>
+        </div>
+        <i class="fas fa-microchip fa-lg" style="color: var(--neon-blue);"></i>
+    </div>
+
+    <div class="container">
+        <div class="mining-stats">
+            <div class="stat-card">
+                <i class="fas fa-bolt"></i>
+                <h5>Hash Power</h5>
+                <p id="hash-rate">0.00 MH/s</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-cube"></i>
+                <h5>Blocks Voted</h5>
+                <p id="total-blocks">1,204</p>
+            </div>
+        </div>
+
+        <div class="poll-box">
+            <div class="poll-question">
+                [SYSTEM_QUERY]: Pilih Program Unggulan Ramadhan 2026?
+            </div>
+
+            <div id="options">
+                <div class="mine-option" onclick="selectOption(0)">
+                    <div class="progress-container">
+                        <div class="progress-fill" id="fill-0"></div>
+                        <div class="option-content">
+                            <span>01. IT_SANTRI_CAMP</span>
+                            <span id="val-0">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mine-option" onclick="selectOption(1)">
+                    <div class="progress-container">
+                        <div class="progress-fill" id="fill-1"></div>
+                        <div class="option-content">
+                            <span>02. QURAN_DIGITAL_HUB</span>
+                            <span id="val-1">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mine-option" onclick="selectOption(2)">
+                    <div class="progress-container">
+                        <div class="progress-fill" id="fill-2"></div>
+                        <div class="option-content">
+                            <span>03. SAHUR_ON_THE_WEB</span>
+                            <span id="val-2">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-mine" onclick="startMining()">EXECUTE_VOTE()</button>
+        </div>
+
+        <div class="console-output" id="console">
+            > Initializing blockchain connection...<br>
+            > Ready to mine hashrate...
+        </div>
+    </div>
+
+    <script>
+        let selected = -1;
+        let votes = [65, 42, 88];
+
+        function selectOption(idx) {
+            selected = idx;
+            document.querySelectorAll('.mine-option').forEach((el, i) => {
+                el.style.opacity = i === idx ? "1" : "0.5";
+            });
+            logConsole(`Option ${idx + 1} selected. Ready to hash.`);
+        }
+
+        function logConsole(msg) {
+            const c = document.getElementById('console');
+            c.innerHTML += `<br>> ${msg}`;
+            c.scrollTop = c.scrollHeight;
+        }
+
+        function startMining() {
+            if(selected === -1) return alert("Select block to mine!");
+            
+            logConsole("Starting vote mining...");
+            let hash = 0;
+            const interval = setInterval(() => {
+                hash += Math.random() * 5;
+                document.getElementById('hash-rate').innerText = hash.toFixed(2) + " MH/s";
+                if(hash > 50) {
+                    clearInterval(interval);
+                    finishMining();
+                }
+            }, 100);
+        }
+
+        function finishMining() {
+            logConsole("Block successfully mined!");
+            logConsole("Transaction hash: 0x" + Math.random().toString(16).substr(2, 8));
+            votes[selected]++;
+            renderResults();
+        }
+
+        function renderResults() {
+            const total = votes.reduce((a,b) => a+b, 0);
+            votes.forEach((v, i) => {
+                const p = Math.round((v/total) * 100);
+                document.getElementById(`fill-${i}`).style.width = p + "%";
+                document.getElementById(`val-${i}`).innerText = p + "%";
+            });
+        }
+
+        // Fake terminal effect
+        setInterval(() => {
+            const states = ["MINING...", "SYNCING...", "CONNECTED", "HASHING..."];
+            document.getElementById('terminal-status').innerText = "STATUS: " + states[Math.floor(Math.random()*states.length)];
+        }, 3000);
+
+        window.onload = renderResults;
+    </script>
+</body>
+</html>
