@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Inventaris & Lapor Kerusakan | Master Pro</title>
+    <title>Inventaris & Audit Kerusakan | Master Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
@@ -12,202 +12,150 @@
             --dana-blue: #108ee9;
             --white: #ffffff;
             --bg-light: #f5f5f5;
-            --success: #27ae60;
-            --warning: #f39c12;
             --danger: #e74c3c;
+            --success: #27ae60;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg-light); color: #333; padding-bottom: 80px; }
+        body { background: var(--bg-light); padding-bottom: 80px; }
 
         .header-inv {
-            background: var(--dana-blue);
-            padding: 30px 20px;
-            color: white;
-            border-radius: 0 0 25px 25px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            background: var(--dana-blue); padding: 30px 20px; color: white;
+            border-radius: 0 0 25px 25px; display: flex; align-items: center; gap: 15px;
         }
 
-        .tab-container {
-            display: flex;
-            background: white;
-            margin: -20px 20px 20px;
-            padding: 5px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            position: relative;
-            z-index: 100;
+        .container { padding: 0 15px; margin-top: 20px; }
+
+        /* CARD STATISTIK BULANAN */
+        .stat-bulanan {
+            background: linear-gradient(135deg, #108ee9, #0a7cc2);
+            border-radius: 20px; padding: 20px; color: white; margin-bottom: 20px;
+            box-shadow: 0 10px 20px rgba(16, 142, 233, 0.2);
         }
-        .tab-btn {
-            flex: 1; padding: 10px; text-align: center; font-size: 12px; font-weight: 700; border-radius: 12px; color: #888; cursor: pointer;
-        }
-        .tab-btn.active { background: var(--dana-blue); color: white; }
+        .stat-bulanan h3 { font-size: 12px; opacity: 0.8; text-transform: uppercase; }
+        .stat-bulanan p { font-size: 24px; font-weight: 800; margin-top: 5px; }
 
-        .container { padding: 0 15px; }
-
-        /* LIST ITEM */
-        .asset-card {
-            background: white; border-radius: 18px; padding: 15px; margin-bottom: 12px;
-            display: flex; align-items: center; gap: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-            border-left: 5px solid transparent;
-        }
-        .asset-card.kondisi-baik { border-left-color: var(--success); }
-        .asset-card.kondisi-rusak { border-left-color: var(--danger); }
-        .asset-card.kondisi-servis { border-left-color: var(--warning); }
-
-        .asset-icon {
-            width: 50px; height: 50px; background: #f0f7ff; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center; color: var(--dana-blue); font-size: 20px;
-        }
-
-        .asset-info { flex: 1; }
-        .asset-info h4 { font-size: 14px; font-weight: 700; }
-        .asset-info p { font-size: 10px; color: #888; }
-
-        .badge { font-size: 9px; padding: 2px 8px; border-radius: 4px; font-weight: 800; text-transform: uppercase; }
-        .bg-baik { background: #e8f5e9; color: var(--success); }
-        .bg-rusak { background: #ffebee; color: var(--danger); }
-        .bg-servis { background: #fff3e0; color: var(--warning); }
-
-        /* FORM LAPOR (KETIK) */
+        /* FORM LAPOR */
         .form-lapor {
-            background: white; padding: 20px; border-radius: 20px; margin-top: 20px;
+            background: white; padding: 20px; border-radius: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
-        .form-lapor h3 { font-size: 15px; margin-bottom: 15px; color: var(--dana-blue); display: flex; align-items: center; gap: 8px; }
+        .form-lapor h3 { font-size: 15px; margin-bottom: 15px; color: var(--dana-blue); }
         .form-group { margin-bottom: 15px; position: relative; }
         label { display: block; font-size: 10px; font-weight: 800; color: #888; margin-bottom: 5px; }
         
         input, textarea {
             width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 10px; font-size: 13px; outline: none; background: #fafafa;
         }
-        input:focus, textarea:focus { border-color: var(--dana-blue); background: #fff; }
 
         .btn-submit {
             background: var(--danger); color: white; border: none; width: 100%; padding: 15px;
             border-radius: 12px; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px;
         }
 
-        /* AUTO SUGGEST STYLE */
-        #suggestion-box {
-            position: absolute; background: white; width: 100%; border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1); z-index: 10; display: none; max-height: 150px; overflow-y: auto;
+        /* RIWAYAT LAPORAN */
+        .log-container { margin-top: 25px; }
+        .log-item {
+            background: white; padding: 15px; border-radius: 15px; margin-bottom: 10px;
+            border-left: 4px solid var(--danger); font-size: 12px;
         }
-        .suggest-item { padding: 10px 15px; font-size: 13px; border-bottom: 1px solid #f9f9f9; cursor: pointer; }
-        .suggest-item:hover { background: #f0f7ff; color: var(--dana-blue); }
-
+        .log-date { font-size: 9px; color: #aaa; font-weight: 700; margin-bottom: 5px; display: block; }
     </style>
 </head>
 <body>
 
     <div class="header-inv">
         <i class="fas fa-arrow-left" onclick="history.back()"></i>
-        <h2 style="font-weight: 800; font-size: 18px;">INVENTARIS ASET</h2>
-    </div>
-
-    <div class="tab-container">
-        <div class="tab-btn active" onclick="filterAset('semua', this)">Semua</div>
-        <div class="tab-btn" onclick="filterAset('rusak', this)">Rusak</div>
-        <div class="tab-btn" onclick="filterAset('servis', this)">Servis</div>
-    </div>
-
-    <div class="container" id="aset-list">
-        <div class="asset-card kondisi-baik">
-            <div class="asset-icon"><i class="fas fa-microphone-alt"></i></div>
-            <div class="asset-info">
-                <h4>Mic Wireless Shure</h4>
-                <p>KODE: INV-001 | Lokasi: Ruang Audio</p>
-                <span class="badge bg-baik">Kondisi Baik</span>
-            </div>
-        </div>
-
-        <div class="asset-card kondisi-rusak">
-            <div class="asset-icon"><i class="fas fa-car-side"></i></div>
-            <div class="asset-info">
-                <h4>Ambulans Yayasan</h4>
-                <p>KODE: INV-003 | Lokasi: Parkir</p>
-                <span class="badge bg-rusak">Rusak Berat</span>
-            </div>
-        </div>
+        <h2 style="font-weight: 800; font-size: 18px;">LAPOR KERUSAKAN</h2>
     </div>
 
     <div class="container">
+        <div class="stat-bulanan">
+            <h3 id="current-month">Total Kerusakan (Maret 2026)</h3>
+            <p id="total-count">0 Laporan</p>
+            <span style="font-size: 10px; opacity: 0.7;">*Data akan di-reset setiap awal bulan.</span>
+        </div>
+
         <div class="form-lapor">
-            <h3><i class="fas fa-tools"></i> Lapor Kerusakan</h3>
+            <h3><i class="fas fa-edit"></i> Form Input Data</h3>
             
             <div class="form-group">
-                <label>KETIK NAMA BARANG / KODE</label>
-                <input type="text" id="lapor-barang" placeholder="Contoh: Mic Shure atau INV-001" oninput="showSuggest(this.value)" autocomplete="off">
-                <div id="suggestion-box"></div>
+                <label>NAMA BARANG</label>
+                <input type="text" id="inp-barang" placeholder="Ketik nama barang...">
             </div>
 
             <div class="form-group">
                 <label>DETAIL KERUSAKAN</label>
-                <textarea id="lapor-detail" placeholder="Jelaskan apa yang rusak, Bos..."></textarea>
+                <textarea id="inp-detail" placeholder="Jelaskan kendalanya..."></textarea>
             </div>
 
-            <button class="btn-submit" onclick="kirimLaporan()">
-                <i class="fas fa-exclamation-triangle"></i> KIRIM LAPORAN
+            <button class="btn-submit" onclick="simpanLaporan()">
+                <i class="fas fa-save"></i> SIMPAN & CATAT WAKTU
             </button>
+        </div>
+
+        <div class="log-container">
+            <h4 style="font-size: 13px; margin-bottom: 10px; color: #666;">AKTIVITAS TERAKHIR</h4>
+            <div id="log-list">
+                </div>
         </div>
     </div>
 
     <script>
-        // Data Dummy untuk Saran Otomatis
-        const daftarAset = [
-            "Mic Wireless Shure",
-            "Ambulans Yayasan",
-            "AC Standing Utama",
-            "Laptop Admin ASUS",
-            "Sound System Aula",
-            "Proyektor Epson",
-            "Karpet Masjid Turki"
-        ];
+        // Inisialisasi Data dari LocalStorage
+        let laporanKerusakan = JSON.parse(localStorage.getItem('db_kerusakan')) || [];
 
-        function showSuggest(val) {
-            const box = document.getElementById('suggestion-box');
-            if (val.length < 1) {
-                box.style.display = 'none';
-                return;
-            }
-
-            const filtered = daftarAset.filter(a => a.toLowerCase().includes(val.toLowerCase()));
+        function simpanLaporan() {
+            const barang = document.getElementById('inp-barang').value;
+            const detail = document.getElementById('inp-detail').value;
             
-            if (filtered.length > 0) {
-                box.innerHTML = filtered.map(item => `<div class="suggest-item" onclick="selectSuggest('${item}')">${item}</div>`).join('');
-                box.style.display = 'block';
-            } else {
-                box.style.display = 'none';
-            }
+            if(!barang || !detail) return alert("Lengkapi data dulu Bos!");
+
+            const sekarang = new Date();
+            const dataBaru = {
+                id: Date.now(),
+                nama: barang,
+                deskripsi: detail,
+                jam: sekarang.getHours().toString().padStart(2, '0') + ":" + sekarang.getMinutes().toString().padStart(2, '0'),
+                tanggal: sekarang.getDate(),
+                bulan: sekarang.getMonth() + 1, // Bulan dimulai dari 0
+                tahun: sekarang.getFullYear(),
+                fullDate: sekarang.toLocaleString('id-ID')
+            };
+
+            laporanKerusakan.push(dataBaru);
+            localStorage.setItem('db_kerusakan', JSON.stringify(laporanKerusakan));
+            
+            alert("Berhasil dicatat pada jam " + dataBaru.jam);
+            renderData();
+            
+            // Clear input
+            document.getElementById('inp-barang').value = "";
+            document.getElementById('inp-detail').value = "";
         }
 
-        function selectSuggest(item) {
-            document.getElementById('lapor-barang').value = item;
-            document.getElementById('suggestion-box').style.display = 'none';
+        function renderData() {
+            const list = document.getElementById('log-list');
+            const totalCountText = document.getElementById('total-count');
+            const now = new Date();
+            const bulanSekarang = now.getMonth() + 1;
+            const tahunSekarang = now.getFullYear();
+
+            // Hitung kalkulasi bulan ini saja
+            const filterBulanIni = laporanKerusakan.filter(item => item.bulan === bulanSekarang && item.tahun === tahunSekarang);
+            totalCountText.innerText = filterBulanIni.length + " Laporan";
+
+            // Render List (5 Terakhir)
+            list.innerHTML = laporanKerusakan.slice().reverse().slice(0, 5).map(item => `
+                <div class="log-item">
+                    <span class="log-date">${item.fullDate} WIB</span>
+                    <strong>${item.nama}</strong><br>
+                    <span style="color:#666">${item.deskripsi}</span>
+                </div>
+            `).join('');
         }
 
-        function filterAset(status, btn) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const cards = document.querySelectorAll('.asset-card');
-            cards.forEach(card => {
-                if (status === 'semua') card.style.display = 'flex';
-                else if (status === 'rusak' && card.classList.contains('kondisi-rusak')) card.style.display = 'flex';
-                else if (status === 'servis' && card.classList.contains('kondisi-servis')) card.style.display = 'flex';
-                else card.style.display = 'none';
-            });
-        }
-
-        function kirimLaporan() {
-            const barang = document.getElementById('lapor-barang').value;
-            const detail = document.getElementById('lapor-detail').value;
-            if(!barang || !detail) return alert("Barang dan Detail jangan kosong, Bos!");
-            alert(`Laporan Kerusakan ${barang} dikirim!`);
-            document.getElementById('lapor-barang').value = "";
-            document.getElementById('lapor-detail').value = "";
-        }
+        window.onload = renderData;
     </script>
 </body>
 </html>
