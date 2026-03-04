@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Database Jamaah | Master Pro</title>
+    <title>Database Jamaah Pro | Master Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
     <style>
         :root {
             --dana-blue: #108ee9;
+            --wa-green: #25d366;
             --white: #ffffff;
             --bg-light: #f5f5f5;
-            --text-dark: #333333;
+            --danger: #ff4757;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
@@ -30,47 +31,54 @@
             background: white; padding: 20px; border-radius: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px;
         }
-        .card-input h3 { font-size: 15px; margin-bottom: 15px; color: var(--dana-blue); }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 10px; font-weight: 800; color: #888; margin-bottom: 5px; }
+        .card-input h3 { font-size: 14px; margin-bottom: 15px; color: var(--dana-blue); font-weight: 800; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-size: 10px; font-weight: 800; color: #888; margin-bottom: 4px; }
         
         input {
             width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 10px;
             font-size: 13px; outline: none; background: #fafafa;
         }
-        input:focus { border-color: var(--dana-blue); }
+        input:focus { border-color: var(--dana-blue); background: #fff; }
 
         .btn-add {
             background: var(--dana-blue); color: white; border: none; width: 100%;
             padding: 15px; border-radius: 12px; font-weight: 700; cursor: pointer;
-            display: flex; justify-content: center; align-items: center; gap: 10px;
+            display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 5px;
         }
-
-        /* SEARCH BAR */
-        .search-area { margin: 20px 0 10px; position: relative; }
-        .search-area i { position: absolute; left: 15px; top: 15px; color: #ccc; }
-        .search-area input { padding-left: 45px; background: white; border: none; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
 
         /* DAFTAR JAMAAH */
-        .list-container { margin-top: 10px; }
+        .list-container { margin-top: 20px; }
         .jamaah-card {
-            background: white; padding: 15px; border-radius: 15px; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 15px; border-left: 4px solid var(--dana-blue);
+            background: white; padding: 15px; border-radius: 18px; margin-bottom: 12px;
+            display: flex; align-items: center; gap: 12px; border-left: 5px solid var(--dana-blue);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
         }
         .avatar {
-            width: 45px; height: 45px; background: #eef7ff; border-radius: 50%;
+            width: 45px; height: 45px; background: #eef7ff; border-radius: 12px;
             display: flex; align-items: center; justify-content: center; color: var(--dana-blue);
-            font-weight: 700; font-size: 18px;
+            font-weight: 800; font-size: 18px;
         }
         .info { flex: 1; }
-        .info h4 { font-size: 14px; color: #333; }
-        .info p { font-size: 11px; color: #888; }
-        
-        .btn-delete { color: #ff4757; font-size: 18px; cursor: pointer; padding: 5px; }
+        .info h4 { font-size: 14px; color: #333; font-weight: 700; }
+        .info p { font-size: 10px; color: #888; line-height: 1.4; }
 
-        .stat-jamaah {
-            text-align: center; margin-bottom: 15px; font-size: 12px; color: #666; font-weight: 600;
+        /* ACTION BUTTONS */
+        .action-btns { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+        .btn-wa { 
+            color: var(--wa-green); font-size: 20px; cursor: pointer; 
+            background: #e8f9ef; width: 35px; height: 35px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none;
         }
+        .btn-del { color: #ccc; font-size: 14px; cursor: pointer; }
+
+        .search-box {
+            background: white; padding: 12px 15px; border-radius: 12px;
+            display: flex; align-items: center; gap: 10px; margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+        .search-box input { padding: 0; background: transparent; border: none; }
     </style>
 </head>
 <body>
@@ -82,26 +90,28 @@
 
     <div class="container">
         <div class="card-input">
-            <h3><i class="fas fa-user-plus"></i> Tambah Jamaah Baru</h3>
+            <h3><i class="fas fa-user-plus"></i> Registrasi Jamaah</h3>
             <div class="form-group">
                 <label>NAMA LENGKAP</label>
-                <input type="text" id="jam-nama" placeholder="Contoh: Haji Ahmad Muhajir">
+                <input type="text" id="jam-nama" placeholder="Contoh: Bpk. Syukron">
             </div>
             <div class="form-group">
-                <label>ALAMAT LENGKAP</label>
-                <input type="text" id="jam-alamat" placeholder="Contoh: Jl. Merdeka No. 45, RT 01">
+                <label>NOMOR WHATSAPP</label>
+                <input type="number" id="jam-wa" placeholder="Contoh: 08123456xxx">
+            </div>
+            <div class="form-group">
+                <label>ALAMAT</label>
+                <input type="text" id="jam-alamat" placeholder="Contoh: Perumahan Indah Blok A">
             </div>
             <button class="btn-add" onclick="tambahJamaah()">
-                <i class="fas fa-save"></i> SIMPAN DATA JAMAAH
+                <i class="fas fa-save"></i> SIMPAN DATA
             </button>
         </div>
 
-        <div class="search-area">
-            <i class="fas fa-search"></i>
-            <input type="text" id="jam-search" placeholder="Cari nama atau alamat..." oninput="renderJamaah()">
+        <div class="search-box">
+            <i class="fas fa-search" style="color: #ccc;"></i>
+            <input type="text" id="jam-search" placeholder="Cari nama jamaah..." oninput="renderJamaah()">
         </div>
-
-        <div class="stat-jamaah" id="total-jamaah">Total: 0 Jamaah</div>
 
         <div id="list-jamaah" class="list-container">
             </div>
@@ -112,29 +122,37 @@
 
         function tambahJamaah() {
             const nama = document.getElementById('jam-nama').value;
+            let wa = document.getElementById('jam-wa').value;
             const alamat = document.getElementById('jam-alamat').value;
 
-            if(!nama || !alamat) return alert("Nama dan Alamat harus diisi, Bos!");
+            if(!nama || !wa) return alert("Nama dan WA wajib diisi, Bos!");
+
+            // Format nomor WA agar bisa buat link (menghapus angka 0 di depan diganti 62)
+            if(wa.startsWith('0')) {
+                wa = '62' + wa.substring(1);
+            }
 
             const jamaahBaru = {
                 id: Date.now(),
                 nama: nama,
-                alamat: alamat,
+                wa: wa,
+                alamat: alamat || 'Alamat tidak diisi',
                 inisial: nama.charAt(0).toUpperCase()
             };
 
             dbJamaah.push(jamaahBaru);
             localStorage.setItem('db_jamaah_yayasan', JSON.stringify(dbJamaah));
             
-            // Reset input
+            // Reset form
             document.getElementById('jam-nama').value = "";
+            document.getElementById('jam-wa').value = "";
             document.getElementById('jam-alamat').value = "";
             
             renderJamaah();
         }
 
         function hapusJamaah(id) {
-            if(confirm("Hapus data jamaah ini, Bos?")) {
+            if(confirm("Hapus jamaah ini dari database?")) {
                 dbJamaah = dbJamaah.filter(j => j.id !== id);
                 localStorage.setItem('db_jamaah_yayasan', JSON.stringify(dbJamaah));
                 renderJamaah();
@@ -144,24 +162,25 @@
         function renderJamaah() {
             const list = document.getElementById('list-jamaah');
             const search = document.getElementById('jam-search').value.toLowerCase();
-            const totalText = document.getElementById('total-jamaah');
 
-            // Filter data berdasarkan search
             const filteredData = dbJamaah.filter(j => 
-                j.nama.toLowerCase().includes(search) || 
-                j.alamat.toLowerCase().includes(search)
+                j.nama.toLowerCase().includes(search)
             );
-
-            totalText.innerText = `Total: ${filteredData.length} Jamaah`;
 
             list.innerHTML = filteredData.map(j => `
                 <div class="jamaah-card">
                     <div class="avatar">${j.inisial}</div>
                     <div class="info">
                         <h4>${j.nama}</h4>
+                        <p><i class="fas fa-phone-alt"></i> ${j.wa}</p>
                         <p><i class="fas fa-map-marker-alt"></i> ${j.alamat}</p>
                     </div>
-                    <i class="fas fa-trash-alt btn-delete" onclick="hapusJamaah(${j.id})"></i>
+                    <div class="action-btns">
+                        <a href="https://wa.me/${j.wa}?text=Assalamu'alaikum%20${j.nama},%20admin%20yayasan%20di%20sini." target="_blank" class="btn-wa">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <i class="fas fa-trash-alt btn-del" onclick="hapusJamaah(${j.id})"></i>
+                    </div>
                 </div>
             `).reverse().join('');
         }
