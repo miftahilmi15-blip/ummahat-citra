@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rekap Laporan Keuangan | Master Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Rekap Laporan Blockchain | Master Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     
     <style>
         :root {
             --dana-blue: #108ee9;
+            --blue-dark: #1e3a8a;
             --white: #ffffff;
             --bg-light: #f4f7fa;
-            --green: #27ae60;
-            --red: #e74c3c;
+            --green: #10b981;
+            --red: #ef4444;
             --excel-green: #1d6f42;
         }
 
@@ -28,62 +29,65 @@
 
         .container { padding: 0 15px; margin-top: -20px; }
 
-        /* REKAP BOX */
+        /* REKAP CARD */
         .rekap-card {
             background: white; border-radius: 20px; padding: 20px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px;
         }
         .balance-info { text-align: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-        
         .rekap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .rekap-item p { font-size: 10px; color: #888; font-weight: 700; text-transform: uppercase; }
-        .rekap-item h3 { font-size: 14px; margin-top: 5px; }
 
-        /* LIST TRANSAKSI */
-        .transaksi-list { background: white; border-radius: 20px; padding: 10px; overflow: hidden; min-height: 100px; }
+        /* LIST TRANSAKSI (GAYA LEDGER) */
+        .transaksi-list { background: white; border-radius: 20px; padding: 10px; overflow: hidden; }
         .tr-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 10px; border-bottom: 1px solid #f9f9f9;
+            padding: 15px 10px; border-bottom: 1px solid #f1f5f9;
+            display: flex; flex-direction: column; gap: 5px;
         }
-        .tr-info h4 { font-size: 13px; color: #333; }
+        .tr-top { display: flex; justify-content: space-between; align-items: flex-start; }
+        .tr-info h4 { font-size: 13px; color: var(--blue-dark); font-weight: 700; }
         .tr-info span { font-size: 10px; color: #aaa; }
-        .tr-amount { font-size: 13px; font-weight: 700; }
+        .tr-amount { font-size: 14px; font-weight: 800; }
+        
+        /* HASH STYLING */
+        .hash-box { 
+            font-family: 'JetBrains Mono', monospace; font-size: 9px; 
+            background: #f8fafc; padding: 5px; border-radius: 6px;
+            color: var(--dana-blue); border: 1px solid #edf2f7;
+            display: flex; justify-content: space-between;
+        }
 
-        /* BUTTONS */
         .action-btns { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
         .btn-action {
             border: none; width: 100%; padding: 15px; border-radius: 12px;
             font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px;
         }
         .btn-excel { background: var(--excel-green); color: white; }
-        .btn-pdf { background: #555; color: white; }
 
         .t-masuk { color: var(--green); }
         .t-keluar { color: var(--red); }
-
-        .empty-state { text-align: center; padding: 30px; color: #ccc; font-size: 13px; }
     </style>
 </head>
 <body>
 
     <div class="header-laporan">
         <i class="fas fa-arrow-left" onclick="history.back()"></i>
-        <h2 style="font-weight: 800; font-size: 18px;">REKAP KEUANGAN</h2>
+        <h2 style="font-weight: 800; font-size: 18px;">AUDIT LEDGER BLOCKCHAIN</h2>
     </div>
 
     <div class="container">
         <div class="rekap-card">
             <div class="balance-info">
-                <p style="font-size: 11px; color: #888;">Sisa Saldo Bersih</p>
+                <p style="font-size: 11px; color: #888;">SALDO TERVERIFIKASI (LEDGER)</p>
                 <h2 id="total-saldo" style="color: var(--dana-blue);">Rp 0</h2>
             </div>
             <div class="rekap-grid">
                 <div class="rekap-item" style="border-right: 1px solid #eee;">
-                    <p>Total Masuk</p>
+                    <p>Total Pemasukan</p>
                     <h3 class="t-masuk" id="total-masuk">Rp 0</h3>
                 </div>
                 <div class="rekap-item" style="padding-left: 10px;">
-                    <p>Total Keluar</p>
+                    <p>Total Pengeluaran</p>
                     <h3 class="t-keluar" id="total-keluar">Rp 0</h3>
                 </div>
             </div>
@@ -93,57 +97,50 @@
             </div>
 
         <div class="action-btns">
-            <button class="btn-action btn-excel" onclick="exportToExcel()">
-                <i class="fas fa-file-excel"></i> DOWNLOAD EXCEL (.XLSX)
+            <button class="btn-action btn-excel" onclick="exportBlockchainToExcel()">
+                <i class="fas fa-file-excel"></i> EXPORT BLOCKCHAIN LEDGER (.XLSX)
             </button>
-            <button class="btn-action btn-pdf" onclick="window.print()">
-                <i class="fas fa-file-pdf"></i> SIMPAN PDF
-            </button>
-            <button class="btn-action" style="background: #eee; color: #666;" onclick="hapusSemuaData()">
-                <i class="fas fa-trash"></i> RESET SEMUA DATA
+            <button class="btn-action" style="background: #555; color: white;" onclick="window.print()">
+                <i class="fas fa-print"></i> CETAK BUKTI AUDIT
             </button>
         </div>
     </div>
 
     <script>
-        // 1. Fungsi Mengambil Data dari LocalStorage (Kunci: db_master_pro)
-        function getDatabase() {
-            return JSON.parse(localStorage.getItem('db_master_pro')) || [];
-        }
-
-        // 2. Fungsi Menampilkan Data ke Layar
-        function renderLaporan() {
+        function loadBlockchainData() {
+            // AMBIL DATA DARI kas_ledger (Kunci yang sama dengan infaq.html Bos)
+            const ledger = JSON.parse(localStorage.getItem('kas_ledger')) || [];
             const list = document.getElementById('list-history');
-            const dataKas = getDatabase();
             
             let tMasuk = 0, tKeluar = 0;
             let html = "";
 
-            if (dataKas.length === 0) {
-                list.innerHTML = `<div class="empty-state">Belum ada transaksi tercatat.</div>`;
-                document.getElementById('total-masuk').innerText = "Rp 0";
-                document.getElementById('total-keluar').innerText = "Rp 0";
-                document.getElementById('total-saldo').innerText = "Rp 0";
+            if (ledger.length === 0) {
+                list.innerHTML = `<div style="text-align:center; padding:40px; color:#ccc; font-size:12px;">Belum ada blok transaksi terverifikasi.</div>`;
                 return;
             }
 
-            // Urutkan data berdasarkan yang terbaru (paling atas)
-            const sortedData = [...dataKas].reverse();
-
-            sortedData.forEach(item => {
-                const isMasuk = item.tipe === 'Masuk';
-                const nominal = parseInt(item.nominal) || 0;
-
-                if(isMasuk) tMasuk += nominal; else tKeluar += nominal;
+            // Render data (Urutan terbaru di atas)
+            [...ledger].reverse().forEach(block => {
+                const isMasuk = block.tipe === 'masuk';
+                const amt = parseInt(block.nominal) || 0;
+                
+                if(isMasuk) tMasuk += amt; else tKeluar += amt;
 
                 html += `
                     <div class="tr-item">
-                        <div class="tr-info">
-                            <h4>${item.keterangan}</h4>
-                            <span>${item.tanggal}</span>
+                        <div class="tr-top">
+                            <div class="tr-info">
+                                <h4>${block.person}</h4>
+                                <span>${block.waktu} | ${block.keterangan}</span>
+                            </div>
+                            <div class="tr-amount ${isMasuk ? 't-masuk' : 't-keluar'}">
+                                ${isMasuk ? '+' : '-'} Rp ${amt.toLocaleString('id-ID')}
+                            </div>
                         </div>
-                        <div class="tr-amount ${isMasuk ? 't-masuk' : 't-keluar'}">
-                            ${isMasuk ? '+' : '-'} ${nominal.toLocaleString('id-ID')}
+                        <div class="hash-box">
+                            <span>HASH: ${block.currentHash}</span>
+                            <span style="color:#cbd5e1">PREV: ${block.prevHash}</span>
                         </div>
                     </div>
                 `;
@@ -155,50 +152,26 @@
             list.innerHTML = html;
         }
 
-        // 3. FUNGSI EXPORT EXCEL (Data Asli dari DB)
-        function exportToExcel() {
-            const dataKas = getDatabase();
-            if (dataKas.length === 0) return alert("Tidak ada data untuk di-export, Bos!");
+        // EXPORT EXCEL KHUSUS BLOCKCHAIN (Menyertakan Hash untuk Audit)
+        function exportBlockchainToExcel() {
+            const ledger = JSON.parse(localStorage.getItem('kas_ledger')) || [];
+            if (ledger.length === 0) return alert("Ledger kosong!");
 
-            // Header Kolom
-            const header = [["LAPORAN KEUANGAN YAYASAN", "", "", ""]];
-            header.push(["Tanggal", "Keterangan", "Tipe", "Nominal (Rp)"]);
+            const header = [["LAPORAN KEUANGAN BERBASIS BLOCKCHAIN (MASTER PRO)"]];
+            header.push(["Waktu", "Penyetor", "Keterangan", "Nominal", "Tipe", "Hash Transaksi", "Prev Hash"]);
 
-            // Format Baris
-            const rows = dataKas.map(item => [
-                item.tanggal, 
-                item.keterangan, 
-                item.tipe, 
-                item.nominal
+            const rows = ledger.map(b => [
+                b.waktu, b.person, b.keterangan, b.nominal, b.tipe, b.currentHash, b.prevHash
             ]);
-
-            // Hitung Total
-            const totalMasuk = dataKas.filter(d => d.tipe === 'Masuk').reduce((a, b) => a + (parseInt(b.nominal) || 0), 0);
-            const totalKeluar = dataKas.filter(d => d.tipe === 'Keluar').reduce((a, b) => a + (parseInt(b.nominal) || 0), 0);
-            
-            rows.push([]); 
-            rows.push(["", "TOTAL PEMASUKAN", "", totalMasuk]);
-            rows.push(["", "TOTAL PENGELUARAN", "", totalKeluar]);
-            rows.push(["", "SALDO AKHIR", "", totalMasuk - totalKeluar]);
 
             const worksheet = XLSX.utils.aoa_to_sheet(header.concat(rows));
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan");
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Ledger_Audit");
 
-            const fileName = "Laporan_Yayasan_" + new Date().toISOString().slice(0,10) + ".xlsx";
-            XLSX.writeFile(workbook, fileName);
+            XLSX.writeFile(workbook, "Audit_Blockchain_Yayasan.xlsx");
         }
 
-        // 4. Fungsi Reset (Opsional)
-        function hapusSemuaData() {
-            if(confirm("Hapus semua riwayat transaksi? Data tidak bisa dikembalikan!")) {
-                localStorage.removeItem('db_master_pro');
-                renderLaporan();
-            }
-        }
-
-        // Jalankan saat halaman dibuka
-        window.onload = renderLaporan;
+        window.onload = loadBlockchainData;
     </script>
 </body>
 </html>
