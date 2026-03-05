@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekap Laporan Keuangan | Master Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <style>
+        :root {
+            --dana-blue: #108ee9;
+            --white: #ffffff;
+            --bg-light: #f4f7fa;
+            --green: #27ae60;
+            --red: #e74c3c;
+            --excel-green: #1d6f42;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg-light); padding-bottom: 50px; }
+
+        .header-laporan {
+            background: var(--dana-blue); padding: 30px 20px; color: white;
+            border-radius: 0 0 25px 25px; display: flex; align-items: center; gap: 15px;
+        }
+
+        .container { padding: 0 15px; margin-top: -20px; }
+
+        /* REKAP BOX */
+        .rekap-card {
+            background: white; border-radius: 20px; padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px;
+        }
+        .balance-info { text-align: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        
+        .rekap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .rekap-item p { font-size: 10px; color: #888; font-weight: 700; text-transform: uppercase; }
+        .rekap-item h3 { font-size: 14px; margin-top: 5px; }
+
+        /* LIST TRANSAKSI */
+        .transaksi-list { background: white; border-radius: 20px; padding: 10px; overflow: hidden; }
+        .tr-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 10px; border-bottom: 1px solid #f9f9f9;
+        }
+        .tr-info h4 { font-size: 13px; color: #333; }
+        .tr-info span { font-size: 10px; color: #aaa; }
+        .tr-amount { font-size: 13px; font-weight: 700; }
+
+        /* BUTTONS */
+        .action-btns { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .btn-action {
+            border: none; width: 100%; padding: 15px; border-radius: 12px;
+            font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-excel { background: var(--excel-green); color: white; }
+        .btn-pdf { background: #555; color: white; }
+
+        .t-masuk { color: var(--green); }
+        .t-keluar { color: var(--red); }
+    </style>
+</head>
+<body>
+
+    <div class="header-laporan">
+        <i class="fas fa-arrow-left" onclick="history.back()"></i>
+        <h2 style="font-weight: 800; font-size: 18px;">REKAP KEUANGAN</h2>
+    </div>
+
+    <div class="container">
+        <div class="rekap-card">
+            <div class="balance-info">
+                <p style="font-size: 11px; color: #888;">Sisa Saldo Bersih</p>
+                <h2 id="total-saldo" style="color: var(--dana-blue);">Rp 0</h2>
+            </div>
+            <div class="rekap-grid">
+                <div class="rekap-item" style="border-right: 1px solid #eee;">
+                    <p>Total Masuk</p>
+                    <h3 class="t-masuk" id="total-masuk">Rp 0</h3>
+                </div>
+                <div class="rekap-item" style="padding-left: 10px;">
+                    <p>Total Keluar</p>
+                    <h3 class="t-keluar" id="total-keluar">Rp 0</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="transaksi-list" id="list-history">
+            </div>
+
+        <div class="action-btns">
+            <button class="btn-action btn-excel" onclick="exportToExcel()">
+                <i class="fas fa-file-excel"></i> DOWNLOAD EXCEL (.XLSX)
+            </button>
+            <button class="btn-action btn-pdf" onclick="window.print()">
+                <i class="fas fa-file-pdf"></i> SIMPAN PDF
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Simulasi data dari Database Bos
+        const dataKas = [
+            { tanggal: '2026-03-01', keterangan: 'Infaq Jumat Utama', nominal: 2500000, tipe: 'Masuk' },
+            { tanggal: '2026-03-02', keterangan: 'Beli ATK Kantor', nominal: 150000, tipe: 'Keluar' },
+            { tanggal: '2026-03-03', keterangan: 'Sedekah Hamba Allah', nominal: 1000000, tipe: 'Masuk' },
+            { tanggal: '2026-03-04', keterangan: 'Servis AC Aula', nominal: 450000, tipe: 'Keluar' },
+            { tanggal: '2026-03-05', keterangan: 'Donasi Yatim', nominal: 500000, tipe: 'Keluar' }
+        ];
+
+        function renderLaporan() {
+            const list = document.getElementById('list-history');
+            let tMasuk = 0, tKeluar = 0;
+            let html = "";
+
+            dataKas.forEach(item => {
+                const isMasuk = item.tipe === 'Masuk';
+                if(isMasuk) tMasuk += item.nominal; else tKeluar += item.nominal;
+
+                html += `
+                    <div class="tr-item">
+                        <div class="tr-info">
+                            <h4>${item.keterangan}</h4>
+                            <span>${item.tanggal}</span>
+                        </div>
+                        <div class="tr-amount ${isMasuk ? 't-masuk' : 't-keluar'}">
+                            ${isMasuk ? '+' : '-'} ${item.nominal.toLocaleString('id-ID')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('total-masuk').innerText = "Rp " + tMasuk.toLocaleString('id-ID');
+            document.getElementById('total-keluar').innerText = "Rp " + tKeluar.toLocaleString('id-ID');
+            document.getElementById('total-saldo').innerText = "Rp " + (tMasuk - tKeluar).toLocaleString('id-ID');
+            list.innerHTML = html;
+        }
+
+        // FUNGSI INTI EXPORT EXCEL
+        function exportToExcel() {
+            // 1. Buat Header Kolom
+            const header = [["LAPORAN KEUANGAN YAYASAN", "", "", ""]];
+            header.push(["Tanggal", "Keterangan", "Tipe", "Nominal (Rp)"]);
+
+            // 2. Format Data untuk Excel
+            const rows = dataKas.map(item => [
+                item.tanggal, 
+                item.keterangan, 
+                item.tipe, 
+                item.nominal
+            ]);
+
+            // 3. Tambahkan Baris Total di bawah
+            const totalMasuk = dataKas.filter(d => d.tipe === 'Masuk').reduce((a, b) => a + b.nominal, 0);
+            const totalKeluar = dataKas.filter(d => d.tipe === 'Keluar').reduce((a, b) => a + b.nominal, 0);
+            
+            rows.push([]); // baris kosong
+            rows.push(["", "TOTAL PEMASUKAN", "", totalMasuk]);
+            rows.push(["", "TOTAL PENGELUARAN", "", totalKeluar]);
+            rows.push(["", "SALDO AKHIR", "", totalMasuk - totalKeluar]);
+
+            // 4. Proses SheetJS
+            const worksheet = XLSX.utils.aoa_to_sheet(header.concat(rows));
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan Keuangan");
+
+            // 5. Generate File & Download
+            const fileName = "Laporan_Yayasan_" + new Date().toLocaleDateString('id-ID') + ".xlsx";
+            XLSX.writeFile(workbook, fileName);
+        }
+
+        window.onload = renderLaporan;
+    </script>
+</body>
+</html>
