@@ -40,7 +40,7 @@
         .rekap-item h3 { font-size: 14px; margin-top: 5px; }
 
         /* LIST TRANSAKSI */
-        .transaksi-list { background: white; border-radius: 20px; padding: 10px; overflow: hidden; }
+        .transaksi-list { background: white; border-radius: 20px; padding: 10px; overflow: hidden; min-height: 100px; }
         .tr-item {
             display: flex; justify-content: space-between; align-items: center;
             padding: 12px 10px; border-bottom: 1px solid #f9f9f9;
@@ -60,6 +60,8 @@
 
         .t-masuk { color: var(--green); }
         .t-keluar { color: var(--red); }
+
+        .empty-state { text-align: center; padding: 30px; color: #ccc; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -97,27 +99,42 @@
             <button class="btn-action btn-pdf" onclick="window.print()">
                 <i class="fas fa-file-pdf"></i> SIMPAN PDF
             </button>
+            <button class="btn-action" style="background: #eee; color: #666;" onclick="hapusSemuaData()">
+                <i class="fas fa-trash"></i> RESET SEMUA DATA
+            </button>
         </div>
     </div>
 
     <script>
-        // Simulasi data dari Database Bos
-        const dataKas = [
-            { tanggal: '2026-03-01', keterangan: 'Infaq Jumat Utama', nominal: 2500000, tipe: 'Masuk' },
-            { tanggal: '2026-03-02', keterangan: 'Beli ATK Kantor', nominal: 150000, tipe: 'Keluar' },
-            { tanggal: '2026-03-03', keterangan: 'Sedekah Hamba Allah', nominal: 1000000, tipe: 'Masuk' },
-            { tanggal: '2026-03-04', keterangan: 'Servis AC Aula', nominal: 450000, tipe: 'Keluar' },
-            { tanggal: '2026-03-05', keterangan: 'Donasi Yatim', nominal: 500000, tipe: 'Keluar' }
-        ];
+        // 1. Fungsi Mengambil Data dari LocalStorage (Kunci: db_master_pro)
+        function getDatabase() {
+            return JSON.parse(localStorage.getItem('db_master_pro')) || [];
+        }
 
+        // 2. Fungsi Menampilkan Data ke Layar
         function renderLaporan() {
             const list = document.getElementById('list-history');
+            const dataKas = getDatabase();
+            
             let tMasuk = 0, tKeluar = 0;
             let html = "";
 
-            dataKas.forEach(item => {
+            if (dataKas.length === 0) {
+                list.innerHTML = `<div class="empty-state">Belum ada transaksi tercatat.</div>`;
+                document.getElementById('total-masuk').innerText = "Rp 0";
+                document.getElementById('total-keluar').innerText = "Rp 0";
+                document.getElementById('total-saldo').innerText = "Rp 0";
+                return;
+            }
+
+            // Urutkan data berdasarkan yang terbaru (paling atas)
+            const sortedData = [...dataKas].reverse();
+
+            sortedData.forEach(item => {
                 const isMasuk = item.tipe === 'Masuk';
-                if(isMasuk) tMasuk += item.nominal; else tKeluar += item.nominal;
+                const nominal = parseInt(item.nominal) || 0;
+
+                if(isMasuk) tMasuk += nominal; else tKeluar += nominal;
 
                 html += `
                     <div class="tr-item">
@@ -126,7 +143,7 @@
                             <span>${item.tanggal}</span>
                         </div>
                         <div class="tr-amount ${isMasuk ? 't-masuk' : 't-keluar'}">
-                            ${isMasuk ? '+' : '-'} ${item.nominal.toLocaleString('id-ID')}
+                            ${isMasuk ? '+' : '-'} ${nominal.toLocaleString('id-ID')}
                         </div>
                     </div>
                 `;
@@ -138,13 +155,16 @@
             list.innerHTML = html;
         }
 
-        // FUNGSI INTI EXPORT EXCEL
+        // 3. FUNGSI EXPORT EXCEL (Data Asli dari DB)
         function exportToExcel() {
-            // 1. Buat Header Kolom
+            const dataKas = getDatabase();
+            if (dataKas.length === 0) return alert("Tidak ada data untuk di-export, Bos!");
+
+            // Header Kolom
             const header = [["LAPORAN KEUANGAN YAYASAN", "", "", ""]];
             header.push(["Tanggal", "Keterangan", "Tipe", "Nominal (Rp)"]);
 
-            // 2. Format Data untuk Excel
+            // Format Baris
             const rows = dataKas.map(item => [
                 item.tanggal, 
                 item.keterangan, 
@@ -152,25 +172,32 @@
                 item.nominal
             ]);
 
-            // 3. Tambahkan Baris Total di bawah
-            const totalMasuk = dataKas.filter(d => d.tipe === 'Masuk').reduce((a, b) => a + b.nominal, 0);
-            const totalKeluar = dataKas.filter(d => d.tipe === 'Keluar').reduce((a, b) => a + b.nominal, 0);
+            // Hitung Total
+            const totalMasuk = dataKas.filter(d => d.tipe === 'Masuk').reduce((a, b) => a + (parseInt(b.nominal) || 0), 0);
+            const totalKeluar = dataKas.filter(d => d.tipe === 'Keluar').reduce((a, b) => a + (parseInt(b.nominal) || 0), 0);
             
-            rows.push([]); // baris kosong
+            rows.push([]); 
             rows.push(["", "TOTAL PEMASUKAN", "", totalMasuk]);
             rows.push(["", "TOTAL PENGELUARAN", "", totalKeluar]);
             rows.push(["", "SALDO AKHIR", "", totalMasuk - totalKeluar]);
 
-            // 4. Proses SheetJS
             const worksheet = XLSX.utils.aoa_to_sheet(header.concat(rows));
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan Keuangan");
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Laporan");
 
-            // 5. Generate File & Download
-            const fileName = "Laporan_Yayasan_" + new Date().toLocaleDateString('id-ID') + ".xlsx";
+            const fileName = "Laporan_Yayasan_" + new Date().toISOString().slice(0,10) + ".xlsx";
             XLSX.writeFile(workbook, fileName);
         }
 
+        // 4. Fungsi Reset (Opsional)
+        function hapusSemuaData() {
+            if(confirm("Hapus semua riwayat transaksi? Data tidak bisa dikembalikan!")) {
+                localStorage.removeItem('db_master_pro');
+                renderLaporan();
+            }
+        }
+
+        // Jalankan saat halaman dibuka
         window.onload = renderLaporan;
     </script>
 </body>
