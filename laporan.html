@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rekap Laporan Blockchain | Master Pro</title>
+    <title>Audit Ledger | Master Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -16,54 +16,63 @@
             --bg-light: #f4f7fa;
             --green: #10b981;
             --red: #ef4444;
-            --excel-green: #1d6f42;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg-light); padding-bottom: 50px; }
 
         .header-laporan {
-            background: var(--dana-blue); padding: 30px 20px; color: white;
-            border-radius: 0 0 25px 25px; display: flex; align-items: center; gap: 15px;
+            background: var(--dana-blue); padding: 30px 20px 50px; color: white;
+            border-radius: 0 0 30px 30px; text-align: center;
         }
 
-        .container { padding: 0 15px; margin-top: -20px; }
+        .container { padding: 0 15px; margin-top: -40px; }
 
-        /* REKAP CARD */
-        .rekap-card {
-            background: white; border-radius: 20px; padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px;
+        /* SALDO UTAMA (TIDAK BERUBAH OLEH FILTER) */
+        .main-balance-card {
+            background: var(--blue-dark); color: white; border-radius: 20px;
+            padding: 20px; text-align: center; box-shadow: 0 10px 20px rgba(30, 58, 138, 0.2);
+            margin-bottom: 15px;
         }
-        .balance-info { text-align: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-        .rekap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        /* FILTER BOX */
+        .filter-section {
+            background: white; border-radius: 15px; padding: 15px;
+            margin-bottom: 15px; display: flex; gap: 10px; align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+        select {
+            flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #eee;
+            font-size: 13px; outline: none; background: #f9f9f9;
+        }
+
+        /* REKAP PERIODIK */
+        .rekap-grid { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;
+        }
+        .rekap-item {
+            background: white; padding: 15px; border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
         .rekap-item p { font-size: 10px; color: #888; font-weight: 700; text-transform: uppercase; }
+        .rekap-item h3 { font-size: 14px; margin-top: 5px; }
 
-        /* LIST TRANSAKSI (GAYA LEDGER) */
-        .transaksi-list { background: white; border-radius: 20px; padding: 10px; overflow: hidden; }
+        /* LIST */
+        .transaksi-list { background: white; border-radius: 20px; padding: 10px; }
         .tr-item {
-            padding: 15px 10px; border-bottom: 1px solid #f1f5f9;
-            display: flex; flex-direction: column; gap: 5px;
+            padding: 12px 10px; border-bottom: 1px solid #f1f5f9;
         }
         .tr-top { display: flex; justify-content: space-between; align-items: flex-start; }
-        .tr-info h4 { font-size: 13px; color: var(--blue-dark); font-weight: 700; }
+        .tr-info h4 { font-size: 13px; color: var(--blue-dark); }
         .tr-info span { font-size: 10px; color: #aaa; }
-        .tr-amount { font-size: 14px; font-weight: 800; }
+        .hash-tag { font-family: 'JetBrains Mono'; font-size: 8px; color: var(--dana-blue); margin-top: 5px; display: block; }
+
+        .btn-excel {
+            background: #1d6f42; color: white; border: none; width: 100%;
+            padding: 15px; border-radius: 15px; font-weight: 700; margin-top: 15px;
+            cursor: pointer;
+        }
         
-        /* HASH STYLING */
-        .hash-box { 
-            font-family: 'JetBrains Mono', monospace; font-size: 9px; 
-            background: #f8fafc; padding: 5px; border-radius: 6px;
-            color: var(--dana-blue); border: 1px solid #edf2f7;
-            display: flex; justify-content: space-between;
-        }
-
-        .action-btns { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .btn-action {
-            border: none; width: 100%; padding: 15px; border-radius: 12px;
-            font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px;
-        }
-        .btn-excel { background: var(--excel-green); color: white; }
-
         .t-masuk { color: var(--green); }
         .t-keluar { color: var(--red); }
     </style>
@@ -71,61 +80,77 @@
 <body>
 
     <div class="header-laporan">
-        <i class="fas fa-arrow-left" onclick="history.back()"></i>
-        <h2 style="font-weight: 800; font-size: 18px;">AUDIT LEDGER BLOCKCHAIN</h2>
+        <h2 style="font-size: 18px;">LAPORAN BLOCKCHAIN</h2>
     </div>
 
     <div class="container">
-        <div class="rekap-card">
-            <div class="balance-info">
-                <p style="font-size: 11px; color: #888;">SALDO TERVERIFIKASI (LEDGER)</p>
-                <h2 id="total-saldo" style="color: var(--dana-blue);">Rp 0</h2>
+        <div class="main-balance-card">
+            <p style="font-size: 11px; opacity: 0.8; letter-spacing: 1px;">TOTAL SALDO KAS GLOBAL</p>
+            <h1 id="global-saldo">Rp 0</h1>
+        </div>
+
+        <div class="filter-section">
+            <i class="fas fa-filter" style="color: var(--dana-blue)"></i>
+            <select id="filter-time" onchange="loadLaporan()">
+                <option value="all">Semua Waktu</option>
+                <option value="today">Hari Ini</option>
+                <option value="month">Bulan Ini</option>
+            </select>
+        </div>
+
+        <div class="rekap-grid">
+            <div class="rekap-item">
+                <p>Masuk (Filter)</p>
+                <h3 class="t-masuk" id="filter-masuk">Rp 0</h3>
             </div>
-            <div class="rekap-grid">
-                <div class="rekap-item" style="border-right: 1px solid #eee;">
-                    <p>Total Pemasukan</p>
-                    <h3 class="t-masuk" id="total-masuk">Rp 0</h3>
-                </div>
-                <div class="rekap-item" style="padding-left: 10px;">
-                    <p>Total Pengeluaran</p>
-                    <h3 class="t-keluar" id="total-keluar">Rp 0</h3>
-                </div>
+            <div class="rekap-item">
+                <p>Keluar (Filter)</p>
+                <h3 class="t-keluar" id="filter-keluar">Rp 0</h3>
             </div>
         </div>
 
-        <div class="transaksi-list" id="list-history">
-            </div>
+        <div class="transaksi-list" id="list-history"></div>
 
-        <div class="action-btns">
-            <button class="btn-action btn-excel" onclick="exportBlockchainToExcel()">
-                <i class="fas fa-file-excel"></i> EXPORT BLOCKCHAIN LEDGER (.XLSX)
-            </button>
-            <button class="btn-action" style="background: #555; color: white;" onclick="window.print()">
-                <i class="fas fa-print"></i> CETAK BUKTI AUDIT
-            </button>
-        </div>
+        <button class="btn-excel" onclick="exportToExcel()">
+            <i class="fas fa-file-excel"></i> DOWNLOAD LAPORAN EXCEL
+        </button>
     </div>
 
     <script>
-        function loadBlockchainData() {
-            // AMBIL DATA DARI kas_ledger (Kunci yang sama dengan infaq.html Bos)
+        function loadLaporan() {
             const ledger = JSON.parse(localStorage.getItem('kas_ledger')) || [];
+            const filterVal = document.getElementById('filter-time').value;
             const list = document.getElementById('list-history');
             
-            let tMasuk = 0, tKeluar = 0;
+            let globalTotal = 0;
+            let fMasuk = 0;
+            let fKeluar = 0;
             let html = "";
 
-            if (ledger.length === 0) {
-                list.innerHTML = `<div style="text-align:center; padding:40px; color:#ccc; font-size:12px;">Belum ada blok transaksi terverifikasi.</div>`;
-                return;
-            }
+            // Ambil waktu sekarang untuk filter
+            const now = new Date();
+            const todayStr = now.toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'});
+            const monthStr = now.toLocaleDateString('id-ID', {month:'short', year:'numeric'});
 
-            // Render data (Urutan terbaru di atas)
-            [...ledger].reverse().forEach(block => {
+            // 1. Hitung Saldo Global (Selalu dari semua data)
+            ledger.forEach(b => {
+                const amt = parseInt(b.nominal) || 0;
+                if(b.tipe === 'masuk') globalTotal += amt; else globalTotal -= amt;
+            });
+
+            // 2. Filter data untuk ditampilkan
+            const filteredData = ledger.filter(b => {
+                if(filterVal === 'today') return b.waktu.includes(todayStr);
+                if(filterVal === 'month') return b.waktu.includes(monthStr);
+                return true;
+            });
+
+            // 3. Render & Hitung Rekap Filter
+            [...filteredData].reverse().forEach(block => {
                 const isMasuk = block.tipe === 'masuk';
                 const amt = parseInt(block.nominal) || 0;
                 
-                if(isMasuk) tMasuk += amt; else tKeluar += amt;
+                if(isMasuk) fMasuk += amt; else fKeluar += amt;
 
                 html += `
                     <div class="tr-item">
@@ -135,43 +160,30 @@
                                 <span>${block.waktu} | ${block.keterangan}</span>
                             </div>
                             <div class="tr-amount ${isMasuk ? 't-masuk' : 't-keluar'}">
-                                ${isMasuk ? '+' : '-'} Rp ${amt.toLocaleString('id-ID')}
+                                ${isMasuk ? '+' : '-'} ${amt.toLocaleString('id-ID')}
                             </div>
                         </div>
-                        <div class="hash-box">
-                            <span>HASH: ${block.currentHash}</span>
-                            <span style="color:#cbd5e1">PREV: ${block.prevHash}</span>
-                        </div>
+                        <span class="hash-tag">ID: ${block.currentHash}</span>
                     </div>
                 `;
             });
 
-            document.getElementById('total-masuk').innerText = "Rp " + tMasuk.toLocaleString('id-ID');
-            document.getElementById('total-keluar').innerText = "Rp " + tKeluar.toLocaleString('id-ID');
-            document.getElementById('total-saldo').innerText = "Rp " + (tMasuk - tKeluar).toLocaleString('id-ID');
-            list.innerHTML = html;
+            // Update UI
+            document.getElementById('global-saldo').innerText = "Rp " + globalTotal.toLocaleString('id-ID');
+            document.getElementById('filter-masuk').innerText = "Rp " + fMasuk.toLocaleString('id-ID');
+            document.getElementById('filter-keluar').innerText = "Rp " + fKeluar.toLocaleString('id-ID');
+            list.innerHTML = html || "<p style='text-align:center; padding:20px; color:#ccc;'>Tidak ada data periode ini</p>";
         }
 
-        // EXPORT EXCEL KHUSUS BLOCKCHAIN (Menyertakan Hash untuk Audit)
-        function exportBlockchainToExcel() {
+        function exportToExcel() {
             const ledger = JSON.parse(localStorage.getItem('kas_ledger')) || [];
-            if (ledger.length === 0) return alert("Ledger kosong!");
-
-            const header = [["LAPORAN KEUANGAN BERBASIS BLOCKCHAIN (MASTER PRO)"]];
-            header.push(["Waktu", "Penyetor", "Keterangan", "Nominal", "Tipe", "Hash Transaksi", "Prev Hash"]);
-
-            const rows = ledger.map(b => [
-                b.waktu, b.person, b.keterangan, b.nominal, b.tipe, b.currentHash, b.prevHash
-            ]);
-
-            const worksheet = XLSX.utils.aoa_to_sheet(header.concat(rows));
+            const worksheet = XLSX.utils.json_to_sheet(ledger);
             const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Ledger_Audit");
-
-            XLSX.writeFile(workbook, "Audit_Blockchain_Yayasan.xlsx");
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Ledger");
+            XLSX.writeFile(workbook, "Laporan_MasterPro_Blockchain.xlsx");
         }
 
-        window.onload = loadBlockchainData;
+        window.onload = loadLaporan;
     </script>
 </body>
 </html>
