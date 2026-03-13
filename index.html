@@ -3,89 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>E-Ummat | Yayasan Ummat Islam</title>
+    <title>E-Ummat | Dompet Digital Ummat</title>
     
-    <link rel="icon" type="image/png" href="ummat.png">
-    <link rel="apple-touch-icon" href="ummat.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="E-Ummat">
     <meta name="theme-color" content="#108ee9">
+    <link rel="apple-touch-icon" href="ummat.png">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
     <style>
-        :root {
-            --dana-blue: #108ee9;
-            --dana-dark-blue: #0a7cc2;
-            --white: #ffffff;
-            --bg-light: #f5f5f5;
-        }
-
+        :root { --dana-blue: #108ee9; --dana-dark-blue: #0a7cc2; --white: #ffffff; --bg-light: #f5f5f5; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background: var(--bg-light); color: #333; overflow-x: hidden; padding-bottom: 90px; }
-
-        /* --- HEADER & SALDO --- */
-        .blue-section {
-            background: var(--dana-blue); height: 230px; padding: 25px 5%; color: white; position: relative;
-            border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
-        }
+        .blue-section { background: var(--dana-blue); height: 230px; padding: 25px 5%; color: white; position: relative; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; }
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         .app-name { font-weight: 800; font-size: 20px; letter-spacing: 1px; }
         .app-name span { color: #ffeb3b; }
-
         .saldo-area { display: flex; flex-direction: column; align-items: center; gap: 5px; margin-top: 10px; }
         .saldo-label { font-size: 11px; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; }
         .saldo-val { font-size: 26px; font-weight: 800; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-
-        .quick-actions { 
-            display: flex; justify-content: space-around; text-align: center; margin-top: 25px;
-        }
+        .quick-actions { display: flex; justify-content: space-around; text-align: center; margin-top: 25px; }
         .action-item { cursor: pointer; transition: 0.2s; }
-        .action-item:active { transform: scale(0.9); }
         .action-item i { font-size: 24px; margin-bottom: 8px; display: block; }
         .action-item p { font-size: 11px; font-weight: 600; }
-
-        /* --- MAIN CONTENT --- */
         .main-container { padding: 0 15px; margin-top: -25px; position: relative; z-index: 10; }
-
-        /* BANNER DENGAN GAMBAR ummat.png */
-        .app-landing-card {
-            background: white; border-radius: 20px; padding: 15px;
-            display: flex; align-items: center; gap: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 20px;
-            border: 1px solid #eee;
-        }
-        .app-img { 
-            width: 90px; height: 90px; border-radius: 15px; overflow: hidden;
-            display: flex; align-items: center; justify-content: center;
-        }
+        .app-landing-card { background: white; border-radius: 20px; padding: 20px; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid #eee; }
+        .app-img { width: 80px; height: 80px; border-radius: 15px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
         .app-img img { width: 100%; height: 100%; object-fit: contain; }
-
-        .app-text h2 { font-size: 15px; font-weight: 800; color: var(--dana-blue); }
+        .app-text h2 { font-size: 15px; font-weight: 700; color: var(--dana-blue); }
         .app-text p { font-size: 10px; color: #777; margin: 4px 0 10px; }
-        .btn-download {
-            background: var(--dana-blue); color: white; border: none; padding: 8px 15px;
-            border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer;
-        }
-
-        /* GRID MENU */
-        .menu-white-box {
-            background: var(--white); border-radius: 25px; padding: 25px 10px;
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-        }
+        .btn-download { background: var(--dana-blue); color: white; border: none; padding: 7px 15px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
+        .menu-white-box { background: var(--white); border-radius: 25px; padding: 25px 10px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
         .menu-item { display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; }
-        .icon-box { 
-            width: 50px; height: 50px; border-radius: 18px; margin-bottom: 8px; 
-            display: flex; align-items: center; justify-content: center; font-size: 24px;
-            transition: 0.3s;
-        }
-        .menu-item:active .icon-box { transform: scale(0.8); }
-        .menu-item h3 { font-size: 11px; font-weight: 600; color: #555; }
-
-        /* COLORS */
+        .icon-box { width: 50px; height: 50px; border-radius: 18px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
         .bg-infaq { background: #e8f5e9; color: #2e7d32; }
         .bg-jamaah { background: #fff3e0; color: #ef6c00; }
         .bg-sholat { background: #e3f2fd; color: #1565c0; }
@@ -93,32 +45,18 @@
         .bg-jadwal { background: #f3e5f5; color: #7b1fa2; }
         .bg-kas { background: #e0f7fa; color: #00838f; }
         .bg-laporan { background: #eceff1; color: #455a64; }
-
-        /* BOTTOM NAV */
-        .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; height: 75px;
-            background: var(--white); border-top: 1px solid #eee;
-            display: flex; justify-content: space-around; align-items: center; z-index: 1000;
-        }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 75px; background: var(--white); border-top: 1px solid #eee; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
         .nav-item { text-align: center; color: #aaa; font-size: 10px; flex: 1; cursor: pointer; }
         .nav-item.active { color: var(--dana-blue); }
-        .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
-        .scan-btn {
-            width: 65px; height: 65px; background: var(--dana-blue); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; color: white;
-            font-size: 28px; margin-top: -40px; border: 6px solid var(--bg-light);
-            box-shadow: 0 8px 15px rgba(16, 142, 233, 0.3);
-        }
+        .scan-btn { width: 65px; height: 65px; background: var(--dana-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 28px; margin-top: -40px; border: 6px solid var(--bg-light); box-shadow: 0 8px 15px rgba(16, 142, 233, 0.3); }
     </style>
 </head>
 <body>
-
     <div class="blue-section">
         <div class="top-bar">
             <div class="app-name">E-<span>UMMAT</span></div>
-            <i class="fas fa-bell" style="font-size: 22px;"></i>
+            <i class="fas fa-comment-dots" style="font-size: 22px;"></i>
         </div>
-
         <div class="saldo-area">
             <div class="saldo-label">Total Saldo Terverifikasi</div>
             <div class="saldo-val" onclick="toggleMata()">
@@ -126,29 +64,25 @@
                 <i id="icon-mata" class="far fa-eye" style="font-size: 16px; opacity: 0.6;"></i>
             </div>
         </div>
-
         <div class="quick-actions">
-            <div class="action-item" onclick="location.href='transaksi.html'"><i class="fas fa-plus-circle"></i><p>Isi Saldo</p></div>
-            <div class="action-item" onclick="location.href='transaksi.html'"><i class="fas fa-paper-plane"></i><p>Kirim</p></div>
+            <div class="action-item" onclick="location.href='infaq.html'"><i class="fas fa-plus-circle"></i><p>Isi Saldo</p></div>
+            <div class="action-item" onclick="location.href='laporan.html'"><i class="fas fa-paper-plane"></i><p>Kirim</p></div>
             <div class="action-item" onclick="location.href='laporan.html'"><i class="fas fa-history"></i><p>Riwayat</p></div>
-            <div class="action-item" onclick="alert('Yayasan Ummat Islam v1.0')"><i class="fas fa-info-circle"></i><p>Tentang</p></div>
+            <div class="action-item" onclick="alert('Fitur segera hadir!')"><i class="fas fa-th-large"></i><p>Lainnya</p></div>
         </div>
     </div>
 
     <div class="main-container">
         <div class="app-landing-card">
-            <div class="app-img">
-                <img src="ummat.png" alt="Logo Yayasan">
-            </div>
+            <div class="app-img"><img src="ummat.png" alt="Logo"></div>
             <div class="app-text">
-                <h2>PASANG E-UMMAT</h2>
-                <p>Yayasan Ummat Islam - Aman & Transparan.</p>
+                <h2>Install E-Ummat di HP</h2>
+                <p>Nikmati akses cepat & aman tanpa browser.</p>
                 <button class="btn-download" onclick="showInstallInfo()">DOWNLOAD SEKARANG</button>
             </div>
         </div>
-
         <div class="menu-white-box">
-            <div class="menu-item" onclick="location.href='transaksi.html'"><div class="icon-box bg-infaq"><i class="fas fa-hand-holding-heart"></i></div><h3>Infaq</h3></div>
+            <div class="menu-item" onclick="location.href='infaq.html'"><div class="icon-box bg-infaq"><i class="fas fa-hand-holding-heart"></i></div><h3>Infaq</h3></div>
             <div class="menu-item" onclick="location.href='jamaah.html'"><div class="icon-box bg-jamaah"><i class="fas fa-users"></i></div><h3>Jamaah</h3></div>
             <div class="menu-item" onclick="location.href='waktusholat.html'"><div class="icon-box bg-sholat"><i class="fas fa-mosque"></i></div><h3>Sholat</h3></div>
             <div class="menu-item" onclick="location.href='sosial.html'"><div class="icon-box bg-sosial"><i class="fas fa-heart"></i></div><h3>Sosial</h3></div>
@@ -162,7 +96,7 @@
     <div class="bottom-nav">
         <div class="nav-item active"><i class="fas fa-home"></i> Beranda</div>
         <div class="nav-item" onclick="location.href='laporan.html'"><i class="fas fa-wallet"></i> Dompet</div>
-        <div class="scan-btn" onclick="location.href='transaksi.html'"><i class="fas fa-qrcode"></i></div>
+        <div class="scan-btn" onclick="location.href='infaq.html'"><i class="fas fa-qrcode"></i></div>
         <div class="nav-item"><i class="fas fa-bell"></i> Pesan</div>
         <div class="nav-item"><i class="fas fa-user-circle"></i> Saya</div>
     </div>
@@ -170,7 +104,6 @@
     <script>
         let isHidden = false;
         let totalSaldo = 0;
-
         function syncSaldo() {
             const data = JSON.parse(localStorage.getItem('kas_ledger')) || [];
             let tempTotal = 0;
@@ -181,25 +114,14 @@
             totalSaldo = tempTotal;
             renderSaldo();
         }
-
         function toggleMata() { isHidden = !isHidden; renderSaldo(); }
-
         function renderSaldo() {
             const display = document.getElementById('angka-saldo');
             const icon = document.getElementById('icon-mata');
-            if(isHidden) {
-                display.innerText = "Rp •••••••";
-                icon.className = "far fa-eye-slash";
-            } else {
-                display.innerText = "Rp " + totalSaldo.toLocaleString('id-ID');
-                icon.className = "far fa-eye";
-            }
+            if(isHidden) { display.innerText = "Rp •••••••"; icon.className = "far fa-eye-slash"; }
+            else { display.innerText = "Rp " + totalSaldo.toLocaleString('id-ID'); icon.className = "far fa-eye"; }
         }
-
-        function showInstallInfo() {
-            alert("Cara Install E-UMMAT:\n\n1. Tekan ikon 'Titik Tiga' atau 'Share' di browser.\n2. Pilih 'Tambahkan ke Layar Utama' / 'Add to Home Screen'.\n3. Buka E-Ummat langsung dari menu HP!");
-        }
-
+        function showInstallInfo() { alert("Klik 'Tambahkan ke Layar Utama' di menu browser Anda."); }
         window.onload = syncSaldo;
     </script>
 </body>
