@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>E-Ummat | Dompet Digital Ummat</title>
+    <title>E-Ummat | Yayasan Ummat Islam</title>
     
+    <link rel="icon" type="image/png" href="ummat.png">
+    <link rel="apple-touch-icon" href="ummat.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="E-Ummat">
     <meta name="theme-color" content="#108ee9">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3661/3661339.png">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -48,21 +50,23 @@
         /* --- MAIN CONTENT --- */
         .main-container { padding: 0 15px; margin-top: -25px; position: relative; z-index: 10; }
 
-        /* DOWNLOAD APP BANNER (GAMBAR APLIKASI) */
+        /* BANNER DENGAN GAMBAR ummat.png */
         .app-landing-card {
-            background: white; border-radius: 20px; padding: 20px;
+            background: white; border-radius: 20px; padding: 15px;
             display: flex; align-items: center; gap: 15px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 20px;
             border: 1px solid #eee;
         }
         .app-img { 
-            width: 80px; height: 80px; background: #e3f2fd; border-radius: 15px;
-            display: flex; align-items: center; justify-content: center; font-size: 40px; color: var(--dana-blue);
+            width: 90px; height: 90px; border-radius: 15px; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
         }
-        .app-text h2 { font-size: 15px; font-weight: 700; color: var(--dana-blue); }
+        .app-img img { width: 100%; height: 100%; object-fit: contain; }
+
+        .app-text h2 { font-size: 15px; font-weight: 800; color: var(--dana-blue); }
         .app-text p { font-size: 10px; color: #777; margin: 4px 0 10px; }
         .btn-download {
-            background: var(--dana-blue); color: white; border: none; padding: 7px 15px;
+            background: var(--dana-blue); color: white; border: none; padding: 8px 15px;
             border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer;
         }
 
@@ -112,7 +116,7 @@
     <div class="blue-section">
         <div class="top-bar">
             <div class="app-name">E-<span>UMMAT</span></div>
-            <i class="fas fa-comment-dots" style="font-size: 22px;"></i>
+            <i class="fas fa-bell" style="font-size: 22px;"></i>
         </div>
 
         <div class="saldo-area">
@@ -124,27 +128,27 @@
         </div>
 
         <div class="quick-actions">
-            <div class="action-item" onclick="location.href='infaq.html'"><i class="fas fa-plus-circle"></i><p>Isi Saldo</p></div>
-            <div class="action-item" onclick="location.href='laporan.html'"><i class="fas fa-paper-plane"></i><p>Kirim</p></div>
+            <div class="action-item" onclick="location.href='transaksi.html'"><i class="fas fa-plus-circle"></i><p>Isi Saldo</p></div>
+            <div class="action-item" onclick="location.href='transaksi.html'"><i class="fas fa-paper-plane"></i><p>Kirim</p></div>
             <div class="action-item" onclick="location.href='laporan.html'"><i class="fas fa-history"></i><p>Riwayat</p></div>
-            <div class="action-item" onclick="alert('Fitur segera hadir!')"><i class="fas fa-th-large"></i><p>Lainnya</p></div>
+            <div class="action-item" onclick="alert('Yayasan Ummat Islam v1.0')"><i class="fas fa-info-circle"></i><p>Tentang</p></div>
         </div>
     </div>
 
     <div class="main-container">
         <div class="app-landing-card">
             <div class="app-img">
-                <i class="fas fa-mobile-alt"></i>
+                <img src="ummat.png" alt="Logo Yayasan">
             </div>
             <div class="app-text">
-                <h2>Install E-Ummat di HP</h2>
-                <p>Nikmati akses cepat & aman tanpa browser.</p>
+                <h2>PASANG E-UMMAT</h2>
+                <p>Yayasan Ummat Islam - Aman & Transparan.</p>
                 <button class="btn-download" onclick="showInstallInfo()">DOWNLOAD SEKARANG</button>
             </div>
         </div>
 
         <div class="menu-white-box">
-            <div class="menu-item" onclick="location.href='infaq.html'"><div class="icon-box bg-infaq"><i class="fas fa-hand-holding-heart"></i></div><h3>Infaq</h3></div>
+            <div class="menu-item" onclick="location.href='transaksi.html'"><div class="icon-box bg-infaq"><i class="fas fa-hand-holding-heart"></i></div><h3>Infaq</h3></div>
             <div class="menu-item" onclick="location.href='jamaah.html'"><div class="icon-box bg-jamaah"><i class="fas fa-users"></i></div><h3>Jamaah</h3></div>
             <div class="menu-item" onclick="location.href='waktusholat.html'"><div class="icon-box bg-sholat"><i class="fas fa-mosque"></i></div><h3>Sholat</h3></div>
             <div class="menu-item" onclick="location.href='sosial.html'"><div class="icon-box bg-sosial"><i class="fas fa-heart"></i></div><h3>Sosial</h3></div>
@@ -158,7 +162,7 @@
     <div class="bottom-nav">
         <div class="nav-item active"><i class="fas fa-home"></i> Beranda</div>
         <div class="nav-item" onclick="location.href='laporan.html'"><i class="fas fa-wallet"></i> Dompet</div>
-        <div class="scan-btn" onclick="location.href='infaq.html'"><i class="fas fa-qrcode"></i></div>
+        <div class="scan-btn" onclick="location.href='transaksi.html'"><i class="fas fa-qrcode"></i></div>
         <div class="nav-item"><i class="fas fa-bell"></i> Pesan</div>
         <div class="nav-item"><i class="fas fa-user-circle"></i> Saya</div>
     </div>
@@ -168,7 +172,6 @@
         let totalSaldo = 0;
 
         function syncSaldo() {
-            // Ambil data dari kas_ledger (Kunci Blockchain)
             const data = JSON.parse(localStorage.getItem('kas_ledger')) || [];
             let tempTotal = 0;
             data.forEach(t => {
@@ -194,7 +197,7 @@
         }
 
         function showInstallInfo() {
-            alert("Cara Install E-UMMAT:\n\n1. Klik tombol 'Tiga Titik' atau 'Share' di browser HP Anda.\n2. Pilih menu 'Tambahkan ke Layar Utama' (Add to Home Screen).\n3. Selesai! E-Ummat siap di layar HP Anda.");
+            alert("Cara Install E-UMMAT:\n\n1. Tekan ikon 'Titik Tiga' atau 'Share' di browser.\n2. Pilih 'Tambahkan ke Layar Utama' / 'Add to Home Screen'.\n3. Buka E-Ummat langsung dari menu HP!");
         }
 
         window.onload = syncSaldo;
