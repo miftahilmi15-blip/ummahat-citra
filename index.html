@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Master Admin Pro | DANA Style</title>
     
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#108ee9">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
@@ -16,21 +20,16 @@
             --bg-light: #f5f5f5;
             --text-dark: #333333;
             --text-gray: #888888;
-            --kaldik-color: #ff4757; /* Warna khas kalender */
+            --kaldik-color: #ff4757;
         }
-        .menu-item:active {
-    transform: scale(0.9);
-    transition: 0.1s;
-}
-.icon-circle {
-    transition: transform 0.2s ease;
-}
-.menu-item:hover .icon-circle {
-    transform: rotate(5deg) scale(1.1);
-}
+
+        /* Tambahan Animasi Click */
+        .menu-item:active { transform: scale(0.9); transition: 0.1s; }
+        .icon-circle { transition: transform 0.2s ease; }
+        .menu-item:hover .icon-circle { transform: rotate(5deg) scale(1.1); }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg-light); color: var(--text-dark); overflow-x: hidden; padding-bottom: 80px; }
+        body { background: var(--bg-light); color: var(--text-dark); overflow-x: hidden; padding-bottom: 100px; }
 
         /* --- SIDEBAR --- */
         #sidebar {
@@ -42,122 +41,82 @@
         .overlay { position: fixed; display: none; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2500; backdrop-filter: blur(2px); }
         .overlay.active { display: block; }
         
-        .sidebar-menu a {
-            color: white; text-decoration: none; display: block; margin-bottom: 25px; font-size: 14px;
-        }
+        .sidebar-menu a { color: white; text-decoration: none; display: block; margin-bottom: 25px; font-size: 14px; }
         .sidebar-menu i { width: 30px; font-size: 18px; }
 
         /* --- HEADER AREA --- */
         .blue-section {
-            background: var(--dana-blue);
-            height: 220px;
-            padding: 20px 5%;
-            color: white;
-            position: relative;
+            background: var(--dana-blue); height: 220px; padding: 20px 5%; color: white; position: relative;
         }
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .saldo-area { display: flex; align-items: center; gap: 10px; }
-        .saldo-area span { font-size: 13px; opacity: 0.9; }
         .saldo-val { font-size: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; }
 
-        .quick-actions {
-            display: flex;
-            justify-content: space-between;
-            text-align: center;
-            margin-top: 15px;
-        }
+        .quick-actions { display: flex; justify-content: space-between; text-align: center; margin-top: 15px; }
         .action-item { flex: 1; cursor: pointer; }
         .action-item i { font-size: 22px; margin-bottom: 8px; display: block; }
         .action-item p { font-size: 11px; font-weight: 500; }
 
         /* BUBBLE PENGINGAT */
         .floating-reminder {
-            position: absolute;
-            background: #ffeb3b; 
-            color: #333;
-            padding: 5px 12px;
-            border-radius: 15px 15px 15px 2px;
-            font-size: 10px;
-            font-weight: 800;
-            bottom: 35px;
-            left: 20px;
-            white-space: nowrap;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            animation: floatAnim 2s ease-in-out infinite;
-            z-index: 100;
-        }
-        .floating-reminder::after {
-            content: '';
-            position: absolute;
-            bottom: -5px; left: 8px;
-            border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #ffeb3b;
+            position: absolute; background: #ffeb3b; color: #333; padding: 5px 12px; border-radius: 15px 15px 15px 2px;
+            font-size: 10px; font-weight: 800; bottom: 35px; left: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            animation: floatAnim 2s ease-in-out infinite; z-index: 100;
         }
 
-        @keyframes floatAnim {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-        }
+        @keyframes floatAnim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 
         /* --- MAIN CONTENT --- */
-        .main-container {
-            padding: 0 15px;
-            margin-top: -30px;
-            position: relative;
-            z-index: 10;
-        }
+        .main-container { padding: 0 15px; margin-top: -30px; position: relative; z-index: 10; }
         
         .mahfuzat-card {
-            background: var(--white);
-            padding: 12px 15px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border-left: 4px solid var(--dana-blue);
+            background: var(--white); padding: 12px 15px; border-radius: 15px; margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 4px solid var(--dana-blue);
         }
-        .mahfuzat-card h4 { font-size: 10px; color: var(--dana-blue); text-transform: uppercase; margin-bottom: 5px; letter-spacing: 0.5px;}
-        
         .marquee-wrapper { width: 100%; overflow: hidden; white-space: nowrap; }
-        .marquee-text {
-            display: inline-block;
-            font-size: 13px;
-            font-style: italic;
-            color: #555;
-            padding-left: 100%;
-            animation: marqueeScroll 25s linear infinite;
-        }
+        .marquee-text { display: inline-block; font-size: 12px; font-style: italic; color: #555; animation: marqueeScroll 25s linear infinite; }
 
-        @keyframes marqueeScroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
-        }
+        @keyframes marqueeScroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
         .menu-white-box {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 25px 10px;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px 5px;
+            background: var(--white); border-radius: 20px; padding: 25px 10px;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 5px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }
 
         .menu-item { display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; }
         .icon-circle { width: 45px; height: 45px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-        .menu-item h3 { font-size: 11px; font-weight: 500; color: #444; line-height: 1.2; }
+        .menu-item h3 { font-size: 11px; font-weight: 500; color: #444; }
+
+        /* --- BANNER/MOCKUP APP AREA --- */
+        .promo-banner {
+            margin-top: 20px; background: linear-gradient(135deg, #108ee9, #0a7cc2);
+            border-radius: 20px; padding: 20px; color: white; display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 8px 20px rgba(16, 142, 233, 0.2);
+        }
+        .promo-text h2 { font-size: 16px; font-weight: 800; }
+        .promo-text p { font-size: 10px; opacity: 0.9; }
+        .btn-install { 
+            background: #ffeb3b; color: #333; border: none; padding: 8px 15px; 
+            border-radius: 10px; font-size: 11px; font-weight: 700; margin-top: 10px; cursor: pointer;
+        }
 
         /* --- BOTTOM NAV --- */
         .bottom-nav {
             position: fixed; bottom: 0; width: 100%; height: 70px;
             background: var(--white); border-top: 1px solid #eee;
-            display: flex; justify-content: space-around; align-items: center;
-            z-index: 1000;
+            display: flex; justify-content: space-around; align-items: center; z-index: 1000;
         }
         .nav-item { text-align: center; color: var(--text-gray); font-size: 10px; cursor: pointer; flex: 1; }
         .nav-item.active { color: var(--dana-blue); }
         .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
-        .pay-btn { width: 60px; height: 60px; background: var(--dana-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; margin-top: -35px; border: 5px solid var(--bg-light); box-shadow: 0 4px 10px rgba(16, 142, 233, 0.3); cursor: pointer; }
+        .pay-btn { 
+            width: 60px; height: 60px; background: var(--dana-blue); border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; color: white; 
+            font-size: 24px; margin-top: -35px; border: 5px solid var(--bg-light); 
+            box-shadow: 0 4px 10px rgba(16, 142, 233, 0.3); 
+        }
 
-        /* Icon Colors */
         .c-infaq { color: #10b981; } .c-jamaah { color: #f59e0b; } .c-sholat { color: #3b82f6; } .c-sosial { color: #ef4444; } 
         .c-jadwal { color: #8b5cf6; } .c-kaldik { color: var(--kaldik-color); } .c-kas { color: #06b6d4; } .c-laporan { color: #64748b; }
     </style>
@@ -169,11 +128,9 @@
     <div id="sidebar">
         <h2 style="margin-bottom:25px; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px;">ADMIN PANEL</h2>
         <div class="sidebar-menu">
-            <a href="admin.html"><i class="fas fa-user-shield"></i> Menu Admin Utama</a>
-            <a href="database.html"><i class="fas fa-database"></i> Backup Database</a>
-            <a href="pengaturan.html"><i class="fas fa-cog"></i> Pengaturan Sistem</a>
-            <a href="log.html"><i class="fas fa-history"></i> Log Aktivitas</a>
-            <a href="bantuan.html"><i class="fas fa-question-circle"></i> Bantuan</a>
+            <a href="#"><i class="fas fa-user-shield"></i> Menu Admin Utama</a>
+            <a href="#" onclick="exportData()"><i class="fas fa-database"></i> Backup Database</a>
+            <a href="#"><i class="fas fa-cog"></i> Pengaturan Sistem</a>
             <hr style="opacity:0.2; margin:20px 0">
             <a href="#" onclick="location.reload()" style="color:#ffb2b2;"><i class="fas fa-power-off"></i> Keluar</a>
         </div>
@@ -189,14 +146,14 @@
                     <i id="icon-mata" class="far fa-eye" style="font-size:14px;"></i>
                 </div>
             </div>
-            <i class="fas fa-comment-dots" onclick="location.href='pesan.html'" style="font-size: 20px; cursor: pointer;"></i>
+            <i class="fas fa-bell" style="font-size: 20px; cursor: pointer;"></i>
         </div>
 
         <div class="quick-actions">
-            <div class="action-item" onclick="location.href='infaq.html'"><i class="fas fa-plus-square"></i><p>Isi Saldo</p></div>
-            <div class="action-item" onclick="location.href='minta.html'"><i class="fas fa-hand-holding-usd"></i><p>Minta</p></div>
-            <div class="action-item" onclick="location.href='kirim.html'"><i class="fas fa-paper-plane"></i><p>Kirim</p></div>
-            <div class="action-item" onclick="location.href='kasbox.html'"><i class="fas fa-wallet"></i><p>Kas Box</p></div>
+            <div class="action-item" onclick="location.href='infaq.html'"><i class="fas fa-qrcode"></i><p>Pindai</p></div>
+            <div class="action-item" onclick="location.href='infaq.html'"><i class="fas fa-plus-circle"></i><p>Isi Saldo</p></div>
+            <div class="action-item" onclick="location.href='laporan.html'"><i class="fas fa-paper-plane"></i><p>Kirim</p></div>
+            <div class="action-item" onclick="location.href='laporan.html'"><i class="fas fa-university"></i><p>Tarik</p></div>
         </div>
 
         <div class="floating-reminder" id="nasihat-gerak">Memuat pesan...</div>
@@ -216,50 +173,51 @@
             <div class="menu-item" onclick="location.href='waktusholat.html'"><div class="icon-circle"><i class="fas fa-mosque c-sholat"></i></div><h3>Sholat</h3></div>
             <div class="menu-item" onclick="location.href='sosial.html'"><div class="icon-circle"><i class="fas fa-heartbeat c-sosial"></i></div><h3>Sosial</h3></div>
             <div class="menu-item" onclick="location.href='jadwal.html'"><div class="icon-circle"><i class="fas fa-calendar-alt c-jadwal"></i></div><h3>Jadwal</h3></div>
-            
-            <div class="menu-item" onclick="location.href='kalender.html'">
-                <div class="icon-circle">
-                    <i class="fas fa-calendar-check c-kaldik"></i>
-                </div>
-                <h3>Kaldik</h3>
-            </div>
-
+            <div class="menu-item" onclick="location.href='kalender.html'"><div class="icon-circle"><i class="fas fa-calendar-check c-kaldik"></i></div><h3>Kaldik</h3></div>
             <div class="menu-item" onclick="location.href='inventaris.html'"><div class="icon-circle"><i class="fas fa-box-open c-kas"></i></div><h3>Inventaris</h3></div>
             <div class="menu-item" onclick="location.href='laporan.html'"><div class="icon-circle"><i class="fas fa-file-contract c-laporan"></i></div><h3>Laporan</h3></div>
+        </div>
+
+        <div class="promo-banner">
+            <div style="font-size: 40px;"><i class="fas fa-mobile-alt"></i></div>
+            <div class="promo-text">
+                <h2>Master Pro Mobile</h2>
+                <p>Klik tombol di bawah untuk cara install aplikasi di layar utama HP Anda.</p>
+                <button class="btn-install" onclick="showInstallInfo()">DOWNLOAD APP</button>
+            </div>
         </div>
     </div>
 
     <div class="bottom-nav">
-        <div class="nav-item active" onclick="location.href='#'"><i class="fas fa-home"></i> Beranda</div>
-        <div class="nav-item" onclick="location.href='aktivitas.html'"><i class="fas fa-history"></i> Aktivitas</div>
-        <div class="pay-btn" onclick="location.href='kartu.html'"><i class="fas fa-qrcode"></i></div>
-        <div class="nav-item" onclick="location.href='dompet.html'"><i class="fas fa-wallet"></i> Dompet</div>
-        <div class="nav-item" onclick="location.href='saya.html'"><i class="fas fa-user-circle"></i> Saya</div>
+        <div class="nav-item active"><i class="fas fa-home"></i> Beranda</div>
+        <div class="nav-item" onclick="location.href='laporan.html'"><i class="fas fa-history"></i> Riwayat</div>
+        <div class="pay-btn" onclick="location.href='infaq.html'"><i class="fas fa-qrcode"></i></div>
+        <div class="nav-item"><i class="fas fa-wallet"></i> Dompet</div>
+        <div class="nav-item"><i class="fas fa-user-circle"></i> Saya</div>
     </div>
 
     <script>
         let isHidden = false;
         let totalSaldoGlobal = 0;
 
-        // --- FUNGSI SIDEBAR ---
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('overlay').classList.toggle('active');
         }
 
-        // --- FUNGSI SYNC DATA ---
         function syncData() {
+            // Sesuai dengan kunci Blockchain Bos: kas_ledger
             let dataRaw = localStorage.getItem('kas_ledger');
             let listKas = dataRaw ? JSON.parse(dataRaw) : [];
-            let masuk = 0; let keluar = 0;
+            let saldo = 0;
 
             listKas.forEach(t => {
                 let nilai = parseInt(t.nominal) || 0;
-                if(t.tipe === 'masuk') masuk += nilai;
-                else keluar += nilai;
+                if(t.tipe === 'masuk') saldo += nilai;
+                else saldo -= nilai;
             });
 
-            totalSaldoGlobal = masuk - keluar;
+            totalSaldoGlobal = saldo;
             renderSaldo();
         }
 
@@ -267,41 +225,41 @@
 
         function renderSaldo() {
             const display = document.getElementById('angka-saldo');
-            const icon = document.getElementById('icon-mata');
-            if(!display || !icon) return;
-
             if(isHidden) {
                 display.innerText = "Rp •••••••";
-                icon.classList.replace('fa-eye', 'fa-eye-slash');
+                document.getElementById('icon-mata').className = "far fa-eye-slash";
             } else {
                 display.innerText = "Rp " + totalSaldoGlobal.toLocaleString('id-ID');
-                icon.classList.replace('fa-eye-slash', 'fa-eye');
+                document.getElementById('icon-mata').className = "far fa-eye";
             }
         }
 
-        // --- ONLOAD ---
+        function showInstallInfo() {
+            alert("Cara Install Master Pro:\n\n1. Tekan ikon Tiga Titik di pojok kanan atas browser Chrome.\n2. Pilih 'Tambahkan ke Layar Utama' (Add to Home Screen).\n3. Aplikasi akan muncul di menu HP Anda!");
+        }
+
+        function exportData() {
+            const data = localStorage.getItem('kas_ledger');
+            if(!data) return alert("Belum ada data!");
+            const blob = new Blob([data], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'backup_database_masterpro.json';
+            a.click();
+        }
+
         window.onload = () => {
-            // 1. Load Mahfuzat & Nasihat (Tetap berjalan di card atas)
             const mahfuzat = [
                 "Man jadda wajada - Siapa bersungguh-sungguh akan berhasil.",
                 "Man shabara zhafira - Siapa bersabar akan beruntung.",
-                "Al-waqtu atsmanu minadz dzahabi - Waktu lebih berharga dari emas.",
-                "Al-ilmu bilaa 'amalin kasy syajari bilaa tsamarin - Ilmu tanpa amal bagai pohon tak berbuah."
+                "Al-waqtu atsmanu minadz dzahabi - Waktu lebih berharga dari emas."
             ];
-            const nasihatAgamis = [
-                "Sedekah dulu yuk sebelum beraktivitas..",
-                "Jangan lupa tabungan akhirat hari ini!",
-                "Infaq pagi ini untuk keberkahan hari ini.",
-                "Harta tak dibawa mati, amal jariyah abadi."
-            ];
+            const nasihat = ["Sedekah dulu yuk!", "Infaq pagi membawa berkah.", "Ayo mining amal hari ini!"];
             
-            const mTextElem = document.getElementById('m-text');
-            if(mTextElem) mTextElem.innerText = mahfuzat.join("   •   ");
+            document.getElementById('m-text').innerText = mahfuzat.join("   •   ");
+            document.getElementById('nasihat-gerak').innerText = nasihat[Math.floor(Math.random()*nasihat.length)];
             
-            const nTextElem = document.getElementById('nasihat-gerak');
-            if(nTextElem) nTextElem.innerText = nasihatAgamis[Math.floor(Math.random() * nasihatAgamis.length)];
-            
-            // 2. Jalankan Sinkronisasi Saldo
             syncData();
         };
     </script>
