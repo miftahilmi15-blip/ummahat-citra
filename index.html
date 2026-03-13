@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Master Admin Pro | DANA Style</title>
+    <title>E-Ummat | Dompet Digital Ummat</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#108ee9">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3661/3661339.png">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -18,206 +19,163 @@
             --dana-dark-blue: #0a7cc2;
             --white: #ffffff;
             --bg-light: #f5f5f5;
-            --text-dark: #333333;
-            --text-gray: #888888;
-            --kaldik-color: #ff4757;
         }
-
-        /* Tambahan Animasi Click */
-        .menu-item:active { transform: scale(0.9); transition: 0.1s; }
-        .icon-circle { transition: transform 0.2s ease; }
-        .menu-item:hover .icon-circle { transform: rotate(5deg) scale(1.1); }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg-light); color: var(--text-dark); overflow-x: hidden; padding-bottom: 100px; }
+        body { background: var(--bg-light); color: #333; overflow-x: hidden; padding-bottom: 90px; }
 
-        /* --- SIDEBAR --- */
-        #sidebar {
-            position: fixed; left: -280px; top: 0; width: 280px; height: 100%; 
-            background: var(--dana-blue); color: white; z-index: 3000; 
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); padding: 25px;
-        }
-        #sidebar.active { left: 0; }
-        .overlay { position: fixed; display: none; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2500; backdrop-filter: blur(2px); }
-        .overlay.active { display: block; }
-        
-        .sidebar-menu a { color: white; text-decoration: none; display: block; margin-bottom: 25px; font-size: 14px; }
-        .sidebar-menu i { width: 30px; font-size: 18px; }
-
-        /* --- HEADER AREA --- */
+        /* --- HEADER & SALDO --- */
         .blue-section {
-            background: var(--dana-blue); height: 220px; padding: 20px 5%; color: white; position: relative;
+            background: var(--dana-blue); height: 230px; padding: 25px 5%; color: white; position: relative;
+            border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
         }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .saldo-area { display: flex; align-items: center; gap: 10px; }
-        .saldo-val { font-size: 20px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .app-name { font-weight: 800; font-size: 20px; letter-spacing: 1px; }
+        .app-name span { color: #ffeb3b; }
 
-        .quick-actions { display: flex; justify-content: space-between; text-align: center; margin-top: 15px; }
-        .action-item { flex: 1; cursor: pointer; }
-        .action-item i { font-size: 22px; margin-bottom: 8px; display: block; }
-        .action-item p { font-size: 11px; font-weight: 500; }
+        .saldo-area { display: flex; flex-direction: column; align-items: center; gap: 5px; margin-top: 10px; }
+        .saldo-label { font-size: 11px; opacity: 0.9; text-transform: uppercase; letter-spacing: 1px; }
+        .saldo-val { font-size: 26px; font-weight: 800; display: flex; align-items: center; gap: 10px; cursor: pointer; }
 
-        /* BUBBLE PENGINGAT */
-        .floating-reminder {
-            position: absolute; background: #ffeb3b; color: #333; padding: 5px 12px; border-radius: 15px 15px 15px 2px;
-            font-size: 10px; font-weight: 800; bottom: 35px; left: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            animation: floatAnim 2s ease-in-out infinite; z-index: 100;
+        .quick-actions { 
+            display: flex; justify-content: space-around; text-align: center; margin-top: 25px;
         }
-
-        @keyframes floatAnim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        .action-item { cursor: pointer; transition: 0.2s; }
+        .action-item:active { transform: scale(0.9); }
+        .action-item i { font-size: 24px; margin-bottom: 8px; display: block; }
+        .action-item p { font-size: 11px; font-weight: 600; }
 
         /* --- MAIN CONTENT --- */
-        .main-container { padding: 0 15px; margin-top: -30px; position: relative; z-index: 10; }
-        
-        .mahfuzat-card {
-            background: var(--white); padding: 12px 15px; border-radius: 15px; margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 4px solid var(--dana-blue);
+        .main-container { padding: 0 15px; margin-top: -25px; position: relative; z-index: 10; }
+
+        /* DOWNLOAD APP BANNER (GAMBAR APLIKASI) */
+        .app-landing-card {
+            background: white; border-radius: 20px; padding: 20px;
+            display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 20px;
+            border: 1px solid #eee;
         }
-        .marquee-wrapper { width: 100%; overflow: hidden; white-space: nowrap; }
-        .marquee-text { display: inline-block; font-size: 12px; font-style: italic; color: #555; animation: marqueeScroll 25s linear infinite; }
+        .app-img { 
+            width: 80px; height: 80px; background: #e3f2fd; border-radius: 15px;
+            display: flex; align-items: center; justify-content: center; font-size: 40px; color: var(--dana-blue);
+        }
+        .app-text h2 { font-size: 15px; font-weight: 700; color: var(--dana-blue); }
+        .app-text p { font-size: 10px; color: #777; margin: 4px 0 10px; }
+        .btn-download {
+            background: var(--dana-blue); color: white; border: none; padding: 7px 15px;
+            border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer;
+        }
 
-        @keyframes marqueeScroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-
+        /* GRID MENU */
         .menu-white-box {
-            background: var(--white); border-radius: 20px; padding: 25px 10px;
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 5px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            background: var(--white); border-radius: 25px; padding: 25px 10px;
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
         }
-
         .menu-item { display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; }
-        .icon-circle { width: 45px; height: 45px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-        .menu-item h3 { font-size: 11px; font-weight: 500; color: #444; }
-
-        /* --- BANNER/MOCKUP APP AREA --- */
-        .promo-banner {
-            margin-top: 20px; background: linear-gradient(135deg, #108ee9, #0a7cc2);
-            border-radius: 20px; padding: 20px; color: white; display: flex; align-items: center; gap: 15px;
-            box-shadow: 0 8px 20px rgba(16, 142, 233, 0.2);
+        .icon-box { 
+            width: 50px; height: 50px; border-radius: 18px; margin-bottom: 8px; 
+            display: flex; align-items: center; justify-content: center; font-size: 24px;
+            transition: 0.3s;
         }
-        .promo-text h2 { font-size: 16px; font-weight: 800; }
-        .promo-text p { font-size: 10px; opacity: 0.9; }
-        .btn-install { 
-            background: #ffeb3b; color: #333; border: none; padding: 8px 15px; 
-            border-radius: 10px; font-size: 11px; font-weight: 700; margin-top: 10px; cursor: pointer;
-        }
+        .menu-item:active .icon-box { transform: scale(0.8); }
+        .menu-item h3 { font-size: 11px; font-weight: 600; color: #555; }
 
-        /* --- BOTTOM NAV --- */
+        /* COLORS */
+        .bg-infaq { background: #e8f5e9; color: #2e7d32; }
+        .bg-jamaah { background: #fff3e0; color: #ef6c00; }
+        .bg-sholat { background: #e3f2fd; color: #1565c0; }
+        .bg-sosial { background: #fce4ec; color: #c2185b; }
+        .bg-jadwal { background: #f3e5f5; color: #7b1fa2; }
+        .bg-kas { background: #e0f7fa; color: #00838f; }
+        .bg-laporan { background: #eceff1; color: #455a64; }
+
+        /* BOTTOM NAV */
         .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; height: 70px;
+            position: fixed; bottom: 0; width: 100%; height: 75px;
             background: var(--white); border-top: 1px solid #eee;
             display: flex; justify-content: space-around; align-items: center; z-index: 1000;
         }
-        .nav-item { text-align: center; color: var(--text-gray); font-size: 10px; cursor: pointer; flex: 1; }
+        .nav-item { text-align: center; color: #aaa; font-size: 10px; flex: 1; cursor: pointer; }
         .nav-item.active { color: var(--dana-blue); }
-        .nav-item i { font-size: 20px; display: block; margin-bottom: 4px; }
-        .pay-btn { 
-            width: 60px; height: 60px; background: var(--dana-blue); border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; color: white; 
-            font-size: 24px; margin-top: -35px; border: 5px solid var(--bg-light); 
-            box-shadow: 0 4px 10px rgba(16, 142, 233, 0.3); 
+        .nav-item i { font-size: 22px; display: block; margin-bottom: 4px; }
+        .scan-btn {
+            width: 65px; height: 65px; background: var(--dana-blue); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; color: white;
+            font-size: 28px; margin-top: -40px; border: 6px solid var(--bg-light);
+            box-shadow: 0 8px 15px rgba(16, 142, 233, 0.3);
         }
-
-        .c-infaq { color: #10b981; } .c-jamaah { color: #f59e0b; } .c-sholat { color: #3b82f6; } .c-sosial { color: #ef4444; } 
-        .c-jadwal { color: #8b5cf6; } .c-kaldik { color: var(--kaldik-color); } .c-kas { color: #06b6d4; } .c-laporan { color: #64748b; }
     </style>
 </head>
 <body>
 
-    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-    
-    <div id="sidebar">
-        <h2 style="margin-bottom:25px; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px;">ADMIN PANEL</h2>
-        <div class="sidebar-menu">
-            <a href="#"><i class="fas fa-user-shield"></i> Menu Admin Utama</a>
-            <a href="#" onclick="exportData()"><i class="fas fa-database"></i> Backup Database</a>
-            <a href="#"><i class="fas fa-cog"></i> Pengaturan Sistem</a>
-            <hr style="opacity:0.2; margin:20px 0">
-            <a href="#" onclick="location.reload()" style="color:#ffb2b2;"><i class="fas fa-power-off"></i> Keluar</a>
-        </div>
-    </div>
-
     <div class="blue-section">
         <div class="top-bar">
-            <i class="fas fa-bars" onclick="toggleSidebar()" style="font-size: 20px; cursor:pointer"></i>
-            <div class="saldo-area">
-                <span>Saldo Kas</span>
-                <div class="saldo-val" onclick="toggleMata()">
-                    <span id="angka-saldo">Rp 0</span>
-                    <i id="icon-mata" class="far fa-eye" style="font-size:14px;"></i>
-                </div>
+            <div class="app-name">E-<span>UMMAT</span></div>
+            <i class="fas fa-comment-dots" style="font-size: 22px;"></i>
+        </div>
+
+        <div class="saldo-area">
+            <div class="saldo-label">Total Saldo Terverifikasi</div>
+            <div class="saldo-val" onclick="toggleMata()">
+                <span id="angka-saldo">Rp 0</span>
+                <i id="icon-mata" class="far fa-eye" style="font-size: 16px; opacity: 0.6;"></i>
             </div>
-            <i class="fas fa-bell" style="font-size: 20px; cursor: pointer;"></i>
         </div>
 
         <div class="quick-actions">
-            <div class="action-item" onclick="location.href='infaq.html'"><i class="fas fa-qrcode"></i><p>Pindai</p></div>
             <div class="action-item" onclick="location.href='infaq.html'"><i class="fas fa-plus-circle"></i><p>Isi Saldo</p></div>
             <div class="action-item" onclick="location.href='laporan.html'"><i class="fas fa-paper-plane"></i><p>Kirim</p></div>
-            <div class="action-item" onclick="location.href='laporan.html'"><i class="fas fa-university"></i><p>Tarik</p></div>
+            <div class="action-item" onclick="location.href='laporan.html'"><i class="fas fa-history"></i><p>Riwayat</p></div>
+            <div class="action-item" onclick="alert('Fitur segera hadir!')"><i class="fas fa-th-large"></i><p>Lainnya</p></div>
         </div>
-
-        <div class="floating-reminder" id="nasihat-gerak">Memuat pesan...</div>
     </div>
 
     <div class="main-container">
-        <div class="mahfuzat-card">
-            <h4>PESAN HARI INI</h4>
-            <div class="marquee-wrapper">
-                <span class="marquee-text" id="m-text">Memuat pesan bijak...</span>
+        <div class="app-landing-card">
+            <div class="app-img">
+                <i class="fas fa-mobile-alt"></i>
+            </div>
+            <div class="app-text">
+                <h2>Install E-Ummat di HP</h2>
+                <p>Nikmati akses cepat & aman tanpa browser.</p>
+                <button class="btn-download" onclick="showInstallInfo()">DOWNLOAD SEKARANG</button>
             </div>
         </div>
 
         <div class="menu-white-box">
-            <div class="menu-item" onclick="location.href='infaq.html'"><div class="icon-circle"><i class="fas fa-hand-holding-heart c-infaq"></i></div><h3>Infaq</h3></div>
-            <div class="menu-item" onclick="location.href='jamaah.html'"><div class="icon-circle"><i class="fas fa-users c-jamaah"></i></div><h3>Jamaah</h3></div>
-            <div class="menu-item" onclick="location.href='waktusholat.html'"><div class="icon-circle"><i class="fas fa-mosque c-sholat"></i></div><h3>Sholat</h3></div>
-            <div class="menu-item" onclick="location.href='sosial.html'"><div class="icon-circle"><i class="fas fa-heartbeat c-sosial"></i></div><h3>Sosial</h3></div>
-            <div class="menu-item" onclick="location.href='jadwal.html'"><div class="icon-circle"><i class="fas fa-calendar-alt c-jadwal"></i></div><h3>Jadwal</h3></div>
-            <div class="menu-item" onclick="location.href='kalender.html'"><div class="icon-circle"><i class="fas fa-calendar-check c-kaldik"></i></div><h3>Kaldik</h3></div>
-            <div class="menu-item" onclick="location.href='inventaris.html'"><div class="icon-circle"><i class="fas fa-box-open c-kas"></i></div><h3>Inventaris</h3></div>
-            <div class="menu-item" onclick="location.href='laporan.html'"><div class="icon-circle"><i class="fas fa-file-contract c-laporan"></i></div><h3>Laporan</h3></div>
-        </div>
-
-        <div class="promo-banner">
-            <div style="font-size: 40px;"><i class="fas fa-mobile-alt"></i></div>
-            <div class="promo-text">
-                <h2>Master Pro Mobile</h2>
-                <p>Klik tombol di bawah untuk cara install aplikasi di layar utama HP Anda.</p>
-                <button class="btn-install" onclick="showInstallInfo()">DOWNLOAD APP</button>
-            </div>
+            <div class="menu-item" onclick="location.href='infaq.html'"><div class="icon-box bg-infaq"><i class="fas fa-hand-holding-heart"></i></div><h3>Infaq</h3></div>
+            <div class="menu-item" onclick="location.href='jamaah.html'"><div class="icon-box bg-jamaah"><i class="fas fa-users"></i></div><h3>Jamaah</h3></div>
+            <div class="menu-item" onclick="location.href='waktusholat.html'"><div class="icon-box bg-sholat"><i class="fas fa-mosque"></i></div><h3>Sholat</h3></div>
+            <div class="menu-item" onclick="location.href='sosial.html'"><div class="icon-box bg-sosial"><i class="fas fa-heart"></i></div><h3>Sosial</h3></div>
+            <div class="menu-item" onclick="location.href='jadwal.html'"><div class="icon-box bg-jadwal"><i class="fas fa-calendar-alt"></i></div><h3>Jadwal</h3></div>
+            <div class="menu-item" onclick="location.href='kalender.html'"><div class="icon-box bg-kas" style="color:#00838f"><i class="fas fa-calendar-check"></i></div><h3>Kaldik</h3></div>
+            <div class="menu-item" onclick="location.href='inventaris.html'"><div class="icon-box bg-laporan"><i class="fas fa-box"></i></div><h3>Barang</h3></div>
+            <div class="menu-item" onclick="location.href='laporan.html'"><div class="icon-box bg-laporan" style="color:var(--dana-blue)"><i class="fas fa-file-invoice-dollar"></i></div><h3>Laporan</h3></div>
         </div>
     </div>
 
     <div class="bottom-nav">
         <div class="nav-item active"><i class="fas fa-home"></i> Beranda</div>
-        <div class="nav-item" onclick="location.href='laporan.html'"><i class="fas fa-history"></i> Riwayat</div>
-        <div class="pay-btn" onclick="location.href='infaq.html'"><i class="fas fa-qrcode"></i></div>
-        <div class="nav-item"><i class="fas fa-wallet"></i> Dompet</div>
+        <div class="nav-item" onclick="location.href='laporan.html'"><i class="fas fa-wallet"></i> Dompet</div>
+        <div class="scan-btn" onclick="location.href='infaq.html'"><i class="fas fa-qrcode"></i></div>
+        <div class="nav-item"><i class="fas fa-bell"></i> Pesan</div>
         <div class="nav-item"><i class="fas fa-user-circle"></i> Saya</div>
     </div>
 
     <script>
         let isHidden = false;
-        let totalSaldoGlobal = 0;
+        let totalSaldo = 0;
 
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-            document.getElementById('overlay').classList.toggle('active');
-        }
-
-        function syncData() {
-            // Sesuai dengan kunci Blockchain Bos: kas_ledger
-            let dataRaw = localStorage.getItem('kas_ledger');
-            let listKas = dataRaw ? JSON.parse(dataRaw) : [];
-            let saldo = 0;
-
-            listKas.forEach(t => {
-                let nilai = parseInt(t.nominal) || 0;
-                if(t.tipe === 'masuk') saldo += nilai;
-                else saldo -= nilai;
+        function syncSaldo() {
+            // Ambil data dari kas_ledger (Kunci Blockchain)
+            const data = JSON.parse(localStorage.getItem('kas_ledger')) || [];
+            let tempTotal = 0;
+            data.forEach(t => {
+                const amt = parseInt(t.nominal) || 0;
+                if(t.tipe === 'masuk') tempTotal += amt; else tempTotal -= amt;
             });
-
-            totalSaldoGlobal = saldo;
+            totalSaldo = tempTotal;
             renderSaldo();
         }
 
@@ -225,43 +183,21 @@
 
         function renderSaldo() {
             const display = document.getElementById('angka-saldo');
+            const icon = document.getElementById('icon-mata');
             if(isHidden) {
                 display.innerText = "Rp •••••••";
-                document.getElementById('icon-mata').className = "far fa-eye-slash";
+                icon.className = "far fa-eye-slash";
             } else {
-                display.innerText = "Rp " + totalSaldoGlobal.toLocaleString('id-ID');
-                document.getElementById('icon-mata').className = "far fa-eye";
+                display.innerText = "Rp " + totalSaldo.toLocaleString('id-ID');
+                icon.className = "far fa-eye";
             }
         }
 
         function showInstallInfo() {
-            alert("Cara Install Master Pro:\n\n1. Tekan ikon Tiga Titik di pojok kanan atas browser Chrome.\n2. Pilih 'Tambahkan ke Layar Utama' (Add to Home Screen).\n3. Aplikasi akan muncul di menu HP Anda!");
+            alert("Cara Install E-UMMAT:\n\n1. Klik tombol 'Tiga Titik' atau 'Share' di browser HP Anda.\n2. Pilih menu 'Tambahkan ke Layar Utama' (Add to Home Screen).\n3. Selesai! E-Ummat siap di layar HP Anda.");
         }
 
-        function exportData() {
-            const data = localStorage.getItem('kas_ledger');
-            if(!data) return alert("Belum ada data!");
-            const blob = new Blob([data], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'backup_database_masterpro.json';
-            a.click();
-        }
-
-        window.onload = () => {
-            const mahfuzat = [
-                "Man jadda wajada - Siapa bersungguh-sungguh akan berhasil.",
-                "Man shabara zhafira - Siapa bersabar akan beruntung.",
-                "Al-waqtu atsmanu minadz dzahabi - Waktu lebih berharga dari emas."
-            ];
-            const nasihat = ["Sedekah dulu yuk!", "Infaq pagi membawa berkah.", "Ayo mining amal hari ini!"];
-            
-            document.getElementById('m-text').innerText = mahfuzat.join("   •   ");
-            document.getElementById('nasihat-gerak').innerText = nasihat[Math.floor(Math.random()*nasihat.length)];
-            
-            syncData();
-        };
+        window.onload = syncSaldo;
     </script>
 </body>
 </html>
